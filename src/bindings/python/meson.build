@@ -155,7 +155,7 @@ if (python_with_mypy.found())
     custom_target('stubs',
                   input : python_bindings_lib,
                   output : ['navtk' ],
-                  command : [python_with_mypy, generate_stubs, '-pnavtk', '-o' + meson.current_build_dir()],
+                  command : [python_with_mypy, generate_stubs, '-v', '-pnavtk', '-o' + meson.current_build_dir()],
                   env: env,
                   build_by_default : true,
                   install_tag: 'python-runtime',
