@@ -231,8 +231,8 @@ Matrix Pinson15NedBlock::generate_f_pinson15(const Pva& pva_aux, const Imu& forc
 
 	// Accelerometer FOGM bias and Gyro FOGM bias
 	for (Size ii = 0; ii < 3; ++ii) {
-		F(ii + 9, ii + 9)   = -1.0 / imu_model.accel_bias_tau(ii, 0);
-		F(ii + 12, ii + 12) = -1.0 / imu_model.gyro_bias_tau(ii, 0);
+		F(ii + 9, ii + 9)   = -1.0 / imu_model.accel_bias_tau(ii);
+		F(ii + 12, ii + 12) = -1.0 / imu_model.gyro_bias_tau(ii);
 	}
 
 	return F;
