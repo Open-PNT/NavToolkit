@@ -109,7 +109,7 @@ public:
  *
  * Accel Bias: 1 mg = 9.81e-3 m/s^2
  *
- * VRW: 0.65 fps/sqrt(hr) max = 3.302e-3 m/s^(3/2)
+ * VRW: 0.065 fps/sqrt(hr) max = 3.302e-4 m/s^(3/2)
  *
  * Gyro bias: 1 deg/hr = 4.8481e-6 rad/s
  *
@@ -126,14 +126,14 @@ ImuModel hg1700_model();
  * Returns the Honeywell HG9900 IMU model. Bias tau values are assumed.
  *
  * See
- * https://aerospace.honeywell.com/content/dam/aerobt/en/documents/learn/products/sensors/brochures/N61-1619-000-001-HG1700InertialMeasurementUnit-bro.pdf
+ * https://aerospace.honeywell.com/content/dam/aerobt/en/documents/learn/products/sensors/brochures/N61-1638-000-000-hg9900inertialmeasurementunit-bro.pdf
  * Spec sheet values given as (all 1 sigma):
  *
  * Accel Bias: 25 ug = 2.4525e-4 m/s^2
  *
  * VRW: 0 (None listed) set to 1e-12 to avoid numerical issues
  *
- * Gyro bias: 0.003 deg/hr = 1.4544e-8 rad/s
+ * Gyro bias: 0.0035 deg/hr = 1.6968e-8 rad/s
  *
  * ARW: 0.002 deg/sqrt(hr) max = 5.8178e-7 rad/s^(1/2).
  *

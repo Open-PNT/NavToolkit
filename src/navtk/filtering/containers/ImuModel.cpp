@@ -33,7 +33,7 @@ ImuModel::ImuModel(Vector3 accel_random_walk_sigma,
       gyro_bias_initial_sigma(std::move(gyro_bias_initial_sigma)) {}
 
 ImuModel hg1700_model() {
-	return ImuModel(zeros(3) + 0.65 * 0.3048 / 60,     // accel_random_walk_sigma, m/s^(3/2)
+	return ImuModel(zeros(3) + 0.065 * 0.3048 / 60,    // accel_random_walk_sigma, m/s^(3/2)
 	                zeros(3) + 0.125 * PI / 180 / 60,  // gyro_random_walk_sigma, rad/s^(1/2)
 	                zeros(3) + 9.81e-3,                // accel_bias_sigma, m/s^2
 	                zeros(3) + 3600.0,                 // accel_bias_tau, sec
@@ -51,7 +51,7 @@ ImuModel hg9900_model() {
 	                zeros(3) + (0.002 * PI / 180 / 60),
 	                zeros(3) + 25 * 9.81e-6,
 	                zeros(3) + 3600,
-	                zeros(3) + 0.003 * PI / 180 / 3600,
+	                zeros(3) + 0.0035 * PI / 180 / 3600,
 	                zeros(3) + 3600,
 	                zeros(3) + 100,
 	                zeros(3) + 5,
