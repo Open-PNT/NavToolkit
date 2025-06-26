@@ -287,10 +287,9 @@ def docker_run(args, task=None):
             auth_sock = environ.get('SSH_AUTH_SOCK')
             if auth_sock and path.exists(auth_sock):
                 command += [
-                    '-v',
-                    '{0}:{0}'.format(auth_sock),
+                    '{0}:/.ssh-auth-sock'.format(auth_sock),
                     '-e',
-                    'SSH_AUTH_SOCK={}'.format(auth_sock),
+                    'SSH_AUTH_SOCK=/.ssh-auth-sock',
                 ]
         ssh_dir = home_dir + '/.ssh'
         command += ['-v', '{}:/home/docker/.ssh:ro'.format(ssh_dir)]
