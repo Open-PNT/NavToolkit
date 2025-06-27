@@ -229,6 +229,36 @@ def call(command):
     check_call(command)
 
 
+def safe_add_volume(outside_path, inside_path, flags=''):
+    '''
+    Return a tuple containing a volume flag and its argument to be used
+    as part of an argv, after verifying that the outside_path is something
+    that is safe to map and won't result in docker's implicit path creation
+    trashing the user's permissions.
+
+    If the outside_path does not exist and the user does not have permissions
+    to create it, warn that it could not be mapped and return an empty tuple
+    instead rather than letting a potentially-rootful docker create it as
+    root-owned.
+    '''
+    if not path.exists(outside_path):
+        try:
+            makedirs(outside_path)
+        except OSError:
+            print(
+                "WARNING: could not map folders; outside path does not exist\n"
+                f"    outside_path: {outside_path!r}\n"
+                f"    inside_path: {inside_path!r}\n",
+                file=sys.stderr,
+                flush=True,
+            )
+            return ()
+    terms = [outside_path, inside_path]
+    if flags:
+        terms.append(flags)
+    return "--volume", ":".join(terms)
+
+
 def docker_run(args, task=None):
     '''
     Run the supplied `task` in a Docker container for supplied platform.
@@ -263,8 +293,7 @@ def docker_run(args, task=None):
         '--tty',
         '--cap-add',
         'SYS_PTRACE',
-        '--volume',
-        cwd + ':/work',
+        *safe_add_volume(cwd, '/work'),
         '--security-opt',
         'label=disable',
         '--rm',
@@ -276,7 +305,7 @@ def docker_run(args, task=None):
     # Mount in ccache directory if it exists
     ccache_dir = f'{home_dir}/.ccache'
     if path.isdir(ccache_dir):
-        command += ['-v', f'{ccache_dir}:/home/docker/.ccache']
+        command += safe_add_volume(ccache_dir, '/home/docker/.ccache')
         print(f'ccache enabled, using cache location: {ccache_dir}')
     else:
         print(f'ccache disabled, cache location does not exist: {ccache_dir}')
@@ -287,13 +316,13 @@ def docker_run(args, task=None):
             auth_sock = environ.get('SSH_AUTH_SOCK')
             if auth_sock and path.exists(auth_sock):
                 command += [
-                    '{0}:/.ssh-auth-sock'.format(auth_sock),
+                    *safe_add_volume(auth_sock, '/.ssh-auth-sock'),
                     '-e',
                     'SSH_AUTH_SOCK=/.ssh-auth-sock',
                 ]
         ssh_dir = home_dir + '/.ssh'
-        command += ['-v', '{}:/home/docker/.ssh:ro'.format(ssh_dir)]
-        command += ['-v', '{}:/root/.ssh:ro'.format(ssh_dir)]
+        command += safe_add_volume(ssh_dir, '/home/docker/.ssh', 'ro')
+        command += safe_add_volume(ssh_dir, '/root/.ssh', 'ro')
 
     command += [open(platform.iid_file).read()]
 
