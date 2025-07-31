@@ -1,7 +1,7 @@
 project('navtoolkit', 'cpp',
     default_options: ['cpp_std=c++17', 'backend_max_links=4', 'cpp_args=-DGLIBCXX_ASSERTIONS=1'],
     meson_version: '>=0.59.1',
-    version: '2.1.0-2.dev')
+    version: '2.1.0-3.dev')
 
 # Warn if using an untested version of meson.
 if meson.version().version_compare('>=1.5')
