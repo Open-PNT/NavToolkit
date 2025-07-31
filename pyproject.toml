@@ -7,7 +7,7 @@ build-backend = 'mesonpy'
 setup = ['-Dbuild_docs_tests_examples=false',
          '-Dmain_library=false',
          '-Dgdal_extensions=disabled',
-         '-Dget_navtk_data=false',
+         '-Dget_navtk_data=true',
          '-Dfirehose-outputs:aspn-cpp-xtensor=disabled',
          '-Dfirehose-outputs:aspn-cpp-xtensor-py=enabled',
          '-Dfirehose-outputs:aspn-c-main-library=false']
