@@ -2,5 +2,6 @@
 directory = navtk-data
 
 url = git@git.aspn.us:pntos/navigation-data.git
-revision = 5238be80cdaa59d26903a0021e814e628634bb09
+# navtk-data/data_v2 branch, committed 1 August 2025
+revision = 10e7dca4bb9272f9e044dac898f7e2c8f80b766c
 depth = 1
