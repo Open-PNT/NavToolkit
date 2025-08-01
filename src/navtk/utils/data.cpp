@@ -178,6 +178,10 @@ vector<string> split_paths(const string& paths, char delim = PATH_DELIMITER) {
 // The user may set $NAVTK_DATA_DIR if they want to explicitly point us at a search folder
 static const vector<string> NAVTK_DATA_DIR = split_paths(getenv_str(NAVTK_DATA_DIR_ENV_VAR));
 
+// If a Python virtual environment has been activated, then VIRTUAL_ENV should be set to the
+// directory containing it.
+static const string VIRTUAL_ENVIRONMENT_DATA_DIR = getenv_str("VIRTUAL_ENV");
+
 // Helper function for converting possibly-unset macros (that should be provided by meson via
 // navtk_meson_config.h) to a vector of search paths. env_key is the name of the environment
 // variable that might contain a PATH_DELIMITER-separated list of paths to search. If that
@@ -330,6 +334,9 @@ void visit_possible_file_paths(ErrorMode error_mode,
 
 	// Current working directory
 	if (try_data_dir(places_searched, ".", basename, try_path)) return;
+
+	// Python virtual environment
+	if (try_os_data_dir(places_searched, VIRTUAL_ENVIRONMENT_DATA_DIR, basename, try_path)) return;
 
 	log_or_throw(error_mode,
 	             "Cannot open {} file `{}` from any of the following locations {}. Consider "
