@@ -26,8 +26,12 @@ namespace geospatial {
 using navtk::navutils::RAD2DEG;
 
 std::shared_ptr<GeoidUndulationSource> GeoidUndulationSource::get_shared(const std::string& path) {
+#ifdef NAVTK_PYTHON_TENSOR
+	return std::make_shared<GeoidUndulationSource>(GeoidUndulationSource(path));
+#else
 	static std::shared_ptr<GeoidUndulationSource> instance(new GeoidUndulationSource(path));
 	return instance;
+#endif
 }
 
 GeoidUndulationSource::GeoidUndulationSource(const std::string& path)

@@ -83,10 +83,12 @@ public:
 private:
 	// private constructor because global instance is implemented via `get_shared()`.
 	GeoidUndulationSource(const std::string& path);
+#ifndef NAVTK_PYTHON_TENSOR
 	GeoidUndulationSource(const GeoidUndulationSource&)             = delete;
 	GeoidUndulationSource& operator=(const GeoidUndulationSource&)  = delete;
 	GeoidUndulationSource(const GeoidUndulationSource&&)            = delete;
 	GeoidUndulationSource& operator=(const GeoidUndulationSource&&) = delete;
+#endif
 
 	// Check if either latitude/longitude pair are outside of the current chunk of undulation
 	// values read into memory.
