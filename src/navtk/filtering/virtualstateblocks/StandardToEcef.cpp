@@ -58,27 +58,40 @@ Matrix StandardToEcef::jacobian(const Vector& x, const aspn_xtensor::TypeTimesta
 	xt::view(jac, vel_range, POS_START)     = dot(C_ned_to_ecef_der_lat, xt::view(x, vel_range));
 	xt::view(jac, vel_range, POS_START + 1) = dot(C_ned_to_ecef_der_lon, xt::view(x, vel_range));
 
-	const auto Z3                       = zeros(3, 3);
-	auto C_ecef_to_ned                  = transpose(C_ned_to_ecef);
-	auto ab                             = dot(C_ned_to_s, C_ecef_to_ned);
-	xt::view(jac, rpy_range, pos_range) = navutils::d_dcm_to_rpy(C_ned_to_s,
-	                                                             Z3,
-	                                                             Z3,
-	                                                             Z3,
-	                                                             C_ecef_to_ned,
-	                                                             transpose(C_ned_to_ecef_der_lat),
-	                                                             transpose(C_ned_to_ecef_der_lon),
-	                                                             Z3,
-	                                                             ab);
-	xt::view(jac, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(C_ned_to_s,
-	                                                             transpose(C_s_to_ned_der_r),
-	                                                             transpose(C_s_to_ned_der_p),
-	                                                             transpose(C_s_to_ned_der_y),
-	                                                             C_ecef_to_ned,
-	                                                             Z3,
-	                                                             Z3,
-	                                                             Z3,
-	                                                             ab);
+	const auto Z3      = zeros(3, 3);
+	auto C_ecef_to_ned = transpose(C_ned_to_ecef);
+	auto ab            = dot(C_ned_to_s, C_ecef_to_ned);
+
+	auto dx = dot(C_ned_to_s, transpose(C_ned_to_ecef_der_lat));
+	auto dy = dot(C_ned_to_s, transpose(C_ned_to_ecef_der_lon));
+	auto dz = Z3;
+
+	// This is equivalent to:
+	// xt::view(jac, rpy_range, pos_range) = navutils::d_dcm_to_rpy(C_ned_to_s,
+	//                                                              Z3,
+	//                                                              Z3,
+	//                                                              Z3,
+	//                                                              C_ecef_to_ned,
+	//                                                              transpose(C_ned_to_ecef_der_lat),
+	//                                                              transpose(C_ned_to_ecef_der_lon),
+	//                                                              Z3);
+	// But with the matrix multiplication simplified where the inputs are zeroes.
+	xt::view(jac, rpy_range, pos_range) = navutils::d_dcm_to_rpy(ab, dx, dy, dz);
+
+	dx = dot(transpose(C_s_to_ned_der_r), C_ecef_to_ned);
+	dy = dot(transpose(C_s_to_ned_der_p), C_ecef_to_ned);
+	dz = dot(transpose(C_s_to_ned_der_y), C_ecef_to_ned);
+	// This is equivalent to:
+	// xt::view(jac, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(C_ned_to_s,
+	//                                                              transpose(C_s_to_ned_der_r),
+	//                                                              transpose(C_s_to_ned_der_p),
+	//                                                              transpose(C_s_to_ned_der_y),
+	//                                                              C_ecef_to_ned,
+	//                                                              Z3,
+	//                                                              Z3,
+	//                                                              Z3);
+	// But with the matrix multiplication simplified where the inputs are zeroes.
+	xt::view(jac, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(ab, dx, dy, dz);
 
 	return jac;
 }

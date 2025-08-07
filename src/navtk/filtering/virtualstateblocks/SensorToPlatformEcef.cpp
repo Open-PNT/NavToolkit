@@ -69,16 +69,24 @@ Matrix SensorToPlatformEcef::jacobian(const Vector& x, const aspn_xtensor::TypeT
 	auto C_k_to_p_der_p = dot(C_s_to_p, C_k_to_s_der_p);
 	auto C_k_to_p_der_y = dot(C_s_to_p, C_k_to_s_der_y);
 
-	auto out      = eye(num_rows(x));
-	const auto Z3 = zeros(3, 3);
+	auto out = eye(num_rows(x));
 
 	// Usually premultiply each by C_k_to_j, but always eye(3) in this case
 	xt::view(out, pos_range, RPY_START)     = dot(transpose(C_k_to_p_der_r), -l_ps_p);
 	xt::view(out, pos_range, RPY_START + 1) = dot(transpose(C_k_to_p_der_p), -l_ps_p);
 	xt::view(out, pos_range, RPY_START + 2) = dot(transpose(C_k_to_p_der_y), -l_ps_p);
 
-	xt::view(out, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(
-	    C_s_to_p, Z3, Z3, Z3, C_k_to_s, C_k_to_s_der_r, C_k_to_s_der_p, C_k_to_s_der_y);
+	auto ab = dot(C_s_to_p, C_k_to_s);
+	auto dx = dot(C_s_to_p, C_k_to_s_der_r);
+	auto dy = dot(C_s_to_p, C_k_to_s_der_p);
+	auto dz = dot(C_s_to_p, C_k_to_s_der_y);
+
+	// This is equivalent to:
+	// const auto Z3 = zeros(3, 3);
+	// xt::view(out, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(
+	//     C_s_to_p, Z3, Z3, Z3, C_k_to_s, C_k_to_s_der_r, C_k_to_s_der_p, C_k_to_s_der_y);
+	// But with the matrix multiplication simplified where the inputs are zeroes.
+	xt::view(out, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(ab, dx, dy, dz);
 
 	return out;
 }

@@ -69,28 +69,42 @@ Matrix EcefToStandard::jacobian(const Vector& x, const aspn_xtensor::TypeTimesta
 	auto C_ecef_to_s_der_p = transpose(navutils::d_cns_wrt_p(xt::view(x, rpy_range)));
 	auto C_ecef_to_s_der_y = transpose(navutils::d_cns_wrt_y(xt::view(x, rpy_range)));
 
-	const auto Z3 = zeros(3, 3);
-	auto ab       = dot(C_ecef_to_s, C_ned_to_ecef);
+	auto ab = dot(C_ecef_to_s, C_ned_to_ecef);
 
-	auto rpy_ned_to_s_der_ecef = navutils::d_dcm_to_rpy(C_ecef_to_s,
-	                                                    Z3,
-	                                                    Z3,
-	                                                    Z3,
-	                                                    C_ned_to_ecef,
-	                                                    transpose(C_ecef_to_ned_der_x),
-	                                                    transpose(C_ecef_to_ned_der_y),
-	                                                    transpose(C_ecef_to_ned_der_z),
-	                                                    ab);
+	auto dx = dot(C_ecef_to_s, transpose(C_ecef_to_ned_der_x));
+	auto dy = dot(C_ecef_to_s, transpose(C_ecef_to_ned_der_y));
+	auto dz = dot(C_ecef_to_s, transpose(C_ecef_to_ned_der_z));
 
-	auto rpy_ned_to_s_der_rpy = navutils::d_dcm_to_rpy(C_ecef_to_s,
-	                                                   C_ecef_to_s_der_r,
-	                                                   C_ecef_to_s_der_p,
-	                                                   C_ecef_to_s_der_y,
-	                                                   C_ned_to_ecef,
-	                                                   Z3,
-	                                                   Z3,
-	                                                   Z3,
-	                                                   ab);
+	// This is equivalent to:
+	// const auto Z3 = zeros(3, 3);
+	// navutils::d_dcm_to_rpy(C_ecef_to_s,
+	// 						Z3,
+	// 						Z3,
+	// 						Z3,
+	// 						C_ned_to_ecef,
+	// 						transpose(C_ecef_to_ned_der_x),
+	// 						transpose(C_ecef_to_ned_der_y),
+	// 						transpose(C_ecef_to_ned_der_z));
+	// But with the matrix multiplication simplified where the inputs are zeroes.
+	auto rpy_ned_to_s_der_ecef = navutils::d_dcm_to_rpy(ab, dx, dy, dz);
+
+	dx = dot(C_ecef_to_s_der_r, C_ned_to_ecef);
+	dy = dot(C_ecef_to_s_der_p, C_ned_to_ecef);
+	dz = dot(C_ecef_to_s_der_y, C_ned_to_ecef);
+
+	// This is equivalent to:
+	// const auto Z3 = zeros(3, 3);
+	// auto rpy_ned_to_s_der_rpy = navutils::d_dcm_to_rpy(C_ecef_to_s,
+	//                                                    C_ecef_to_s_der_r,
+	//                                                    C_ecef_to_s_der_p,
+	//                                                    C_ecef_to_s_der_y,
+	//                                                    C_ned_to_ecef,
+	//                                                    Z3,
+	//                                                    Z3,
+	//                                                    Z3,
+	//                                                    ab);
+	// But with the matrix multiplication simplified where the inputs are zeroes.
+	auto rpy_ned_to_s_der_rpy = navutils::d_dcm_to_rpy(ab, dx, dy, dz);
 
 	xt::view(out, rpy_range, pos_range) = rpy_ned_to_s_der_ecef;
 	xt::view(out, rpy_range, rpy_range) = rpy_ned_to_s_der_rpy;

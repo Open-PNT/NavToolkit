@@ -62,18 +62,27 @@ Matrix PlatformToSensorEcef::jacobian(const Vector& x, const aspn_xtensor::TypeT
 	auto C_p_to_k_der_p = navutils::d_cns_wrt_p(base_rpy);
 	auto C_p_to_k_der_y = navutils::d_cns_wrt_y(base_rpy);
 
-	auto out      = eye(num_rows(x));
-	const auto Z3 = zeros(3, 3);
+	auto out = eye(num_rows(x));
 
-	xt::view(out, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(
-	    navtk::navutils::quat_to_dcm(sensor_mount.get_orientation_quaternion()),
-	    Z3,
-	    Z3,
-	    Z3,
-	    C_k_to_p,
-	    transpose(C_p_to_k_der_r),
-	    transpose(C_p_to_k_der_p),
-	    transpose(C_p_to_k_der_y));
+	auto a  = navtk::navutils::quat_to_dcm(sensor_mount.get_orientation_quaternion());
+	auto ab = dot(a, C_k_to_p);
+	auto dx = dot(a, transpose(C_p_to_k_der_r));
+	auto dy = dot(a, transpose(C_p_to_k_der_p));
+	auto dz = dot(a, transpose(C_p_to_k_der_y));
+
+	// This is equivalent to:
+	// const auto Z3 = zeros(3, 3);
+	// xt::view(out, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(
+	//     navtk::navutils::quat_to_dcm(sensor_mount.get_orientation_quaternion()),
+	//     Z3,
+	//     Z3,
+	//     Z3,
+	//     C_k_to_p,
+	//     transpose(C_p_to_k_der_r),
+	//     transpose(C_p_to_k_der_p),
+	//     transpose(C_p_to_k_der_y));
+	// But with the matrix multiplication simplified where the inputs are zeroes.
+	xt::view(out, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(ab, dx, dy, dz);
 
 	// Normally pre-multiply by C_k_to_j, but it is always eye(3) in this case
 	xt::view(out, pos_range, RPY_START)     = dot(C_p_to_k_der_r, l_bs_b);
