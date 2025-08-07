@@ -137,23 +137,15 @@ Matrix3 d_dcm_to_rpy(const Matrix3& a,
                      const Matrix3& dbdy,
                      const Matrix3& dbdz) {
 	auto ab = dot(a, b);
-	return d_dcm_to_rpy(a, dadx, dady, dadz, b, dbdx, dbdy, dbdz, ab);
+	auto dx = dot(dadx, b) + dot(a, dbdx);
+	auto dy = dot(dady, b) + dot(a, dbdy);
+	auto dz = dot(dadz, b) + dot(a, dbdz);
+	return d_dcm_to_rpy(ab, dx, dy, dz);
 }
 
-Matrix3 d_dcm_to_rpy(const Matrix3& a,
-                     const Matrix3& dadx,
-                     const Matrix3& dady,
-                     const Matrix3& dadz,
-                     const Matrix3& b,
-                     const Matrix3& dbdx,
-                     const Matrix3& dbdy,
-                     const Matrix3& dbdz,
-                     const Matrix3& ab) {
+Matrix3 d_dcm_to_rpy(const Matrix3& ab, const Matrix3& dx, const Matrix3& dy, const Matrix3& dz) {
 	auto d_min = std::numeric_limits<double>::min();
 	auto jac   = xt::empty<double>({3, 3});
-	auto dx    = dot(dadx, b) + dot(a, dbdx);
-	auto dy    = dot(dady, b) + dot(a, dbdy);
-	auto dz    = dot(dadz, b) + dot(a, dbdz);
 
 	auto den1 = std::max(pow(ab(2, 2), 2.0) + pow(ab(1, 2), 2.0), d_min);
 	jac(0, 0) = (dx(1, 2) * ab(2, 2) - ab(1, 2) * dx(2, 2)) / den1;

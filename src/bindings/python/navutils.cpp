@@ -20,6 +20,7 @@ namespace nav = navtk::navutils;
 
 using namespace pybind11::literals;
 using nav::GravModels;
+using navtk::Matrix3;
 using navtk::not_null;
 
 void add_navutils_functions(pybind11::module& m) {
@@ -33,8 +34,34 @@ void add_navutils_functions(pybind11::module& m) {
 	NAMESPACE_FUNCTION(d_llh_to_ecef_wrt_llh, nav, "llh"_a)
 	NAMESPACE_FUNCTION(d_ecef_to_llh_wrt_ecef, nav, "ecef"_a)
 	NAMESPACE_FUNCTION(d_cne_wrt_k, nav, "dk"_a, "llh"_a)
-	NAMESPACE_FUNCTION(
-	    d_dcm_to_rpy, nav, "a"_a, "dadx"_a, "dady"_a, "dadz"_a, "b"_a, "dbdx"_a, "dbdy"_a, "dbdz"_a)
+	NAMESPACE_FUNCTION_OVERLOAD(d_dcm_to_rpy,
+	                            nav,
+	                            PARAMS(const Matrix3&,
+	                                   const Matrix3&,
+	                                   const Matrix3&,
+	                                   const Matrix3&,
+	                                   const Matrix3&,
+	                                   const Matrix3&,
+	                                   const Matrix3&,
+	                                   const Matrix3&),
+	                            ,
+	                            "a"_a,
+	                            "dadx"_a,
+	                            "dady"_a,
+	                            "dadz"_a,
+	                            "b"_a,
+	                            "dbdx"_a,
+	                            "dbdy"_a,
+	                            "dbdz"_a)
+	NAMESPACE_FUNCTION_OVERLOAD(
+	    d_dcm_to_rpy,
+	    nav,
+	    PARAMS(const Matrix3&, const Matrix3&, const Matrix3&, const Matrix3&),
+	    _2,
+	    "ab"_a,
+	    "dx"_a,
+	    "dy"_a,
+	    "dz"_a)
 	NAMESPACE_FUNCTION(d_rpy_tilt_corr_wrt_tilt, nav, "tilts"_a, "C_nav_to_platform"_a)
 	NAMESPACE_FUNCTION(d_rpy_correct_dcm_with_tilt_wrt_tilt, nav, "tilts"_a, "C_nav_to_platform"_a)
 	NAMESPACE_FUNCTION(d_quat_prop_wrt_r, nav, "q"_a, "r"_a)
