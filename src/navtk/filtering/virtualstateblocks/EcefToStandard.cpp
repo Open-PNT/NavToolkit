@@ -70,6 +70,7 @@ Matrix EcefToStandard::jacobian(const Vector& x, const aspn_xtensor::TypeTimesta
 	auto C_ecef_to_s_der_y = transpose(navutils::d_cns_wrt_y(xt::view(x, rpy_range)));
 
 	const auto Z3 = zeros(3, 3);
+	auto ab       = dot(C_ecef_to_s, C_ned_to_ecef);
 
 	auto rpy_ned_to_s_der_ecef = navutils::d_dcm_to_rpy(C_ecef_to_s,
 	                                                    Z3,
@@ -78,7 +79,8 @@ Matrix EcefToStandard::jacobian(const Vector& x, const aspn_xtensor::TypeTimesta
 	                                                    C_ned_to_ecef,
 	                                                    transpose(C_ecef_to_ned_der_x),
 	                                                    transpose(C_ecef_to_ned_der_y),
-	                                                    transpose(C_ecef_to_ned_der_z));
+	                                                    transpose(C_ecef_to_ned_der_z),
+	                                                    ab);
 
 	auto rpy_ned_to_s_der_rpy = navutils::d_dcm_to_rpy(C_ecef_to_s,
 	                                                   C_ecef_to_s_der_r,
@@ -87,7 +89,8 @@ Matrix EcefToStandard::jacobian(const Vector& x, const aspn_xtensor::TypeTimesta
 	                                                   C_ned_to_ecef,
 	                                                   Z3,
 	                                                   Z3,
-	                                                   Z3);
+	                                                   Z3,
+	                                                   ab);
 
 	xt::view(out, rpy_range, pos_range) = rpy_ned_to_s_der_ecef;
 	xt::view(out, rpy_range, rpy_range) = rpy_ned_to_s_der_rpy;
