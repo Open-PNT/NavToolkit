@@ -115,6 +115,37 @@ Matrix3 d_dcm_to_rpy(const Matrix3& a,
                      const Matrix3& dbdz);
 
 /**
+ * Derivative of the dcm_to_rpy() function wrt 3 variables (usually RPY), where the DCM is composed
+ * of the product of 2 other DCMs. The derivative does not exist at pitch = PI/2 (derived from the
+ * composite DCM) and this function is unreliable in that region; user beware.
+ *
+ * Following the naming of the parameters, this is the derivative of `dcm_to_rpy(dot(C_2_to_3,
+ * C_1_to_2))` where parameter `a = C_2_to_3` and `b = C_1_to_2`.
+ *
+ * @param a DCM `C_2_to_3`
+ * @param dadx derivative of `C_2_to_3` wrt variable 1 (x Euler angle).
+ * @param dady derivative of `C_2_to_3` wrt variable 2 (y Euler angle).
+ * @param dadz derivative of `C_2_to_3` wrt variable 3 (z Euler angle).
+ * @param b DCM `C_1_to_2`
+ * @param dbdx derivative of `C_1_to_2` wrt variable 1 (x Euler angle).
+ * @param dbdy derivative of `C_1_to_2` wrt variable 2 (y Euler angle).
+ * @param dbdz derivative of `C_1_to_2` wrt variable 3 (z Euler angle).
+ * @param ab The product of multiplying \p a and \p b. The purpose of this parameter is to reduce
+ * redundant calculations when d_dcm_to_rpy is called multiple times with similar parameters.
+ *
+ * @return Derivative of RPY representation of C_1_to_3 wrt some 3-variable input.
+ */
+Matrix3 d_dcm_to_rpy(const Matrix3& a,
+                     const Matrix3& dadx,
+                     const Matrix3& dady,
+                     const Matrix3& dadz,
+                     const Matrix3& b,
+                     const Matrix3& dbdx,
+                     const Matrix3& dbdy,
+                     const Matrix3& dbdz,
+                     const Matrix3& ab);
+
+/**
  * Derivative of the RPY representation of the 'standard' tilt corrected DCM wrt the tilt vector.
  * In other words
  * \f$ \frac{\partial f}{\delta \psi} dcm_to_rpy(C^b_n[I - \Psi]) \f$ where \f$ \Psi \f$ is the
