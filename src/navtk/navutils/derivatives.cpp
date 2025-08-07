@@ -137,7 +137,7 @@ Matrix3 d_dcm_to_rpy(const Matrix3& a,
                      const Matrix3& dbdy,
                      const Matrix3& dbdz) {
 	auto d_min = std::numeric_limits<double>::min();
-	auto jac   = zeros(3, 3);
+	auto jac   = xt::empty<double>({3, 3});
 	auto ab    = dot(a, b);
 	auto dx    = dot(dadx, b) + dot(a, dbdx);
 	auto dy    = dot(dady, b) + dot(a, dbdy);
