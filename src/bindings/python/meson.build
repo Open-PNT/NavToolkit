@@ -73,10 +73,7 @@ extract_docs_test_result = run_command([python] + extract_docs_test + ['-hardexi
 working_cindex = extract_docs_test_result.returncode() == 0
 
 navtk_generated_hpp = []
-# The PYBIND11_USE_SMART_HOLDER_AS_DEFAULT flag enables pybind smart holder behavior in progressive
-# mode. This allows python to retain a reference to an object, when ownership of that object is
-# passed to C++.
-python_bindings_cpp_args = ['-DNAVTK_PYTHON_TENSOR', '-DPYBIND11_USE_SMART_HOLDER_AS_DEFAULT']
+python_bindings_cpp_args = ['-DNAVTK_PYTHON_TENSOR']
 
 if not get_option('python_docstrings')
     cindex_errors += ['Meson configured with ' +

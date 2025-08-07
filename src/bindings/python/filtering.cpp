@@ -480,7 +480,7 @@ void add_filtering_experimental_functions(pybind11::module &m) {
 	     "warning_threshold"_a = 10000)
 	CDOC(NonlinearAltitudeProcessor);
 
-	py::class_<MeasurementBuffer, PYBIND11_SH_DEF(MeasurementBuffer)>(m, "MeasurementBuffer")
+	py::class_<MeasurementBuffer, std::shared_ptr<MeasurementBuffer>>(m, "MeasurementBuffer")
 	    .def(
 	        "__iter__",
 	        [](MeasurementBuffer &buf) { return py::make_iterator(buf.begin(), buf.end()); },
@@ -527,7 +527,7 @@ void add_filtering_experimental_functions(pybind11::module &m) {
 	         "t_0"_a,
 	         "t_1"_a) CDOC(MeasurementBuffer);
 
-	py::class_<MeasurementBuffer3d, PYBIND11_SH_DEF(MeasurementBuffer3d)>(m, "MeasurementBuffer3d")
+	py::class_<MeasurementBuffer3d, std::shared_ptr<MeasurementBuffer3d>>(m, "MeasurementBuffer3d")
 	    .def(py::init<>())
 	    .def("add_measurement",
 	         &MeasurementBuffer3d::add_measurement,

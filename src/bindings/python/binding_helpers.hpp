@@ -72,11 +72,11 @@ namespace py = pybind11;
 #define FIRST(X, ...) X
 // Macro trick forcing the ... to be rescanned
 #define CALL_MACRO(macro, ...) macro(__VA_ARGS__)
-#define PY_CLASS_IMPL(NAME, ...) py::class_<__VA_ARGS__, PYBIND11_SH_DEF(NAME)>(m, #NAME)
+#define PY_CLASS_IMPL(NAME, ...) py::class_<__VA_ARGS__, std::shared_ptr<NAME>>(m, #NAME)
 // Binds a class. First parameter is the class name. Optional additional params are base classes.
 #define CLASS(...) CALL_MACRO(PY_CLASS_IMPL, FIRST(__VA_ARGS__, MISSING CLASS NAME), __VA_ARGS__)
 // Binds a templated class with the default template parameters.
-#define CLASST(NAME, ...) py::class_<NAME<>, __VA_ARGS__, PYBIND11_SH_DEF(NAME<>)>(m, #NAME)
+#define CLASST(NAME, ...) py::class_<NAME<>, __VA_ARGS__, std::shared_ptr<NAME<>>>(m, #NAME)
 // Finds and adds the relevant docstring from navtk_generated.hpp.
 #define CDOC(NAME) .doc() = PROCESS_DOC(NAME)
 // Accepts a string argument, which it matches against the docstrings in navtk_generated.hpp,

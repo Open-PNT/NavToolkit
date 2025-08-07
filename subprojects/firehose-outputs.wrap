@@ -2,6 +2,6 @@
 directory = firehose-outputs
 
 url = git@git.aspn.us:pntos/firehose-outputs.git
-# main branch - committed 29 April 2025
-revision = 7f48516c81c828546e69ddd91ec00a376a66d25d
+# main branch - committed 13 November 2025
+revision = f642101b18acd93a561f52865055ec83b342ddb3
 depth = 1
