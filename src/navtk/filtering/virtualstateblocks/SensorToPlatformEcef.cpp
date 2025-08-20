@@ -81,11 +81,6 @@ Matrix SensorToPlatformEcef::jacobian(const Vector& x, const aspn_xtensor::TypeT
 	auto dy = dot(C_s_to_p, C_k_to_s_der_p);
 	auto dz = dot(C_s_to_p, C_k_to_s_der_y);
 
-	// This is equivalent to:
-	// const auto Z3 = zeros(3, 3);
-	// xt::view(out, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(
-	//     C_s_to_p, Z3, Z3, Z3, C_k_to_s, C_k_to_s_der_r, C_k_to_s_der_p, C_k_to_s_der_y);
-	// But with the matrix multiplication simplified where the inputs are zeroes.
 	xt::view(out, rpy_range, rpy_range) = navutils::d_dcm_to_rpy(ab, dx, dy, dz);
 
 	return out;

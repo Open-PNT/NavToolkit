@@ -68,11 +68,6 @@ Matrix PinsonErrorToStandard::jacobian(const Vector& x, const aspn_xtensor::Type
 	auto corr_C_ned_to_s =
 	    navutils::ortho_dcm(dot(sol.rot_mat, eye(3) + navutils::skew(xt::view(x, att_range))));
 
-	// This is equivalent to:
-	// const auto Z3 = zeros(3, 3);
-	// xt::view(jac, att_range, att_range) =
-	//     navutils::d_dcm_to_rpy(eye(3), Z3, Z3, Z3, corr_C_ned_to_s, ddx, ddy, ddz);
-	// But with the matrix multiplication simplified where the inputs are identity or zeroes.
 	xt::view(jac, att_range, att_range) = navutils::d_dcm_to_rpy(corr_C_ned_to_s, ddx, ddy, ddz);
 
 	return jac;
