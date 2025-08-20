@@ -88,22 +88,33 @@ Matrix3 d_cne_wrt_k(const Vector3& dk, const Vector3& llh);
 
 /**
  * Derivative of the dcm_to_rpy() function wrt 3 variables (usually RPY), where the DCM is composed
- * of the product of 2 other DCMs. The derivative does not exist at pitch = PI/2 (derived from
- * the composite DCM) and this function is unreliable in that region; user beware.
+ * of the product of 2 other DCMs. The derivative does not exist at pitch = PI/2 (derived from the
+ * composite DCM) and this function is unreliable in that region; user beware.
  *
- * Following the naming of the parameters, this is the derivative of `dcm_to_rpy(dot(C_2_to_3,
- * C_1_to_2))` where parameter `a = C_2_to_3` and `b = C_1_to_2`.
+ * Say there is a function such that:
  *
- * @param a DCM `C_2_to_3`
- * @param dadx derivative of `C_2_to_3` wrt variable 1 (x Euler angle).
- * @param dady derivative of `C_2_to_3` wrt variable 2 (y Euler angle).
- * @param dadz derivative of `C_2_to_3` wrt variable 3 (z Euler angle).
- * @param b DCM `C_1_to_2`
- * @param dbdx derivative of `C_1_to_2` wrt variable 1 (x Euler angle).
- * @param dbdy derivative of `C_1_to_2` wrt variable 2 (y Euler angle).
- * @param dbdz derivative of `C_1_to_2` wrt variable 3 (z Euler angle).
+ * \f$ f = \text{dcm_to_rpy}(C) \f$
  *
- * @return Derivative of RPY representation of C_1_to_3 wrt some 3-variable input.
+ * where
+ *
+ * \f$ C = C_1C_2 \f$
+ *
+ * then
+ *
+ * \f$ \dot{f(C)} = \dot{f}(C)\dot{C} = \dot{f}(C_1C_2)(\dot{C_1}C_2 + C_1\dot{C_2}) \f$
+ *
+ * With the above in mind, see below for how each parameter is defined.
+ *
+ * @param a DCM `C_1`
+ * @param dadx derivative of `C_1` wrt variable 1 (x Euler angle).
+ * @param dady derivative of `C_1` wrt variable 2 (y Euler angle).
+ * @param dadz derivative of `C_1` wrt variable 3 (z Euler angle).
+ * @param b DCM `C_2`
+ * @param dbdx derivative of `C_2` wrt variable 1 (x Euler angle).
+ * @param dbdy derivative of `C_2` wrt variable 2 (y Euler angle).
+ * @param dbdz derivative of `C_2` wrt variable 3 (z Euler angle).
+ *
+ * @return Derivative of RPY representation of `C` wrt some 3-variable input.
  */
 Matrix3 d_dcm_to_rpy(const Matrix3& a,
                      const Matrix3& dadx,
@@ -119,20 +130,36 @@ Matrix3 d_dcm_to_rpy(const Matrix3& a,
  * of the product of 2 other DCMs. The derivative does not exist at pitch = PI/2 (derived from the
  * composite DCM) and this function is unreliable in that region; user beware.
  *
- * Let `a = C_2_to_3` and `b = C_1_to_2`. This returns the derivative of `dcm_to_rpy(dot(a, b))`.
- * Let dadx be the derivative of `C_2_to_3` wrt variable 1 (x Euler angle).
- * Let dady be the derivative of `C_2_to_3` wrt variable 2 (y Euler angle).
- * Let dadz be the derivative of `C_2_to_3` wrt variable 3 (z Euler angle).
- * Let dbdx be the derivative of `C_1_to_2` wrt variable 1 (x Euler angle).
- * Let dbdy be the derivative of `C_1_to_2` wrt variable 2 (y Euler angle).
- * Let dbdz be the derivative of `C_1_to_2` wrt variable 3 (z Euler angle).
+ * Say there is a function such that:
  *
- * @param ab Should be equal to `dot(a, b)`.
- * @param dx Should be equal to `dot(dadx, b) + dot(a, dbdx)`.
- * @param dy Should be equal to `dot(dady, b) + dot(a, dbdy)`.
- * @param dz Should be equal to `dot(dadz, b) + dot(a, dbdz)`.
+ * \f$ f = \text{dcm_to_rpy}(C) \f$
  *
- * @return Derivative of RPY representation of C_1_to_3 wrt some 3-variable input.
+ * where
+ *
+ * \f$ C = C_1C_2 \f$
+ *
+ * then
+ *
+ * \f$ \dot{f(C)} = \dot{f}(C)\dot{C} = \dot{f}(C_1C_2)(\dot{C_1}C_2 + C_1\dot{C_2}) \f$
+ *
+ * Now, consider the case where either \f$ \dot{C_1} \f$ or \f$ \dot{C_2} \f$ is zero. In this case,
+ * calculations can be simplified significantly. This function allows for intermediary values,
+ * calculated more simply with the above assumptions, to be passed in. See below for how each
+ * parameter is defined.
+ *
+ * - Let dadx be the derivative of `C_1` wrt variable 1 (x Euler angle).
+ * - Let dady be the derivative of `C_1` wrt variable 2 (y Euler angle).
+ * - Let dadz be the derivative of `C_1` wrt variable 3 (z Euler angle).
+ * - Let dbdx be the derivative of `C_2` wrt variable 1 (x Euler angle).
+ * - Let dbdy be the derivative of `C_2` wrt variable 2 (y Euler angle).
+ * - Let dbdz be the derivative of `C_2` wrt variable 3 (z Euler angle).
+ *
+ * @param ab Should be equal to `dot(C_1, C_2)`.
+ * @param dx Should be equal to `dot(dadx, C_2) + dot(C_1, dbdx)`.
+ * @param dy Should be equal to `dot(dady, C_2) + dot(C_1, dbdy)`.
+ * @param dz Should be equal to `dot(dadz, C_2) + dot(C_1, dbdz)`.
+ *
+ * @return Derivative of RPY representation of `C` wrt some 3-variable input.
  */
 Matrix3 d_dcm_to_rpy(const Matrix3& ab, const Matrix3& dx, const Matrix3& dy, const Matrix3& dz);
 
