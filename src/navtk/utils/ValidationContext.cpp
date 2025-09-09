@@ -61,11 +61,17 @@ ValidationContext& ValidationContext::add_matrix(const Matrix& matrix, const str
 }
 
 ValidationContext& ValidationContext::add_matrix(const Vector& vec) {
-	return add_matrix(to_matrix(vec), DEFAULT_VECTOR_NAME);
+	if (is_enabled()) {
+		return add_matrix(to_matrix(vec), DEFAULT_VECTOR_NAME);
+	}
+	return *this;
 }
 
 ValidationContext& ValidationContext::add_matrix(const Vector& vec, const string& name) {
-	return add_matrix(to_matrix(vec), name);
+	if (is_enabled()) {
+		return add_matrix(to_matrix(vec), name);
+	}
+	return *this;
 }
 
 ValidationContext& ValidationContext::symmetric(double rtol, double atol) {
