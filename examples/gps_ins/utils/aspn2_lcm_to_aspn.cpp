@@ -183,6 +183,23 @@ aspn_xtensor::MeasurementImu to_aspn(const datasources::lcm::messages::aspn::imu
 	    header, time, ASPN_MEASUREMENT_IMU_IMU_TYPE_INTEGRATED, d_vel, d_theta, {});
 }
 
+std::shared_ptr<aspn_xtensor::MeasurementImu> to_aspn_ptr(
+    const datasources::lcm::messages::aspn::imu &t) {
+	// pull out delta V's and theta's
+	Vector3 d_vel{t.delta_v[0], t.delta_v[1], t.delta_v[2]};
+	Vector3 d_theta{t.delta_theta[0], t.delta_theta[1], t.delta_theta[2]};
+
+	auto header = TypeHeader(ASPN_MEASUREMENT_IMU, 0, 0, 0, 0);
+	auto time   = to_aspn(t.header.timestamp_valid);
+	return std::make_shared<aspn_xtensor::MeasurementImu>(
+	    header,
+	    time,
+	    ASPN_MEASUREMENT_IMU_IMU_TYPE_INTEGRATED,
+	    d_vel,
+	    d_theta,
+	    std::vector<aspn23_xtensor::TypeIntegrity>{});
+}
+
 aspn_xtensor::MeasurementPositionVelocityAttitude to_aspn(
     const datasources::lcm::messages::aspn::positionvelocityattitude &t) {
 	auto header     = TypeHeader(ASPN_MEASUREMENT_POSITION_VELOCITY_ATTITUDE, 0, 0, 0, 0);

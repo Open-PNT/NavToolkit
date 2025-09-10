@@ -71,6 +71,8 @@ aspn_xtensor::MetadataGpsLnavEphemeris to_aspn(
  * @return ASPN Imu type object
  */
 aspn_xtensor::MeasurementImu to_aspn(const datasources::lcm::messages::aspn::imu &t);
+std::shared_ptr<aspn_xtensor::MeasurementImu> to_aspn_ptr(
+    const datasources::lcm::messages::aspn::imu &t);
 
 /**
  * Converts from lcm positionvelocityattitude type to the ASPN
