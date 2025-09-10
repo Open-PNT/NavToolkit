@@ -238,12 +238,16 @@ void BufferedImu::add_data(not_null<std::shared_ptr<aspn_xtensor::AspnBase>> dat
 }
 
 void BufferedImu::mechanize(const MeasurementImu& imu) {
-	if (imu.get_imu_type() != ASPN_MEASUREMENT_IMU_IMU_TYPE_INTEGRATED) {
+	mechanize(std::make_shared<MeasurementImu>(imu));
+}
+
+void BufferedImu::mechanize(std::shared_ptr<MeasurementImu> imu) {
+	if (imu->get_imu_type() != ASPN_MEASUREMENT_IMU_IMU_TYPE_INTEGRATED) {
 		log_or_throw<std::invalid_argument>(
 		    "Only ASPN_MEASUREMENT_IMU_IMU_TYPE_INTEGRATED currently supported in BufferedImu.");
 		return;
 	}
-	auto t   = imu.get_aspn_c()->time_of_validity.elapsed_nsec;
+	auto t   = imu->get_aspn_c()->time_of_validity.elapsed_nsec;
 	auto dt  = (t - nsec_time_span().second) * 1e-9;
 	auto est = estimated_dt();
 
@@ -259,8 +263,8 @@ void BufferedImu::mechanize(const MeasurementImu& imu) {
 	if (dt > 0) {
 		dt_sum += dt;
 		++num_dt;
-		ins.mechanize(t, imu.get_meas_accel(), imu.get_meas_gyro());
-		imu_buf.insert(make_shared<MeasurementImu>(imu));
+		ins.mechanize(t, imu->get_meas_accel(), imu->get_meas_gyro());
+		imu_buf.insert(imu);
 		to_positionvelocityattitude(*ins.get_solution(), dummy_pva);
 		auto sol = make_shared<MeasurementPositionVelocityAttitude>(dummy_pva);
 		pva_buf.insert(sol);

@@ -570,7 +570,7 @@ void add_inertial_functions(pybind11::module &m) {
 	     "buffer_length"_a = 60.0)
 	METHOD(BufferedImu, reset, "pva"_a = nullptr, "imu_errs"_a = nullptr, "previous"_a = nullptr)
 	METHOD(BufferedImu, calc_pva_no_reset_since, "time"_a, "since"_a)
-	METHOD_OVERLOAD(BufferedImu, mechanize, PARAMS(const MeasurementImu &), , "imu"_a)
+	METHOD_OVERLOAD(BufferedImu, mechanize, PARAMS(std::shared_ptr<MeasurementImu>), , "imu"_a)
 	METHOD_OVERLOAD(BufferedImu,
 	                mechanize,
 	                PARAMS(const aspn_xtensor::TypeTimestamp &, const Vector3 &, const Vector3 &),

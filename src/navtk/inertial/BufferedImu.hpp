@@ -120,6 +120,21 @@ public:
 	 */
 	void mechanize(const aspn_xtensor::MeasurementImu& imu);
 
+
+	/**
+	 * Propagate the current inertial solution by integrating the supplied IMU measurement.
+	 *
+	 * @param imu IMU measurement to mechanize. IMU must be of
+	 * ASPN_MEASUREMENT_IMU_IMU_TYPE_INTEGRATED type. IMU data with a delta time between
+	 * measurements that varies by 50% or more from the average delta will generate a warning. To
+	 * account for the possibility that this class may have been initialized 'between' IMU
+	 * measurements, the input to the first call of this function may be scaled accordingly.
+	 *
+	 * @throw std::invalid_argument If error mode is DIE and a type other than
+	 * ASPN_MEASUREMENT_IMU_IMU_TYPE_INTEGRATED is received.
+	 */
+	void mechanize(std::shared_ptr<aspn_xtensor::MeasurementImu> imu);
+
 	/**
 	 * Propagate the current inertial solution by integrating the supplied IMU measurement.
 	 *
