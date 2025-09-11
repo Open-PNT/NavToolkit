@@ -123,6 +123,27 @@ void to_positionvelocityattitude(const InertialPosVelAtt& pva,
 	storage.set_quaternion(dcm_to_quat(pva.get_C_s_to_ned()));
 }
 
+std::shared_ptr<MeasurementPositionVelocityAttitude> to_positionvelocityattitude(
+    std::shared_ptr<InertialPosVelAtt> pva) {
+	auto llh  = pva->get_llh();
+	auto vned = pva->get_vned();
+	return std::make_shared<MeasurementPositionVelocityAttitude>(
+	    TypeHeader(ASPN_MEASUREMENT_POSITION_VELOCITY_ATTITUDE, 0, 0, 0, 0),
+	    pva->time_validity,
+	    ASPN_MEASUREMENT_POSITION_VELOCITY_ATTITUDE_REFERENCE_FRAME_GEODETIC,
+	    llh(0),
+	    llh(1),
+	    llh(2),
+	    vned(0),
+	    vned(1),
+	    vned(2),
+	    dcm_to_quat(pva->get_C_s_to_ned()),
+	    zeros(9, 9),
+	    ASPN_MEASUREMENT_POSITION_VELOCITY_ATTITUDE_ERROR_MODEL_NONE,
+	    Vector(),
+	    std::vector<aspn_xtensor::TypeIntegrity>{});
+}
+
 MeasurementPositionVelocityAttitude to_positionvelocityattitude(const Vector& pva) {
 	return to_positionvelocityattitude(to_navsolution(pva));
 }

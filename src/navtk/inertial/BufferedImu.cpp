@@ -67,22 +67,7 @@ BufferedImu::BufferedImu(const MeasurementPositionVelocityAttitude& pva,
       reset_err_buf(buffer_length / expected_dt + 2),
       expected_dt(expected_dt),
       dt_sum(0),
-      num_dt(0),
-      dummy_pva(MeasurementPositionVelocityAttitude(
-          TypeHeader(ASPN_MEASUREMENT_POSITION_VELOCITY_ATTITUDE, 0, 0, 0, 0),
-          TypeTimestamp((int64_t)0),
-          ASPN_MEASUREMENT_POSITION_VELOCITY_ATTITUDE_REFERENCE_FRAME_GEODETIC,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          zeros(4),
-          zeros(9, 9),
-          ASPN_MEASUREMENT_POSITION_VELOCITY_ATTITUDE_ERROR_MODEL_NONE,
-          Vector(),
-          std::vector<aspn_xtensor::TypeIntegrity>{})) {
+      num_dt(0) {
 
 	auto imu_err_shared           = make_shared<ImuErrors>(imu_errs);
 	imu_err_shared->time_validity = pva.get_time_of_validity();
@@ -160,9 +145,7 @@ bool BufferedImu::reset(shared_ptr<MeasurementPositionVelocityAttitude> pva,
 				              (*imu)->get_meas_accel(),
 				              (*imu)->get_meas_gyro());
 			}
-			to_positionvelocityattitude(*ins.get_solution(), dummy_pva);
-			auto sol = make_shared<MeasurementPositionVelocityAttitude>(dummy_pva);
-			pva_buf.insert(sol);
+			pva_buf.insert(to_positionvelocityattitude(ins.get_solution()));
 		}
 
 		reset_err_buf.insert(make_shared<ImuErrors>(reset_err));
@@ -265,9 +248,7 @@ void BufferedImu::mechanize(std::shared_ptr<MeasurementImu> imu) {
 		++num_dt;
 		ins.mechanize(t, imu->get_meas_accel(), imu->get_meas_gyro());
 		imu_buf.insert(imu);
-		to_positionvelocityattitude(*ins.get_solution(), dummy_pva);
-		auto sol = make_shared<MeasurementPositionVelocityAttitude>(dummy_pva);
-		pva_buf.insert(sol);
+		pva_buf.insert(to_positionvelocityattitude(ins.get_solution()));
 	}
 }
 

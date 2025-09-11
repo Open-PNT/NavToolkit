@@ -215,8 +215,6 @@ private:
 	// Provides an estimate of the delta time between IMU measurements, calculated from
 	// measurements presumed valid
 	double estimated_dt() const;
-
-	aspn_xtensor::MeasurementPositionVelocityAttitude dummy_pva;
 };
 
 }  // namespace inertial
