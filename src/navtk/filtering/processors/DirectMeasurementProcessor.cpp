@@ -35,12 +35,13 @@ std::shared_ptr<StandardMeasurementModel> DirectMeasurementProcessor::generate_m
 		return nullptr;
 	}
 
-	ValidationContext{}
-	    .add_matrix(gvd->estimate)
-	    .dim('N', 1)
-	    .add_matrix(gvd->covariance)
-	    .dim('N', 'N')
-	    .validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(gvd->estimate)
+		    .dim('N', 1)
+		    .add_matrix(gvd->covariance)
+		    .dim('N', 'N')
+		    .validate();
+	}
 
 	return std::make_shared<StandardMeasurementModel>(
 	    StandardMeasurementModel(gvd->estimate, measurement_matrix, gvd->covariance));

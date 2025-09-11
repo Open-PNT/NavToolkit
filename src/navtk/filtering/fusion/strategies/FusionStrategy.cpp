@@ -74,12 +74,13 @@ Size FusionStrategy::on_fusion_engine_state_block_added(Size how_many) {
 Size FusionStrategy::on_fusion_engine_state_block_added(Vector const& initial_estimate,
                                                         Matrix const& initial_covariance) {
 	auto state_count = this->get_num_states();
-	ValidationContext{}
-	    .add_matrix(initial_estimate, "initial_estimate")
-	    .dim('N', 1)
-	    .add_matrix(initial_covariance, "initial_covariance")
-	    .dim('N', 'N')
-	    .validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(initial_estimate, "initial_estimate")
+		    .dim('N', 1)
+		    .add_matrix(initial_covariance, "initial_covariance")
+		    .dim('N', 'N')
+		    .validate();
+	}
 	this->on_fusion_engine_state_block_added_impl(initial_estimate, initial_covariance);
 	this->on_state_count_changed();
 	return state_count;
@@ -90,14 +91,15 @@ Size FusionStrategy::on_fusion_engine_state_block_added(Vector const& initial_es
                                                         Matrix const& initial_covariance,
                                                         Matrix const& cross_covariance) {
 	auto state_count = this->get_num_states();
-	ValidationContext{}
-	    .add_matrix(initial_estimate, "initial_estimate")
-	    .dim('N', 1)
-	    .add_matrix(initial_covariance, "initial_covariance")
-	    .dim('N', 'N')
-	    .add_matrix(cross_covariance, "cross_covariance")
-	    .dim(state_count, 'N')
-	    .validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(initial_estimate, "initial_estimate")
+		    .dim('N', 1)
+		    .add_matrix(initial_covariance, "initial_covariance")
+		    .dim('N', 'N')
+		    .add_matrix(cross_covariance, "cross_covariance")
+		    .dim(state_count, 'N')
+		    .validate();
+	}
 	this->on_fusion_engine_state_block_added(initial_estimate, initial_covariance);
 	this->set_covariance_slice_impl(cross_covariance, 0, state_count);
 	this->set_covariance_slice_impl(xt::transpose(cross_covariance), state_count, 0);
@@ -145,8 +147,11 @@ void FusionStrategy::set_covariance_slice(Matrix const& new_covariance,
 		// Check for an off-diagonal that would overwrite itself.
 		check_transpose_safety(new_covariance, first_col, first_row, cols, rows);
 		this->set_covariance_slice_impl(xt::transpose(new_covariance), first_col, first_row);
-	} else
-		ValidationContext{}.add_matrix(new_covariance, "new_covariance").symmetric().validate();
+	} else {
+		if (ValidationContext validation{}) {
+			validation.add_matrix(new_covariance, "new_covariance").symmetric().validate();
+		}
+	}
 	this->set_covariance_slice_impl(new_covariance, first_row, first_col);
 }
 

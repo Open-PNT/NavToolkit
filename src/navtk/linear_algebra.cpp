@@ -195,7 +195,9 @@ int ell(const Matrix& A, int m) {
 }
 
 Matrix expm(const Matrix& matrix) {
-	ValidationContext{}.add_matrix(matrix, "matrix").dim('N', 'N').validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(matrix, "matrix").dim('N', 'N').validate();
+	}
 
 	// If matrix is diagonal, expm is just the exponential of the diagonal elements
 	if (is_diagonal(matrix)) {

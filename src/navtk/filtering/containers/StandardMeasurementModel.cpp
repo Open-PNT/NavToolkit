@@ -14,14 +14,15 @@ StandardMeasurementModel::StandardMeasurementModel(Vector z,
                                                    Matrix R)
     : z(std::move(z)), h(std::move(h)), H(std::move(H)), R(std::move(R)) {
 
-	ValidationContext{}
-	    .add_matrix(this->z, "z")
-	    .dim('N', 1)
-	    .add_matrix(this->H, "H")
-	    .dim('N', 'M')
-	    .add_matrix(this->R, "R")
-	    .dim('N', 'N')
-	    .validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(this->z, "z")
+		    .dim('N', 1)
+		    .add_matrix(this->H, "H")
+		    .dim('N', 'M')
+		    .add_matrix(this->R, "R")
+		    .dim('N', 'N')
+		    .validate();
+	}
 }
 StandardMeasurementModel::StandardMeasurementModel(Vector z, Matrix H, Matrix R)
     : z(std::move(z)),
@@ -29,14 +30,15 @@ StandardMeasurementModel::StandardMeasurementModel(Vector z, Matrix H, Matrix R)
       H(std::move(H)),
       R(std::move(R)) {
 
-	ValidationContext{}
-	    .add_matrix(this->z, "z")
-	    .dim('N', 1)
-	    .add_matrix(this->H, "H")
-	    .dim('N', 'M')
-	    .add_matrix(this->R, "R")
-	    .dim('N', 'N')
-	    .validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(this->z, "z")
+		    .dim('N', 1)
+		    .add_matrix(this->H, "H")
+		    .dim('N', 'M')
+		    .add_matrix(this->R, "R")
+		    .dim('N', 'N')
+		    .validate();
+	}
 }
 
 }  // namespace filtering

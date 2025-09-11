@@ -178,14 +178,11 @@ Vector3 dcm_to_rpy(const Matrix3 &dcm) {
 namespace {
 void validate_discretized_inputs(const Matrix &f, const Matrix &q, double dt) {
 
-	ValidationContext{}
-	    .add_matrix(f, "f")
-	    .dim('N', 'N')
-	    .add_matrix(q, "q")
-	    .dim('N', 'N')
-	    .validate();
-	if (dt < 0.0) {
-		log_or_throw<std::invalid_argument>("`dt` should be >= 0; is {}", dt);
+	if (ValidationContext validation{}) {
+		validation.add_matrix(f, "f").dim('N', 'N').add_matrix(q, "q").dim('N', 'N').validate();
+		if (dt < 0.0) {
+			log_or_throw<std::invalid_argument>("`dt` should be >= 0; is {}", dt);
+		}
 	}
 }
 }  // namespace

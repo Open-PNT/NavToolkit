@@ -199,12 +199,13 @@ Matrix dot(A&& a, B&& b) {
 	// Manually multiply on ARM because xt::linalg::dot seems to trigger UB (#906)
 	if (has_zero_size(a_mat) || has_zero_size(b_mat)) return Matrix{};
 
-	utils::ValidationContext{}
-	    .add_matrix(a_mat, "a_mat")
-	    .dim('X', 'N')
-	    .add_matrix(b_mat, "b_mat")
-	    .dim('N', 'Y')
-	    .validate();
+	if (utils::ValidationContext validation{}) {
+		validation.add_matrix(a_mat, "a_mat")
+		    .dim('X', 'N')
+		    .add_matrix(b_mat, "b_mat")
+		    .dim('N', 'Y')
+		    .validate();
+	}
 
 	auto left_rows = num_rows(a_mat);
 	auto left_cols = num_cols(a_mat);
@@ -244,12 +245,13 @@ Matrix transpose_a_dot_b(A&& a, B&& b) {
 	// Manually multiply on ARM because xt::linalg::dot seems to trigger UB (#906)
 	if (has_zero_size(a_mat) || has_zero_size(b_mat)) return Matrix{};
 
-	utils::ValidationContext{}
-	    .add_matrix(a_mat, "a_mat")
-	    .dim('X', 'N')
-	    .add_matrix(b_mat, "b_mat")
-	    .dim('Y', 'N')
-	    .validate();
+	if (utils::ValidationContext validation{}) {
+		validation.add_matrix(a_mat, "a_mat")
+		    .dim('X', 'N')
+		    .add_matrix(b_mat, "b_mat")
+		    .dim('Y', 'N')
+		    .validate();
+	}
 
 	Size rows      = num_rows(a_mat);
 	Size columns   = num_rows(b_mat);
@@ -288,12 +290,13 @@ Matrix a_dot_transpose_b(A&& a, B&& b) {
 	// Manually multiply on ARM because xt::linalg::dot seems to trigger UB (#906)
 	if (has_zero_size(a_mat) || has_zero_size(b_mat)) return Matrix{};
 
-	utils::ValidationContext{}
-	    .add_matrix(a_mat, "a_mat")
-	    .dim('N', 'X')
-	    .add_matrix(b_mat, "b_mat")
-	    .dim('N', 'Y')
-	    .validate();
+	if (utils::ValidationContext validation{}) {
+		validation.add_matrix(a_mat, "a_mat")
+		    .dim('N', 'X')
+		    .add_matrix(b_mat, "b_mat")
+		    .dim('N', 'Y')
+		    .validate();
+	}
 
 	Size rows      = num_cols(a_mat);
 	Size columns   = num_cols(b_mat);
