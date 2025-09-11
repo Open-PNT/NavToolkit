@@ -87,6 +87,19 @@ aspn_xtensor::MeasurementPositionVelocityAttitude to_positionvelocityattitude(
 aspn_xtensor::MeasurementPositionVelocityAttitude to_positionvelocityattitude(const Vector& pva);
 
 /**
+ * Converts a position, velocity and attitude from vector representation to ASPN. Header `device_id`
+ * and `seq_num` are set to "" and 0, respectively.
+ *
+ * @param pva A 10-element Vector containing time in seconds; latitude and longitude in radians;
+ * height above WGS-84 ellipsoid; north, east and down velocity in m/s; and roll, pitch and yaw
+ * angles in radians.
+ *
+ * @return Converted solution.
+ */
+std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude> to_positionvelocityattitude(
+    std::shared_ptr<inertial::InertialPosVelAtt> pva);
+
+/**
  * Converts a position, velocity and attitude from inertial representation to ASPN, storing the
  * result in /p storage. Header `device_id` and `seq_num` are set to "" and 0, respectively.
  * Does not modify the covariance of /p storage.
