@@ -44,6 +44,18 @@ void assert_eq(const aspn_xtensor::MeasurementPositionVelocityAttitude& pva1,
 	ASSERT_FLOAT_EQ(pva1.get_v3(), pva2.get_v3());
 	ASSERT_ALLCLOSE(Vector4(pva1.get_quaternion()), Vector4(pva2.get_quaternion()));
 }
+void assert_eq(std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude> pva1,
+               std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude> pva2) {
+	ASSERT_EQ(pva1->get_time_of_validity().get_elapsed_nsec(),
+	          pva2->get_time_of_validity().get_elapsed_nsec());
+	ASSERT_FLOAT_EQ(pva1->get_p1(), pva2->get_p1());
+	ASSERT_FLOAT_EQ(pva1->get_p2(), pva2->get_p2());
+	ASSERT_FLOAT_EQ(pva1->get_p3(), pva2->get_p3());
+	ASSERT_FLOAT_EQ(pva1->get_v1(), pva2->get_v1());
+	ASSERT_FLOAT_EQ(pva1->get_v2(), pva2->get_v2());
+	ASSERT_FLOAT_EQ(pva1->get_v3(), pva2->get_v3());
+	ASSERT_ALLCLOSE(Vector4(pva1->get_quaternion()), Vector4(pva2->get_quaternion()));
+}
 }  // namespace
 
 struct InterpolationTests : public ::testing::Test {
@@ -624,6 +636,47 @@ TEST_F(InterpolationTests, InterpolatePvaVariety) {
 	            "latest pva");
 }
 
+
+TEST_F(InterpolationTests, InterpolatePvaVarietyPtr) {
+	// Equal or very near to endpoints
+	auto pva0_ptr = std::make_shared<MeasurementPositionVelocityAttitude>(pva0);
+	auto pva1_ptr = std::make_shared<MeasurementPositionVelocityAttitude>(pva1);
+	assert_eq(pva0_ptr, linear_interp_pva(pva0_ptr, pva1_ptr, t0));
+	assert_eq(pva1_ptr, linear_interp_pva(pva0_ptr, pva1_ptr, t1));
+	assert_eq(pva0_ptr,
+	          linear_interp_pva(pva0_ptr, pva1_ptr, to_type_timestamp(std::nextafter(0.0, 1.0))));
+	assert_eq(pva0_ptr,
+	          linear_interp_pva(pva0_ptr, pva1_ptr, to_type_timestamp(std::nextafter(0.0, -1.0))));
+	assert_eq(pva1_ptr,
+	          linear_interp_pva(pva0_ptr, pva1_ptr, to_type_timestamp(std::nextafter(1.0, 2.0))));
+	assert_eq(pva1_ptr,
+	          linear_interp_pva(pva0_ptr, pva1_ptr, to_type_timestamp(std::nextafter(1.0, -1.0))));
+
+	// Switched order
+	assert_eq(pva0_ptr, linear_interp_pva(pva1_ptr, pva0_ptr, t0));
+	assert_eq(pva1_ptr, linear_interp_pva(pva1_ptr, pva0_ptr, t1));
+	assert_eq(linear_interp_pva(pva0_ptr, pva1_ptr, to_type_timestamp(0.7)),
+	          linear_interp_pva(pva1_ptr, pva0_ptr, to_type_timestamp(0.7)));
+
+	// Extrap
+	EXPECT_WARN(assert_eq(pva0_ptr, linear_interp_pva(pva0_ptr, pva1_ptr, to_type_timestamp(-1.0))),
+	            "earliest pva");
+	EXPECT_WARN(assert_eq(pva1_ptr, linear_interp_pva(pva0_ptr, pva1_ptr, to_type_timestamp(2.0))),
+	            "latest pva");
+	EXPECT_WARN(linear_interp_pva(pva0_ptr, pva1_ptr, to_type_timestamp(-1.0)), "earliest pva");
+	EXPECT_WARN(linear_interp_pva(pva0_ptr, pva1_ptr, to_type_timestamp(2.0)), "latest pva");
+
+	// Identical angles
+	assert_eq(pva1_ptr, EXPECT_WARN(linear_interp_pva(pva1_ptr, pva1_ptr, t0), "earliest"));
+	assert_eq(pva1_ptr, linear_interp_pva(pva1_ptr, pva1_ptr, t1));
+	EXPECT_WARN(assert_eq(pva1_ptr, linear_interp_pva(pva1_ptr, pva1_ptr, to_type_timestamp(0.5))),
+	            "earliest pva");
+	EXPECT_WARN(assert_eq(pva1_ptr, linear_interp_pva(pva1_ptr, pva1_ptr, to_type_timestamp(-1.0))),
+	            "earliest pva");
+	EXPECT_WARN(assert_eq(pva1_ptr, linear_interp_pva(pva1_ptr, pva1_ptr, to_type_timestamp(2.0))),
+	            "latest pva");
+}
+
 TEST_F(InterpolationTests, LinearInterpolatePvaOutsideRange) {
 
 	auto pva = EXPECT_WARN(linear_interp_pva(pva0, pva1, to_type_timestamp(1.5)),
@@ -643,4 +696,13 @@ TEST_F(InterpolationTests, LinearExtrapolatePvaOutsideRange) {
 	auto time = to_type_timestamp(1.5);
 	auto pva  = EXPECT_NO_LOG(linear_extrapolate_pva(pva0, pva1, time));
 	ASSERT_EQ(pva.get_time_of_validity(), time);
+}
+
+TEST_F(InterpolationTests, LinearExtrapolatePvaOutsideRangePtr) {
+	auto time = to_type_timestamp(1.5);
+	auto pva  = EXPECT_NO_LOG(
+        linear_extrapolate_pva(std::make_shared<MeasurementPositionVelocityAttitude>(pva0),
+                               std::make_shared<MeasurementPositionVelocityAttitude>(pva1),
+                               time));
+	ASSERT_EQ(pva->get_time_of_validity(), time);
 }

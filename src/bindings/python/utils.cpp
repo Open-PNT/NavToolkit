@@ -227,7 +227,14 @@ void add_utils_functions(pybind11::module &m) {
 	    quadratic_spline_interpolate, su, "time_source"_a, "data_source"_a, "time_interp"_a)
 	NAMESPACE_FUNCTION(
 	    cubic_spline_interpolate, su, "time_source"_a, "data_source"_a, "time_interp"_a)
-	NAMESPACE_FUNCTION(linear_interp_pva, su, "pva1"_a, "pva2"_a, "t"_a)
+	FUNCTION_CAST(linear_interp_pva,
+	              navtk::not_null<std::shared_ptr<PVA>>(*)(navtk::not_null<std::shared_ptr<PVA>>,
+	                                                       navtk::not_null<std::shared_ptr<PVA>>,
+	                                                       const aspn_xtensor::TypeTimestamp &),
+	              ,
+	              "pva1"_a,
+	              "pva2"_a,
+	              "t"_a)
 	NAMESPACE_FUNCTION(linear_interp_rpy, su, "t1"_a, "rpy1"_a, "t2"_a, "rpy2"_a, "t"_a)
 
 	FUNCTIONT(normalize, PARAMS(double), "orig"_a, "min_val"_a)

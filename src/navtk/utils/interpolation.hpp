@@ -5,6 +5,7 @@
 #include <typeinfo>
 
 #include <navtk/aspn.hpp>
+#include <navtk/not_null.hpp>
 #include <navtk/tensors.hpp>
 #include <navtk/utils/Ordered.hpp>
 
@@ -144,6 +145,24 @@ aspn_xtensor::MeasurementPositionVelocityAttitude linear_interp_pva(
     const aspn_xtensor::TypeTimestamp &t);
 
 /**
+ * Performs linear interpolation between two MeasurementPositionVelocityAttitude records.
+ *
+ * @param pva1 First record.
+ * @param pva2 Second record.
+ * @param t Time between pva1 and pva2 to interpolate to.
+ *
+ * @return Approximate pva at time `t`. If `pva1` and `pva2` have the same `time_validity`, `pva2`
+ * is returned. If `t` is outside of the range between `pva1` and `pva2` the return value will be
+ * the nearest of the inputs (constant endpoint extrapolation) with a warning. When interpolation is
+ * performed the covariance matrix is not interpolated, but copied directly from the pva input with
+ * the latest time.
+ */
+not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> linear_interp_pva(
+    navtk::not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva1,
+    navtk::not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva2,
+    const aspn_xtensor::TypeTimestamp &t);
+
+/**
  * Performs linear interpolation between or extrapolation beyond two
  * MeasurementPositionVelocityAttitude records.
  *
@@ -158,6 +177,23 @@ aspn_xtensor::MeasurementPositionVelocityAttitude linear_interp_pva(
 aspn_xtensor::MeasurementPositionVelocityAttitude linear_extrapolate_pva(
     const aspn_xtensor::MeasurementPositionVelocityAttitude &pva1,
     const aspn_xtensor::MeasurementPositionVelocityAttitude &pva2,
+    const aspn_xtensor::TypeTimestamp &t);
+
+/**
+ * Performs linear interpolation between or extrapolation beyond two
+ * MeasurementPositionVelocityAttitude records.
+ *
+ * @param pva1 First record.
+ * @param pva2 Second record.
+ * @param t Time to interpolate or extrapolate to.
+ *
+ * @return Approximate pva at time `t`. If `pva1` and `pva2` have the same `time_validity`, `pva2`
+ * is returned. When interpolation is performed the covariance matrix is not interpolated, but
+ * copied directly from the pva input with the latest time.
+ */
+not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> linear_extrapolate_pva(
+    navtk::not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva1,
+    navtk::not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva2,
     const aspn_xtensor::TypeTimestamp &t);
 
 /**

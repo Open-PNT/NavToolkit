@@ -199,8 +199,8 @@ shared_ptr<MeasurementPositionVelocityAttitude> BufferedImu::calc_pva_no_reset_s
 			    (*imu)->get_time_of_validity(), (*imu)->get_meas_accel(), (*imu)->get_meas_gyro());
 			auto post = ins_clone.get_solution();
 
-			sol_out = make_shared<MeasurementPositionVelocityAttitude>(utils::linear_interp_pva(
-			    to_positionvelocityattitude(*pre), to_positionvelocityattitude(*post), time));
+			sol_out = utils::linear_interp_pva(
+			    to_positionvelocityattitude(pre), to_positionvelocityattitude(post), time);
 		} else {
 			ins_clone.mechanize(
 			    (*imu)->get_time_of_validity(), (*imu)->get_meas_accel(), (*imu)->get_meas_gyro());

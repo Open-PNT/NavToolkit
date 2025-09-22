@@ -167,8 +167,7 @@ shared_ptr<MeasurementPositionVelocityAttitude> BufferedPva::calc_pva_no_check(
 
 	auto possible = pva_buf.get_nearest_neighbors(time);
 	if (safe_deref(pva_buf, possible.first) && safe_deref(pva_buf, possible.second)) {
-		return make_shared<MeasurementPositionVelocityAttitude>(
-		    utils::linear_interp_pva(**(possible.first), **(possible.second), time));
+		return utils::linear_interp_pva(*(possible.first), *(possible.second), time);
 	}
 	return nullptr;
 }

@@ -192,6 +192,37 @@ aspn_xtensor::MeasurementPositionVelocityAttitude linear_interp_pva(
 	return linear_extrapolate_pva(pva1, pva2, t);
 }
 
+not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> linear_interp_pva(
+    not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva1,
+    not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva2,
+    const aspn_xtensor::TypeTimestamp &t) {
+
+	int64_t time1  = pva1->get_aspn_c()->time_of_validity.elapsed_nsec;
+	int64_t time2  = pva2->get_aspn_c()->time_of_validity.elapsed_nsec;
+	int64_t time_t = t.get_elapsed_nsec();
+
+	if ((time1) > time2) {
+		return linear_interp_pva(pva2, pva1, t);
+	}
+
+	if (time_t <= time1) {
+		if (time_t != time1) {
+			spdlog::warn(
+			    "Requested interpolation time {} before earliest pva point at {}", time_t, time1);
+		}
+		return pva1;
+	};
+	if (time_t >= time2) {
+		if (time_t != time2) {
+			spdlog::warn(
+			    "Requested interpolation time {} after latest pva point at {}", time_t, time2);
+		}
+		return pva2;
+	};
+
+	return linear_extrapolate_pva(pva1, pva2, t);
+}
+
 aspn_xtensor::MeasurementPositionVelocityAttitude linear_extrapolate_pva(
     const aspn_xtensor::MeasurementPositionVelocityAttitude &pva1,
     const aspn_xtensor::MeasurementPositionVelocityAttitude &pva2,
@@ -234,6 +265,51 @@ aspn_xtensor::MeasurementPositionVelocityAttitude linear_extrapolate_pva(
 	                                                         pva1.get_error_model(),
 	                                                         pva1.get_error_model_params(),
 	                                                         pva1.get_integrity());
+}
+
+not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> linear_extrapolate_pva(
+    not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva1,
+    not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva2,
+    const aspn_xtensor::TypeTimestamp &t) {
+
+	aspn_xtensor::TypeTimestamp time1 = pva1->get_time_of_validity();
+	aspn_xtensor::TypeTimestamp time2 = pva2->get_time_of_validity();
+
+	if (time1 > time2) {
+		return linear_extrapolate_pva(pva2, pva1, t);
+	}
+
+	if (time1 == time2) {
+		return pva2;
+	}
+
+	auto l     = linear_interpolate(time1, pva1->get_p1(), time2, pva2->get_p1(), t);
+	auto ln    = linear_interpolate(time1, pva1->get_p2(), time2, pva2->get_p2(), t);
+	auto a     = linear_interpolate(time1, pva1->get_p3(), time2, pva2->get_p3(), t);
+	Vector3 v1 = {pva1->get_v1(), pva1->get_v2(), pva1->get_v3()};
+	Vector3 v2 = {pva2->get_v1(), pva2->get_v2(), pva2->get_v3()};
+	auto v     = linear_interpolate(time1, v1, time2, v2, t);
+
+	Vector3 rpy1 = navutils::quat_to_rpy(pva1->get_quaternion());
+	Vector3 rpy2 = navutils::quat_to_rpy(pva2->get_quaternion());
+	auto att     = linear_extrapolate_rpy(time1, rpy1, time2, rpy2, t);
+
+	// TODO PNTOS-376 Figure out the proper, safe way to interpolate a cov matrix.
+	return std::make_shared<aspn_xtensor::MeasurementPositionVelocityAttitude>(
+	    pva1->get_header(),
+	    t,
+	    pva1->get_reference_frame(),
+	    l,
+	    ln,
+	    a,
+	    v(0),
+	    v(1),
+	    v(2),
+	    navutils::rpy_to_quat(att),
+	    pva1->get_covariance(),
+	    pva1->get_error_model(),
+	    pva1->get_error_model_params(),
+	    pva1->get_integrity());
 }
 
 Vector3 linear_interp_rpy(const aspn_xtensor::TypeTimestamp &t1,
