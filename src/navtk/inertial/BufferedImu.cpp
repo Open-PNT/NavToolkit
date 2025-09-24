@@ -269,11 +269,15 @@ std::shared_ptr<aspn_xtensor::MeasurementImu> BufferedImu::calc_force_and_rate(
 		auto pva   = calc_pva(time);
 		auto after = imu_buf.get_nearest_neighbors(time).second;
 		if (pva != nullptr && safe_deref(imu_buf, after)) {
+			auto imu        = *after;
+			auto meas_accel = imu->get_meas_accel();
+			auto meas_gyro  = imu->get_meas_gyro();
+
 			auto force = calc_force_ned(navutils::quat_to_dcm(pva->get_quaternion()),
 			                            estimated_dt(),
-			                            (*after)->get_meas_gyro(),
-			                            (*after)->get_meas_accel());
-			auto rate  = calc_rot_rate(*pva, estimated_dt(), (*after)->get_meas_gyro());
+			                            meas_gyro,
+			                            meas_accel);
+			auto rate  = calc_rot_rate(*pva, estimated_dt(), meas_gyro);
 			return std::make_shared<aspn_xtensor::MeasurementImu>(to_imu(time, force, rate));
 		}
 	}
