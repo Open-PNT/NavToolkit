@@ -89,15 +89,17 @@ Vector3 calc_rot_rate(const aspn_xtensor::MeasurementPositionVelocityAttitude& p
                       double dt,
                       const Vector3& dth) {
 
+	auto latitude = pva.get_p1();
+
 	return calc_rot_rate(navutils::quat_to_dcm(pva.get_quaternion()),
-	                     navutils::transverse_radius(pva.get_p1()),
-	                     navutils::meridian_radius(pva.get_p1()),
+	                     navutils::transverse_radius(latitude),
+	                     navutils::meridian_radius(latitude),
 	                     pva.get_p3(),
-	                     cos(pva.get_p1()),
+	                     cos(latitude),
 	                     dt,
 	                     dth,
-	                     sin(pva.get_p1()),
-	                     tan(pva.get_p1()),
+	                     sin(latitude),
+	                     tan(latitude),
 	                     utils::extract_vel(pva));
 }
 
