@@ -46,15 +46,7 @@ void assert_eq(const aspn_xtensor::MeasurementPositionVelocityAttitude& pva1,
 }
 void assert_eq(std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude> pva1,
                std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude> pva2) {
-	ASSERT_EQ(pva1->get_time_of_validity().get_elapsed_nsec(),
-	          pva2->get_time_of_validity().get_elapsed_nsec());
-	ASSERT_FLOAT_EQ(pva1->get_p1(), pva2->get_p1());
-	ASSERT_FLOAT_EQ(pva1->get_p2(), pva2->get_p2());
-	ASSERT_FLOAT_EQ(pva1->get_p3(), pva2->get_p3());
-	ASSERT_FLOAT_EQ(pva1->get_v1(), pva2->get_v1());
-	ASSERT_FLOAT_EQ(pva1->get_v2(), pva2->get_v2());
-	ASSERT_FLOAT_EQ(pva1->get_v3(), pva2->get_v3());
-	ASSERT_ALLCLOSE(Vector4(pva1->get_quaternion()), Vector4(pva2->get_quaternion()));
+	assert_eq(*pva1, *pva2);
 }
 }  // namespace
 
