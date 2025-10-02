@@ -166,25 +166,26 @@ aspn_xtensor::MeasurementPositionVelocityAttitude linear_interp_pva(
     const aspn_xtensor::MeasurementPositionVelocityAttitude &pva2,
     const aspn_xtensor::TypeTimestamp &t) {
 
-	int64_t time1  = pva1.get_aspn_c()->time_of_validity.elapsed_nsec;
-	int64_t time2  = pva2.get_aspn_c()->time_of_validity.elapsed_nsec;
-	int64_t time_t = t.get_elapsed_nsec();
+	int64_t time1       = pva1.get_aspn_c()->time_of_validity.elapsed_nsec;
+	int64_t time2       = pva2.get_aspn_c()->time_of_validity.elapsed_nsec;
+	int64_t target_time = t.get_elapsed_nsec();
 
 	if ((time1) > time2) {
 		return linear_interp_pva(pva2, pva1, t);
 	}
 
-	if (time_t <= time1) {
-		if (time_t != time1) {
-			spdlog::warn(
-			    "Requested interpolation time {} before earliest pva point at {}", time_t, time1);
+	if (target_time <= time1) {
+		if (target_time != time1) {
+			spdlog::warn("Requested interpolation time {} before earliest pva point at {}",
+			             target_time,
+			             time1);
 		}
 		return pva1;
 	};
-	if (time_t >= time2) {
-		if (time_t != time2) {
+	if (target_time >= time2) {
+		if (target_time != time2) {
 			spdlog::warn(
-			    "Requested interpolation time {} after latest pva point at {}", time_t, time2);
+			    "Requested interpolation time {} after latest pva point at {}", target_time, time2);
 		}
 		return pva2;
 	};
@@ -197,25 +198,26 @@ not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> lin
     not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva2,
     const aspn_xtensor::TypeTimestamp &t) {
 
-	int64_t time1  = pva1->get_aspn_c()->time_of_validity.elapsed_nsec;
-	int64_t time2  = pva2->get_aspn_c()->time_of_validity.elapsed_nsec;
-	int64_t time_t = t.get_elapsed_nsec();
+	int64_t time1       = pva1->get_aspn_c()->time_of_validity.elapsed_nsec;
+	int64_t time2       = pva2->get_aspn_c()->time_of_validity.elapsed_nsec;
+	int64_t target_time = t.get_elapsed_nsec();
 
 	if ((time1) > time2) {
 		return linear_interp_pva(pva2, pva1, t);
 	}
 
-	if (time_t <= time1) {
-		if (time_t != time1) {
-			spdlog::warn(
-			    "Requested interpolation time {} before earliest pva point at {}", time_t, time1);
+	if (target_time <= time1) {
+		if (target_time != time1) {
+			spdlog::warn("Requested interpolation time {} before earliest pva point at {}",
+			             target_time,
+			             time1);
 		}
 		return pva1;
 	};
-	if (time_t >= time2) {
-		if (time_t != time2) {
+	if (target_time >= time2) {
+		if (target_time != time2) {
 			spdlog::warn(
-			    "Requested interpolation time {} after latest pva point at {}", time_t, time2);
+			    "Requested interpolation time {} after latest pva point at {}", target_time, time2);
 		}
 		return pva2;
 	};
