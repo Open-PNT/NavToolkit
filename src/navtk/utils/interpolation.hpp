@@ -133,11 +133,11 @@ Y linear_interpolate(const aspn_xtensor::TypeTimestamp &x0,
  * @param pva2 Second record.
  * @param t Time between pva1 and pva2 to interpolate to.
  *
- * @return Approximate pva at time `t`. If `pva1` and `pva2` have the same `time_validity`, `pva2`
- * is returned. If `t` is outside of the range between `pva1` and `pva2` the return value will be
- * the nearest of the inputs (constant endpoint extrapolation) with a warning. When interpolation is
- * performed the covariance matrix is not interpolated, but copied directly from the pva input with
- * the latest time.
+ * @return Approximate pva at time `t`. If `pva1` and `pva2` have the same `time_validity`, a copy
+ * of `pva2` is returned. If `t` is outside of the range between `pva1` and `pva2` the return value
+ * will be a copy of the nearest of the inputs (constant endpoint extrapolation) with a warning.
+ * When interpolation is performed the covariance matrix is not interpolated, but copied directly
+ * from the pva input with the latest time.
  */
 aspn_xtensor::MeasurementPositionVelocityAttitude linear_interp_pva(
     const aspn_xtensor::MeasurementPositionVelocityAttitude &pva1,
@@ -151,11 +151,11 @@ aspn_xtensor::MeasurementPositionVelocityAttitude linear_interp_pva(
  * @param pva2 Second record.
  * @param t Time between pva1 and pva2 to interpolate to.
  *
- * @return Approximate pva at time `t`. If `pva1` and `pva2` have the same `time_validity`, `pva2`
- * is returned. If `t` is outside of the range between `pva1` and `pva2` the return value will be
- * the nearest of the inputs (constant endpoint extrapolation) with a warning. When interpolation is
- * performed the covariance matrix is not interpolated, but copied directly from the pva input with
- * the latest time.
+ * @return Approximate pva at time `t`. If `pva1` and `pva2` have the same `time_validity`, a
+ * pointer to `pva2` is returned. If `t` is outside of the range between `pva1` and `pva2` the
+ * return value will be a pointer to the nearest of the inputs (constant endpoint extrapolation)
+ * with a warning. When interpolation is performed the covariance matrix is not interpolated, but
+ * copied directly from the pva input with the latest time.
  */
 not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> linear_interp_pva(
     navtk::not_null<std::shared_ptr<aspn_xtensor::MeasurementPositionVelocityAttitude>> pva1,
