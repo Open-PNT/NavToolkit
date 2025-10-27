@@ -1011,6 +1011,7 @@ void add_filtering_functions(pybind11::module &m) {
 	METHOD_VOID(Pinson15NedBlock, generate_f_pinson15)
 	METHOD_VOID(Pinson15NedBlock, generate_q_pinson15)
 	METHOD_VOID(Pinson15NedBlock, get_imu_model)
+	METHOD_VOID(Pinson15NedBlock, get_q15_matrix)
 	METHOD_VOID(Pinson15NedBlock, get_lin_function)
 	METHOD_VOID(Pinson15NedBlock, get_discretization_strategy)
 	METHOD_VOID(Pinson15NedBlock, get_gravity_model)

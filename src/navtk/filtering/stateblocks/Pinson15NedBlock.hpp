@@ -123,7 +123,9 @@ public:
 	Pinson15NedBlock(const Pinson15NedBlock &block);
 
 	/**
-	 * A function which is used to give the state block aux data.
+	 * A function which is used to give the state block aux data. Note that
+	 * it generates Q matrix upon receiving a new ImuModel or a new Pva data, different than
+	 * previous ones.
 	 *
 	 * @param aux_data An AspnBaseVector containing inertial aux (Pva + Imu messages) and/or a
 	 * filtering::ImuModel.
@@ -382,12 +384,17 @@ public:
 	 *
 	 * @return The Q matrix.
 	 */
-	Matrix generate_q_pinson15(Matrix C_sensor_to_nav);
+	Matrix generate_q_pinson15(const Matrix &C_sensor_to_nav);
 
 	/**
 	 * @return The active ImuModel.
 	 */
 	ImuModel get_imu_model() const;
+
+	/**
+	 * @return The Q matrix.
+	 */
+	Matrix get_q15_matrix() const;
 
 	/**
 	 * @return The active #LinearizationPointFunction.
@@ -429,6 +436,21 @@ private:
 	 * An instance of ImuModel specifying the error model parameters of the INS being used.
 	 */
 	ImuModel imu_model;
+
+	/**
+	 * Keep if all the imu_model's accel_rand_walk elements are the same.
+	 */
+	bool all_eq_accel_randwalk = false;
+
+	/**
+	 * Keep if all the imu_model's gyro_rand_walk elements are the same.
+	 */
+	bool all_eq_gyro_randwalk = false;
+
+	/**
+	 * A Pinson15 Q matrix
+	 */
+	Matrix q15_matrix = zeros(15, 15);
 
 	/**
 	 * Storage for a #LinearizationPointFunction.

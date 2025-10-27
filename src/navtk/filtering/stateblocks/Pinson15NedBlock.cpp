@@ -20,11 +20,21 @@ Pinson15NedBlock::Pinson15NedBlock(const std::string& label,
     : StateBlock(15, label, std::move(discretization_strategy)),
       imu_model(std::move(imu_model)),
       lin_function(std::move(lin_function)),
-      gravity_model(std::move(gravity_model)) {}
+      gravity_model(std::move(gravity_model)) {
+	all_eq_gyro_randwalk =
+	    (imu_model.gyro_random_walk_sigma[0] == imu_model.gyro_random_walk_sigma[1] &&
+	     imu_model.gyro_random_walk_sigma[0] == imu_model.gyro_random_walk_sigma[2]);
+	all_eq_accel_randwalk =
+	    (imu_model.accel_random_walk_sigma[0] == imu_model.accel_random_walk_sigma[1] &&
+	     imu_model.accel_random_walk_sigma[0] == imu_model.accel_random_walk_sigma[2]);
+}
 
 Pinson15NedBlock::Pinson15NedBlock(const Pinson15NedBlock& block)
     : StateBlock(block),
       imu_model(block.imu_model),
+      all_eq_accel_randwalk(block.all_eq_accel_randwalk),
+      all_eq_gyro_randwalk(block.all_eq_gyro_randwalk),
+      q15_matrix(block.q15_matrix),
       lin_function(block.lin_function),
       gravity_model(block.gravity_model) {
 	if (block.new_pva_aux != nullptr) {
@@ -46,11 +56,23 @@ void Pinson15NedBlock::receive_aux_data(const AspnBaseVector& aux_data) {
 		if (auto pva_aux = std::dynamic_pointer_cast<Pva>(aux)) {
 			old_pva_aux = new_pva_aux;
 			new_pva_aux = pva_aux;
+			if (old_pva_aux == nullptr || !all_eq_gyro_randwalk || !all_eq_accel_randwalk) {
+				generate_q_pinson15(navtk::navutils::quat_to_dcm(new_pva_aux->get_quaternion()));
+			}
 		} else if (auto force_and_rate_aux = std::dynamic_pointer_cast<Imu>(aux)) {
 			old_force_and_rate_aux = new_force_and_rate_aux;
 			new_force_and_rate_aux = force_and_rate_aux;
 		} else if (auto imu_model_aux = std::dynamic_pointer_cast<ImuModel>(aux)) {
 			imu_model = *imu_model_aux;
+			all_eq_gyro_randwalk =
+			    (imu_model.gyro_random_walk_sigma[0] == imu_model.gyro_random_walk_sigma[1] &&
+			     imu_model.gyro_random_walk_sigma[0] == imu_model.gyro_random_walk_sigma[2]);
+			all_eq_accel_randwalk =
+			    (imu_model.accel_random_walk_sigma[0] == imu_model.accel_random_walk_sigma[1] &&
+			     imu_model.accel_random_walk_sigma[0] == imu_model.accel_random_walk_sigma[2]);
+			if (new_pva_aux != nullptr) {
+				generate_q_pinson15(navtk::navutils::quat_to_dcm(new_pva_aux->get_quaternion()));
+			}
 		} else {
 			StateBlock::receive_aux_data(aux_data);
 		}
@@ -71,10 +93,9 @@ DynamicsModel Pinson15NedBlock::generate_dynamics(GenXhatPFunction,
 		log_or_throw<std::runtime_error>(
 		    "Pinson15 Cannot propagate unless it first receives aux_data with a Pose object");
 
-	double dt = (time_to.get_elapsed_nsec() - time_from.get_elapsed_nsec()) * 1e-9;
-	auto F    = generate_f_pinson15(*new_pva_aux, *new_force_and_rate_aux);
-	auto Q    = generate_q_pinson15(navtk::navutils::quat_to_dcm(new_pva_aux->get_quaternion()));
-	auto discretized = discretization_strategy(F, eye(num_rows(Q)), Q, dt);
+	double dt        = (time_to.get_elapsed_nsec() - time_from.get_elapsed_nsec()) * 1e-9;
+	auto F           = generate_f_pinson15(*new_pva_aux, *new_force_and_rate_aux);
+	auto discretized = discretization_strategy(F, eye(15), q15_matrix, dt);
 	auto Phi         = discretized.first;
 	auto Qd          = discretized.second;
 
@@ -103,27 +124,36 @@ Matrix Pinson15NedBlock::scale_phi(Matrix& phi) {
 	return phi;
 }
 
-Matrix Pinson15NedBlock::generate_q_pinson15(Matrix C_sensor_to_nav) {
-	Matrix q = zeros(1, 15);
-
-	xt::view(q, xt::keep(0), xt::range(3, 6)) = imu_model.accel_random_walk_sigma;
-	xt::view(q, xt::keep(0), xt::range(6, 9)) = imu_model.gyro_random_walk_sigma;
-	xt::view(q, xt::keep(0), xt::range(9, 12)) =
-	    imu_model.accel_bias_sigma * sqrt(2 / imu_model.accel_bias_tau);
-	xt::view(q, xt::keep(0), xt::range(12, 15)) =
-	    imu_model.gyro_bias_sigma * sqrt(2 / imu_model.gyro_bias_tau);
-
-	Matrix Q = pow(q, 2) * eye(15);
-
-	// Map random walk into navigation frame
+Matrix Pinson15NedBlock::generate_q_pinson15(const Matrix& C_sensor_to_nav) {
 	auto block = xt::range(3, 6);
-	xt::view(Q, block, block) =
-	    dot(dot(C_sensor_to_nav, xt::view(Q, block, block)), xt::transpose(C_sensor_to_nav));
-	block = xt::range(6, 9);
-	xt::view(Q, block, block) =
-	    dot(dot(C_sensor_to_nav, xt::view(Q, block, block)), xt::transpose(C_sensor_to_nav));
+	if (all_eq_accel_randwalk) {
+		xt::view(q15_matrix, block, block) = xt::diag(pow(imu_model.accel_random_walk_sigma, 2));
+	} else {
+		for (size_t idx = 3; idx < 6; idx++) {
+			xt::view(q15_matrix, idx, block) = xt::view(C_sensor_to_nav, (idx - 3), xt::all()) *
+			                                   pow(imu_model.accel_random_walk_sigma, 2);
+		}
+		xt::view(q15_matrix, block, block) =
+		    dot(xt::view(q15_matrix, block, block), xt::transpose(C_sensor_to_nav));
+	}
 
-	return Q;
+	block = xt::range(6, 9);
+	if (all_eq_gyro_randwalk) {
+		xt::view(q15_matrix, block, block) = xt::diag(pow(imu_model.gyro_random_walk_sigma, 2));
+	} else {
+		for (size_t idx = 6; idx < 9; idx++) {
+			xt::view(q15_matrix, idx, block) = xt::view(C_sensor_to_nav, (idx - 6), xt::all()) *
+			                                   pow(imu_model.gyro_random_walk_sigma, 2);
+		}
+		xt::view(q15_matrix, block, block) =
+		    dot(xt::view(q15_matrix, block, block), xt::transpose(C_sensor_to_nav));
+	}
+
+	xt::view(q15_matrix, xt::range(9, 12), xt::range(9, 12)) =
+	    xt::diag(pow(imu_model.accel_bias_sigma, 2) * (2 / imu_model.accel_bias_tau));
+	xt::view(q15_matrix, xt::range(12, 15), xt::range(12, 15)) =
+	    xt::diag(pow(imu_model.gyro_bias_sigma, 2) * (2 / imu_model.gyro_bias_tau));
+	return q15_matrix;
 }
 
 Matrix Pinson15NedBlock::generate_f_pinson15(const Pva& pva_aux, const Imu& force_and_rate_aux) {
@@ -181,12 +211,10 @@ Matrix Pinson15NedBlock::generate_f_pinson15(const Pva& pva_aux, const Imu& forc
 	double a5 = 4.3977311e-9;
 	double a6 = 7.211e-13;
 
-
-	double dgdlat = 2 * a1 * a2 * cos(2 * pos[0]) +
-	                a1 * a3 * (12 * (1 - cos(4 * pos[0])) / 8 - pow(sin(pos[0]), 4)) +
-	                2 * a5 * (cos(2 * pos[0]) - cosl * sinl) * pos[2];
-	double dgdalt = (a4 + a5 * pow(sinl, 2)) + a6 * 2 * pos[2];
-
+	auto dgdlat = 2 * a1 * a2 * cos(2 * pos[0]) +
+	              a1 * a3 * (12 * (1 - cos(4 * pos[0])) / 8 - pow(sin(pos[0]), 4)) +
+	              2 * a5 * (cos(2 * pos[0]) - cosl * sinl) * pos[2];
+	auto dgdalt = (a4 + a5 * pow(sinl, 2)) + a6 * 2 * pos[2];
 
 	// block6: deltavel = block6 * dpos
 	Matrix block6 =
@@ -239,6 +267,8 @@ Matrix Pinson15NedBlock::generate_f_pinson15(const Pva& pva_aux, const Imu& forc
 }
 
 ImuModel Pinson15NedBlock::get_imu_model() const { return imu_model; }
+
+Matrix Pinson15NedBlock::get_q15_matrix() const { return q15_matrix; }
 
 Pinson15NedBlock::LinearizationPointFunction Pinson15NedBlock::get_lin_function() const {
 	return lin_function;
