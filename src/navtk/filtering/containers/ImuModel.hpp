@@ -103,7 +103,7 @@ public:
  * 0.
  *
  * See
- * https://aerospace.honeywell.com/content/dam/aerobt/en/documents/learn/products/sensors/brochures/N61-1619-000-001-HG1700InertialMeasurementUnit-bro.pdf
+ * https://prod-edam.honeywell.com/content/dam/honeywell-edam/aero/en-us/products/navigation-and-sensors/inertial-measurement-units/hg1700-inertial-measurement-unit/documents/hon-aero-n61-1619-000-001-hg1700-inertial-measurement-unit-brochure-en.pdf?download=false
  *
  * Spec sheet values given as (all 1 sigma):
  *
@@ -126,7 +126,7 @@ ImuModel hg1700_model();
  * Returns the Honeywell HG9900 IMU model. Bias tau values are assumed.
  *
  * See
- * https://aerospace.honeywell.com/content/dam/aerobt/en/documents/learn/products/sensors/brochures/N61-1638-000-000-hg9900inertialmeasurementunit-bro.pdf
+ * https://prod-edam.honeywell.com/content/dam/honeywell-edam/aero/en-us/products/navigation-and-sensors/inertial-measurement-units/hg9900-inertial-measurement-unit/documents/hon-aero-n61-1638-000-000-hg9900-inertial-measurement-unit-brochure-en.pdf?download=false
  * Spec sheet values given as (all 1 sigma):
  *
  * Accel Bias: 25 ug = 2.4525e-4 m/s^2
@@ -173,7 +173,7 @@ ImuModel sagem_primus200_model();
  * large number of additional error terms not accounted for- it is unlikely that this model will
  * perform well as is.
  *
- * See https://www.sensonor.com/media/1132/ts1524r9-datasheet-stim300.pdf
+ * See https://safran-navigation-timing.com/portal/download/stim300-datasheets/?version=r9
  *
  * Spec sheet values given as:
  *
