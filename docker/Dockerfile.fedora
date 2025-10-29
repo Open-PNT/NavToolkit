@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:1
-ARG BASE=fedora:39
+ARG BASE=fedora:43
 FROM ${BASE}
 
 # ccache: For CI machines to decrease compile times

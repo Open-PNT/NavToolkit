@@ -173,7 +173,7 @@ PLATFORMS = {
         Platform(
             'fedora-gcc',
             'Dockerfile.fedora',
-            'fedora:39',
+            'fedora:43',
             meson_setup_args=[
                 '-Db_sanitize=address,undefined',
                 '--buildtype=release',
@@ -187,7 +187,7 @@ PLATFORMS = {
         Platform(
             'fedora-clang',
             'Dockerfile.fedora',
-            'fedora:39',
+            'fedora:43',
             docker_run_args=[
                 '--env',
                 'CC=ccache clang',

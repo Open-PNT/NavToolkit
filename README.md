@@ -119,7 +119,7 @@ meson setup build -Dpython_docstrings=false
 before the standard `/usr/bin/python`.  If it is not done automatically, it will need to be done
 manually.
 
-### Fedora 39
+### Fedora 43
 
 The following commands do most of the setup necessary to build the C++ library, Python extension
 module, and documentation as well as run the examples:
