@@ -1,5 +1,5 @@
 project('navtoolkit', 'cpp',
-    default_options: ['cpp_std=c++17', 'backend_max_links=4', 'cpp_args=-DGLIBCXX_ASSERTIONS=1'],
+    default_options: ['cpp_std=c++20', 'backend_max_links=4', 'cpp_args=-DGLIBCXX_ASSERTIONS=1'],
     meson_version: '>=0.59.1',
     version: '2.1.0-3.dev')
 
