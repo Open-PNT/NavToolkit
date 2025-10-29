@@ -4,8 +4,8 @@
 #include <sstream>
 
 #include <spdlog/spdlog.h>
-#include <xtensor/xbuilder.hpp>
-#include <xtensor/xio.hpp>
+#include <xtensor/generators/xbuilder.hpp>
+#include <xtensor/io/xio.hpp>
 
 #include <navtk/errors.hpp>
 #include <navtk/factory.hpp>

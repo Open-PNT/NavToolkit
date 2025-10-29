@@ -8,7 +8,7 @@
 #include <error_mode_assert.hpp>
 #include <filtering/fusion/strategies/ConfiguredStrategy.hpp>
 #include <tensor_assert.hpp>
-#include <xtensor/xrandom.hpp>
+#include <xtensor/generators/xrandom.hpp>
 
 #include <navtk/filtering/containers/LinearizedStrategyBase.hpp>
 #include <navtk/filtering/experimental/containers/RbpfModel.hpp>

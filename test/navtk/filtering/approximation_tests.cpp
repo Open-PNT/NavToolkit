@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <tensor_assert.hpp>
-#include <xtensor/xio.hpp>
+#include <xtensor/io/xio.hpp>
 
 #include <navtk/filtering/utils.hpp>
 

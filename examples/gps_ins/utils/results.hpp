@@ -1,6 +1,6 @@
 #pragma once
 
-#include <xtensor/xrandom.hpp>
+#include <xtensor/generators/xrandom.hpp>
 
 #include <navtk/aspn.hpp>
 #include <navtk/filtering/fusion/StandardFusionEngine.hpp>

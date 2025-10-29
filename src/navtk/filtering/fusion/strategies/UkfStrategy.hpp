@@ -3,7 +3,7 @@
 #include <functional>
 #include <memory>
 
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/filtering/containers/LinearizedStrategyBase.hpp>
 #include <navtk/filtering/containers/StandardDynamicsModel.hpp>

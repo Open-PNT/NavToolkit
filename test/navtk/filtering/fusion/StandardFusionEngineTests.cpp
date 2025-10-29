@@ -6,7 +6,7 @@
 #include <error_mode_assert.hpp>
 #include <spdlog_assert.hpp>
 #include <tensor_assert.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/errors.hpp>
 #include <navtk/filtering/GenXhatPFunction.hpp>

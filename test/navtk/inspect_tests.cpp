@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/factory.hpp>
 #include <navtk/inspect.hpp>

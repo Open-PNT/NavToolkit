@@ -34,8 +34,8 @@ template <int N, typename T = Scalar>
 using VectorN = xt::pytensor<T, 1>;
 }  // namespace navtk
 #else
-#	include <xtensor/xfixed.hpp>
-#	include <xtensor/xtensor.hpp>
+#	include <xtensor/containers/xfixed.hpp>
+#	include <xtensor/containers/xtensor.hpp>
 namespace navtk {
 /**
  * Tensor type definition.
@@ -62,7 +62,7 @@ using VectorN = xt::xtensor_fixed<T, xt::xshape<N> >;
 }  // namespace navtk
 #endif
 
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xview.hpp>
 
 namespace navtk {
 

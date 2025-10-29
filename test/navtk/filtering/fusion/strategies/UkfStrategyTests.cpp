@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 #include <tensor_assert.hpp>
-#include <xtensor/xmanipulation.hpp>
+#include <xtensor/misc/xmanipulation.hpp>
 
 #include <navtk/filtering/fusion/strategies/UkfStrategy.hpp>
 #include <navtk/linear_algebra.hpp>

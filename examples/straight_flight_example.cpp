@@ -6,7 +6,7 @@
 #include <pybind11/pybind11.h>
 #include <utils/exampleutils.hpp>
 #include <xtensor-python/pytensor.hpp>
-#include <xtensor/xrandom.hpp>
+#include <xtensor/generators/xrandom.hpp>
 
 #include <navtk/factory.hpp>
 #include <navtk/filtering/GenXhatPFunction.hpp>

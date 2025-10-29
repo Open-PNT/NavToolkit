@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 #include <spdlog/spdlog.h>
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/errors.hpp>
 #include <navtk/filtering/containers/GaussianVectorData.hpp>

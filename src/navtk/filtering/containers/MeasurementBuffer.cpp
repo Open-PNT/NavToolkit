@@ -3,8 +3,8 @@
 #include <navtk/utils/interpolation.hpp>
 
 #include <spdlog/spdlog.h>
-#include <xtensor/xadapt.hpp>
-#include <xtensor/xbuilder.hpp>
+#include <xtensor/containers/xadapt.hpp>
+#include <xtensor/generators/xbuilder.hpp>
 
 using xt::vstack;
 using xt::xtuple;

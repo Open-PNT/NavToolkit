@@ -1,6 +1,6 @@
 #pragma once
 
-#include <xtensor/xmath.hpp>
+#include <xtensor/core/xmath.hpp>
 
 #include <navtk/inspect.hpp>
 #include <navtk/tensors.hpp>

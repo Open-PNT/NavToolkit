@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include <error_mode_assert.hpp>
 #include <tensor_assert.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/aspn.hpp>
 #include <navtk/filtering/containers/EstimateWithCovariance.hpp>

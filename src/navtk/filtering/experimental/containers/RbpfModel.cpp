@@ -5,9 +5,9 @@
 #include <numeric>
 #include <tuple>
 
-#include <xtensor/xbuilder.hpp>
-#include <xtensor/xmath.hpp>
-#include <xtensor/xpad.hpp>
+#include <xtensor/core/xmath.hpp>
+#include <xtensor/generators/xbuilder.hpp>
+#include <xtensor/misc/xpad.hpp>
 
 #include <navtk/errors.hpp>
 #include <navtk/experimental/random.hpp>

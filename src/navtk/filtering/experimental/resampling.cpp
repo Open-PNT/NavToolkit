@@ -1,7 +1,7 @@
 #include <navtk/filtering/experimental/resampling.hpp>
 
-#include <xtensor/xmath.hpp>
-#include <xtensor/xrandom.hpp>
+#include <xtensor/core/xmath.hpp>
+#include <xtensor/generators/xrandom.hpp>
 
 #include <navtk/experimental/random.hpp>
 #include <navtk/linear_algebra.hpp>

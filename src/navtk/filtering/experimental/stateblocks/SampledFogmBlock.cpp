@@ -5,7 +5,7 @@
 #include <navtk/factory.hpp>
 #include <navtk/utils/ValidationContext.hpp>
 #include <xtensor-blas/xlinalg.hpp>
-#include <xtensor/xmath.hpp>
+#include <xtensor/core/xmath.hpp>
 
 using navtk::utils::ValidationContext;
 namespace navtk {

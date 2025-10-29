@@ -4,13 +4,13 @@
 #include <gtest/gtest.h>
 #include <error_mode_assert.hpp>
 #include <tensor_assert.hpp>
-#include <xtensor/xrandom.hpp>
+#include <xtensor/generators/xrandom.hpp>
 
 #include <navtk/filtering/containers/StandardDynamicsModel.hpp>
 #include <navtk/filtering/containers/StandardMeasurementModel.hpp>
 #include <navtk/filtering/experimental/fusion/strategies/RbpfStrategy.hpp>
 #include <navtk/filtering/fusion/strategies/EkfStrategy.hpp>
-#include <xtensor/xmath.hpp>
+#include <xtensor/core/xmath.hpp>
 
 #include <navtk/experimental/random.hpp>
 #include <navtk/linear_algebra.hpp>

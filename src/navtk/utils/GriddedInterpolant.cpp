@@ -1,6 +1,6 @@
 #include <navtk/utils/GriddedInterpolant.hpp>
 
-#include <xtensor/xmath.hpp>
+#include <xtensor/core/xmath.hpp>
 
 #include <navtk/errors.hpp>
 #include <navtk/linear_algebra.hpp>

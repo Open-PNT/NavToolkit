@@ -4,11 +4,11 @@
 #include <iterator>
 #include <vector>
 
-#include <xtensor/xindex_view.hpp>
-#include <xtensor/xmath.hpp>
-#include <xtensor/xpad.hpp>
-#include <xtensor/xstrided_view.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/core/xmath.hpp>
+#include <xtensor/misc/xpad.hpp>
+#include <xtensor/views/xindex_view.hpp>
+#include <xtensor/views/xstrided_view.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/experimental/random.hpp>
 #include <navtk/tensors.hpp>

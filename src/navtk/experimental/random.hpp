@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <random>
-#include <xtensor/xrandom.hpp>
+#include <xtensor/generators/xrandom.hpp>
 
 #include <navtk/not_null.hpp>
 #include <navtk/tensors.hpp>

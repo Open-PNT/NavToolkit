@@ -2,10 +2,10 @@
 
 #include <string>
 
-#include <xtensor/xio.hpp>
-#include <xtensor/xmath.hpp>
-#include <xtensor/xrandom.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/core/xmath.hpp>
+#include <xtensor/generators/xrandom.hpp>
+#include <xtensor/io/xio.hpp>
+#include <xtensor/views/xview.hpp>
 
 namespace navtk {
 namespace utils {

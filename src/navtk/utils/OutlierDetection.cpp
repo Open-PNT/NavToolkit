@@ -1,6 +1,6 @@
 #include <navtk/utils/OutlierDetection.hpp>
 
-#include <xtensor/xsort.hpp>
+#include <xtensor/misc/xsort.hpp>
 
 #include <navtk/factory.hpp>
 #include <navtk/tensors.hpp>

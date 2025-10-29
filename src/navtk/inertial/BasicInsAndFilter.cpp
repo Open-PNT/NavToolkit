@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/aspn.hpp>
 #include <navtk/factory.hpp>

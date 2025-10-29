@@ -1,9 +1,9 @@
 #include <navtk/utils/OutlierDetection.hpp>
 #include <navtk/utils/OutlierDetectionSigma.hpp>
 
-#include <xtensor/xindex_view.hpp>
-#include <xtensor/xmath.hpp>
-#include <xtensor/xsort.hpp>
+#include <xtensor/core/xmath.hpp>
+#include <xtensor/misc/xsort.hpp>
+#include <xtensor/views/xindex_view.hpp>
 
 #include <navtk/factory.hpp>
 #include <navtk/tensors.hpp>

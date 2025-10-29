@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/aspn.hpp>
 #include <navtk/filtering/GenXhatPFunction.hpp>

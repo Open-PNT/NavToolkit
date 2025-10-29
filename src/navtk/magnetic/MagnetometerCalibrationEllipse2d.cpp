@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-#include <xtensor/xbuilder.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/generators/xbuilder.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/factory.hpp>
 #include <navtk/linear_algebra.hpp>

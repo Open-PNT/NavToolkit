@@ -1,7 +1,7 @@
 #include <utils/exampleutils.hpp>
 
 #include <pybind11/embed.h>
-#include <xtensor/xrandom.hpp>
+#include <xtensor/generators/xrandom.hpp>
 
 #include <navtk/errors.hpp>
 #include <navtk/factory.hpp>

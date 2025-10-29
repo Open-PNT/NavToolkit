@@ -1,6 +1,6 @@
 #include <navtk/utils/CubicSplineModel.hpp>
 
-#include <xtensor/xadapt.hpp>
+#include <xtensor/containers/xadapt.hpp>
 
 #include <navtk/linear_algebra.hpp>
 #include <navtk/tensors.hpp>

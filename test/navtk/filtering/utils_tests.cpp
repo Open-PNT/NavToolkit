@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <tensor_assert.hpp>
-#include <xtensor/xio.hpp>
-#include <xtensor/xrandom.hpp>
+#include <xtensor/generators/xrandom.hpp>
+#include <xtensor/io/xio.hpp>
 
 #include <navtk/experimental/random.hpp>
 #include <navtk/filtering/utils.hpp>

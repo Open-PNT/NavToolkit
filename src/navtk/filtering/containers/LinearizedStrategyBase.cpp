@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <xtensor/xbuilder.hpp>
+#include <xtensor/generators/xbuilder.hpp>
 
 #include <navtk/factory.hpp>
 #include <navtk/inspect.hpp>

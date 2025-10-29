@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gtest/gtest.h>
-#include <xtensor/xmath.hpp>
+#include <xtensor/core/xmath.hpp>
 
 #include <navtk/linear_algebra.hpp>
 #include <navtk/tensors.hpp>

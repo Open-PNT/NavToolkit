@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <tensor_assert.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/navutils/math.hpp>
 #include <navtk/navutils/navigation.hpp>

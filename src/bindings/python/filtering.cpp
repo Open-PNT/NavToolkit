@@ -6,7 +6,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <xtensor/xrandom.hpp>
+#include <xtensor/generators/xrandom.hpp>
 
 #include <navtk/aspn.hpp>
 #include <navtk/filtering/containers/ClockModel.hpp>

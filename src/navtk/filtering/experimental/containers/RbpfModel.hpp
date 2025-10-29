@@ -4,9 +4,9 @@
 #include <utility>
 #include <vector>
 
-#include <xtensor/xindex_view.hpp>
-#include <xtensor/xstrided_view.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/views/xindex_view.hpp>
+#include <xtensor/views/xstrided_view.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/filtering/containers/LinearizedStrategyBase.hpp>
 #include <navtk/filtering/fusion/strategies/FusionStrategy.hpp>

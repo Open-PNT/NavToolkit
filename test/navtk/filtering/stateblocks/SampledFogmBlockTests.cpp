@@ -3,8 +3,8 @@
 #include <gtest/gtest.h>
 #include <scalar_assert.hpp>
 #include <tensor_assert.hpp>
-#include <xtensor/xmath.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/core/xmath.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/experimental/random.hpp>
 #include <navtk/filtering/GenXhatPFunction.hpp>

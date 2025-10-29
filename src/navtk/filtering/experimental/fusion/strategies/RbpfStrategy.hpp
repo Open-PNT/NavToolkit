@@ -5,9 +5,9 @@
 #include <memory>
 #include <vector>
 
-#include <xtensor/xmath.hpp>
-#include <xtensor/xtensor.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/containers/xtensor.hpp>
+#include <xtensor/core/xmath.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/filtering/containers/StandardMeasurementModel.hpp>
 #include <navtk/filtering/experimental/containers/RbpfModel.hpp>

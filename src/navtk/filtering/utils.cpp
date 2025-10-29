@@ -1,7 +1,7 @@
 #include <navtk/filtering/utils.hpp>
 
-#include <xtensor/xrandom.hpp>
-#include <xtensor/xview.hpp>
+#include <xtensor/generators/xrandom.hpp>
+#include <xtensor/views/xview.hpp>
 
 #include <navtk/linear_algebra.hpp>
 #include <navtk/navutils/navigation.hpp>

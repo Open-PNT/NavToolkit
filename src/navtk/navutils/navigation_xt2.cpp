@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include <xtensor/xnorm.hpp>
+#include <xtensor/reducers/xnorm.hpp>
 
 #include <navtk/linear_algebra.hpp>
 #include <navtk/navutils/math.hpp>

@@ -1,14 +1,14 @@
 #pragma once
 
 #include <xtensor-blas/xlinalg.hpp>
-#include <xtensor/xnorm.hpp>
+#include <xtensor/reducers/xnorm.hpp>
 
 #include <navtk/factory.hpp>
 #include <navtk/inspect.hpp>
 #include <navtk/navutils/math.hpp>
 #include <navtk/tensors.hpp>
 #include <navtk/utils/ValidationContext.hpp>
-#include <xtensor/xpad.hpp>
+#include <xtensor/misc/xpad.hpp>
 
 namespace navtk {
 
