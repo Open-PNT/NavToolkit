@@ -44,7 +44,7 @@ subprojects_dir = join_paths(meson.global_source_root(), 'subprojects')
 extract_docs_prog = [join_paths(meson.project_source_root(), 'util', 'extract_docs.py')]
 extract_docs_test_flags = [
     '-C' + meson.project_source_root(),
-    '-std=c++14',
+    '-std=c++20',
     '-I' + subprojects_dir + '/*/include',
     '-I' + join_paths(get_option('prefix'), get_option('subproj_includedir')),
     '-I' + subprojects_dir + '/firehose-outputs/aspn-c/src/',

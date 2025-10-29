@@ -2,8 +2,8 @@
 directory = xtl
 
 url = https://github.com/xtensor-stack/xtl.git
-# v0.7.7
-revision = a7c1c5444dfc57f76620391af4c94785ff82c8d6
+# v0.8.0
+revision = ef84e9f27020ad54961c99acd293d80d4b775dd3
 depth = 1
 
 patch_directory = xtl

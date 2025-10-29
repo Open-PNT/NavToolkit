@@ -2,8 +2,8 @@
 directory = xtensor-blas
 
 url = https://github.com/xtensor-stack/xtensor-blas.git
-# v0.21.0
-revision = 5dcbab5f41636a678a9ec715a058fbe6501aba77
+# v0.23.0
+revision = 836a8047413eb64ce8e034ab6ab7ce1608562bfc
 depth = 1
 
 patch_directory = xtensor-blas

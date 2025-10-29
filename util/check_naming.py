@@ -25,7 +25,7 @@ def build_extract_args():
     x = str(version_info.minor)
     # -fsized-deallocation: https://github.com/pybind/pybind11/issues/1604
     args = [
-        '-std=c++14',
+        '-std=c++20',
         '-fsized-deallocation',
         f'-I/usr/lib/python3.{x}/site-packages/numpy/core/include',
         f'-I{np.get_include()}',

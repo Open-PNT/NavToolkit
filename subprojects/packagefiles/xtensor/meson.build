@@ -1,7 +1,7 @@
 project('xtensor', 'cpp',
-        version:'0.25.0',
+        version:'0.27.1',
         license:'BSD-3-Clause',
-        default_options : ['warning_level=3', 'cpp_std=c++14'])
+        default_options : ['warning_level=3', 'cpp_std=c++20'])
 
 xtensor_cpp_arg = []
 

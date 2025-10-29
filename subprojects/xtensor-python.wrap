@@ -2,8 +2,8 @@
 directory = xtensor-python
 
 url = https://github.com/xtensor-stack/xtensor-python
-# v0.27.0
-revision = a7c20058ce39447d84714f6e09bfd463d654af47
+# v0.29.0
+revision = 7065f733f4839066d1092bad38b9cbbdd9fc6dee
 depth = 1
 
 patch_directory = xtensor-python

@@ -117,7 +117,7 @@ class AsanTester:
             [self.compiler]
             + infer_flags(self.exe_wrapper)
             + [
-                '-std=c++14',
+                '-std=c++20',
                 '-g',
                 '-fsanitize=address',
                 relpath(source, SOURCE_DIR),

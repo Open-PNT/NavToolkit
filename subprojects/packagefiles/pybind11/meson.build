@@ -1,4 +1,4 @@
-project('pybind11', 'cpp', default_options : ['cpp_std=c++14'], license : 'BSD-style', version : '3.0.0')
+project('pybind11', 'cpp', default_options : ['cpp_std=c++20'], license : 'BSD-style', version : '3.0.0')
 
 python3 = import('python').find_installation('python3')
 

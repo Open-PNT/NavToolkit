@@ -1,7 +1,7 @@
 project('xtensor-blas', 'cpp',
-    version:'0.21.0',
+    version:'0.23.0',
     license:'BSD-3-Clause',
-    default_options : ['warning_level=3', 'cpp_std=c++14'])
+    default_options : ['warning_level=3', 'cpp_std=c++20'])
 
 
 xtensor_dep = dependency('xtensor',
