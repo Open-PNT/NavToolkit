@@ -320,8 +320,7 @@ std::shared_ptr<EstimateWithCovariance> StandardFusionEngine::peek_ahead(
     aspn_xtensor::TypeTimestamp time, std::vector<std::string> const &mixed_block_labels) const {
 
 	if (mixed_block_labels.empty()) {
-		log_or_throw<spdlog::level::level_enum::warn>(
-		    ErrorMode::LOG, "peek_ahead with empty mixed_block_labels does nothing.");
+		spdlog::warn("peek_ahead with empty mixed_block_labels does nothing.");
 		return nullptr;
 	}
 
@@ -546,8 +545,7 @@ std::shared_ptr<EstimateWithCovariance> StandardFusionEngine::generate_x_and_p(
     vector<string> const &mixed_block_labels) const {
 
 	if (mixed_block_labels.empty()) {
-		log_or_throw<spdlog::level::level_enum::warn>(ErrorMode::LOG,
-		                                              "No labels provided, nothing to do.");
+		spdlog::warn("No labels provided, nothing to do.");
 		return nullptr;
 	}
 
