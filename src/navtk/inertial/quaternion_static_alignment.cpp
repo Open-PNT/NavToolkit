@@ -40,7 +40,7 @@ Matrix3 quaternion_static_alignment(const Vector3& dv_avg, const Vector3& dth_av
 	Vector accel_np = dot(C_sensor_to_nedprime, accel);
 
 	if (accel_np[0] >= 1e-10 || accel_np[1] >= 1e-10) {
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "Assertion failed in quaternion_static_alignment: "
 		    "assert(accel_np[0] < 1e-10 && accel_np[1] < 1e-10)");
 	}
@@ -72,8 +72,7 @@ Matrix3 quaternion_static_alignment(const Vector3& dv_avg, const Vector3& dth_av
 	Vector gy_n    = dot(mult, ang_rate);
 
 	if (gy_n[1] >= 1e-10) {
-		log_or_throw<std::runtime_error>(
-		    "Assertion failed in quaternion_static_alignment: assert(gy_n[1] < 1e-10)");
+		log_or_throw("Assertion failed in quaternion_static_alignment: assert(gy_n[1] < 1e-10)");
 	}
 
 	return mult;

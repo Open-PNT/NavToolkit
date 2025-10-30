@@ -67,8 +67,7 @@ void RbpfModel::set_particle_count_target(Size new_value) {
 		particle_count_target = new_value;
 		this->on_state_marks_changed();
 	} else {
-		log_or_throw<std::runtime_error>(
-		    "Exception Occurred: Particle count changed after initialization.");
+		log_or_throw("Exception Occurred: Particle count changed after initialization.");
 	}
 }
 std::vector<double> RbpfModel::get_jitter_scaling() const { return jitter_levels; }
@@ -390,8 +389,7 @@ void RbpfModel::update_particle_count() {
 		ResamplingResult res;
 
 		if (goal != particle_count_target && goal != 1) {
-			log_or_throw<std::runtime_error>(
-			    "Exception Occurred: Particle count has changed unexpectedly.");
+			log_or_throw("Exception Occurred: Particle count has changed unexpectedly.");
 		}
 
 		std::vector<size_t> index;

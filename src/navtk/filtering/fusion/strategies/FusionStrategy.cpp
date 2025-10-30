@@ -30,7 +30,7 @@ void check_assign(const FusionStrategy& model,
                   char const* where) {
 	auto error_mode = get_global_error_mode();
 	if (first_index + dim_getter(incoming) > model.get_num_states())
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    error_mode,
 		    "Trying to assign {0} beyond the end of the {1}. The {1} has {2} states, but you have "
 		    "attempted to set {0} {3} thru {4} with:\n{5}",

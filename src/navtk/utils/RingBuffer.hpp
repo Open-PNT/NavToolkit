@@ -281,8 +281,7 @@ public:
 				return_val = end();
 			}
 		} else {
-			log_or_throw<std::runtime_error>(
-			    "unimplemented operation erase from middle of RingBuffer");
+			log_or_throw("unimplemented operation erase from middle of RingBuffer");
 		}
 		return return_val;
 	}

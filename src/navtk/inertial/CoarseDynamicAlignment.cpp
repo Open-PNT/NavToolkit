@@ -114,8 +114,7 @@ CoarseDynamicAlignment::CoarseDynamicAlignment(const filtering::ImuModel& model,
 		dtheta_integrator = [](const Vector3& meas) { return expm(navutils::skew(meas)); };
 		break;
 	default:
-		log_or_throw<std::runtime_error>(
-		    "Unknown dcm_integration option; falling back to first order");
+		log_or_throw("Unknown dcm_integration option; falling back to first order");
 		dtheta_integrator = [](const Vector3& meas) { return eye(3) + navutils::skew(meas); };
 	}
 }
@@ -246,8 +245,7 @@ void CoarseDynamicAlignment::update_move_status(
 void CoarseDynamicAlignment::mechanize_or_warn(
     const not_null<std::shared_ptr<aspn_xtensor::MeasurementImu>> imu) {
 	if (alignment_status == AlignmentStatus::ALIGNED_GOOD) {
-		log_or_throw<std::runtime_error>(
-		    "CoarseDynamicAlignment receiving imu measurements after aligned.");
+		log_or_throw("CoarseDynamicAlignment receiving imu measurements after aligned.");
 	} else if (iteration_data != nullptr &&
 	           imu->get_aspn_c()->time_of_validity.elapsed_nsec <
 	               iteration_data->get_position(DynData::RecentPositionsEnum::SECOND_MOST_RECENT)
@@ -290,7 +288,7 @@ CoarseDynamicAlignment::AlignmentStatus CoarseDynamicAlignment::process(
     std::shared_ptr<aspn_xtensor::AspnBase> message) {
 
 	if (alignment_status == AlignmentStatus::ALIGNED_GOOD) {
-		log_or_throw<std::runtime_error>("CoarseDynamicAlignment: Aligned. Stop sending data.");
+		log_or_throw("CoarseDynamicAlignment: Aligned. Stop sending data.");
 		return alignment_status;
 	}
 
@@ -351,7 +349,7 @@ CoarseDynamicAlignment::AlignmentStatus CoarseDynamicAlignment::process(
 		return alignment_status;
 	}
 
-	log_or_throw<std::runtime_error>("CoarseDynamicAlignment unused data type.");
+	log_or_throw("CoarseDynamicAlignment unused data type.");
 
 	return alignment_status;
 }
@@ -483,7 +481,7 @@ void CoarseDynamicAlignment::add_new_meas(const aspn_xtensor::MeasurementPositio
 		if (iteration_data != nullptr) {
 			iteration_data->update(pos, align_buffer);
 		} else {
-			log_or_throw<std::runtime_error>("iteration_data null and shouldn't be.");
+			log_or_throw("iteration_data null and shouldn't be.");
 		}
 		auto C_s_to_n = eye(3);
 

@@ -29,7 +29,7 @@ public:
 		map_path = getenv("NAVTK_DATA_DIR");
 
 		if (map_path == NULL) {
-			log_or_throw<std::runtime_error>(
+			log_or_throw(
 			    "Environment variable 'NAVTK_DATA_DIR' not set. Must be set to directory "
 			    "containing GDAL files.");
 		} else {

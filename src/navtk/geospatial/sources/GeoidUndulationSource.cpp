@@ -47,15 +47,14 @@ GeoidUndulationSource::GeoidUndulationSource(const std::string& path)
 	// error.
 	if (min_lat != -90 || max_lat != 90 || min_lon != 0 || max_lon != 360 || lat_step != 0.25 ||
 	    lon_step != 0.25) {
-		log_or_throw<std::runtime_error>(
-		    "Error reading header of file 'ww15mgh.grd.' File may have been modified");
+		log_or_throw("Error reading header of file 'ww15mgh.grd.' File may have been modified");
 	}
 }
 
 std::pair<bool, double> GeoidUndulationSource::lookup_datum(double latitude,
                                                             double longitude) const {
 	if (!infile->is_open()) {
-		log_or_throw<std::runtime_error>("File is not open.", latitude, longitude);
+		log_or_throw("File is not open.", latitude, longitude);
 		return {false, 0.0};
 	}
 
@@ -234,7 +233,7 @@ size_t GeoidUndulationSource::get_lat_idx(double lat) const { return (max_lat - 
 
 void GeoidUndulationSource::set_chunk_size(Size size) {
 	if (size < 1 || size > 720) {
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "Invalid chunk size {}. Size must be between 1 and 720. Keeping current cache size of "
 		    "{}",
 		    size,

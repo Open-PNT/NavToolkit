@@ -90,7 +90,7 @@ DynamicsModel Pinson15NedBlock::generate_dynamics(GenXhatPFunction,
 		receive_aux_data(lin_function(time_from, time_to));
 	}
 	if (new_pva_aux == nullptr || new_force_and_rate_aux == nullptr)
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "Pinson15 Cannot propagate unless it first receives aux_data with a Pose object");
 
 	double dt        = (time_to.get_elapsed_nsec() - time_from.get_elapsed_nsec()) * 1e-9;

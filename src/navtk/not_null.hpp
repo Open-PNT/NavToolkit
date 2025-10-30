@@ -107,7 +107,7 @@ public:
 	 * is ErrorMode::DIE.
 	 */
 	constexpr std::conditional_t<std::is_copy_constructible<T>::value, T, const T&> get() const {
-		if (ptr == nullptr) log_or_throw<std::runtime_error>("Held pointer is no longer non-null.");
+		if (ptr == nullptr) log_or_throw("Held pointer is no longer non-null.");
 		return ptr;
 	}
 
