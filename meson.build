@@ -31,6 +31,11 @@ if get_option('buildtype') == 'debug'
     add_project_arguments(['-DXTENSOR_ENABLE_ASSERT'], language: 'cpp')
 endif
 
+# TODO: xtensor regression. Relevant issues:
+# - https://github.com/xtensor-stack/xtensor/issues/2819
+# - https://github.com/xtensor-stack/xtensor/issues/2840
+add_project_arguments(['-DXTENSOR_FORCE_TEMPORARY_MEMORY_IN_ASSIGNMENTS'], language: 'cpp')
+
 is_release_build = get_option('buildtype') == 'release'
 # Do what the matrix_validation option says, but if it is "auto" then set it to "disabled" if it is a release build
 use_matrix_validation = get_option('matrix_validation').disable_auto_if(is_release_build)
