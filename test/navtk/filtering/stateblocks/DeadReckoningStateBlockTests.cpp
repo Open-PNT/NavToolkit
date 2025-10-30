@@ -37,7 +37,7 @@ struct DeadReckoningStateBlockTests : public ::testing::Test {
 	double dt                                  = 2.0;
 	aspn_xtensor::TypeTimestamp t_from         = to_type_timestamp();
 	aspn_xtensor::TypeTimestamp t_to           = to_type_timestamp(2, 0);
-	navtk::filtering::GenXhatPFunction gen_x_p = [=](const std::vector<std::string>&) {
+	navtk::filtering::GenXhatPFunction gen_x_p = [=, this](const std::vector<std::string>&) {
 		return std::make_shared<navtk::filtering::EstimateWithCovariance>(xhat, navtk::zeros(4, 4));
 	};
 

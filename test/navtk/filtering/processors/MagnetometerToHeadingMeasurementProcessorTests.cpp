@@ -82,7 +82,7 @@ struct MagnetometerToHeadingMeasurementProcessorTests : public ::testing::Test {
 		mag_mp_heading = std::make_shared<MagnetometerToHeadingMeasurementProcessor>(
 		    "a", state_block_label, caruso_calib, r_provided);
 
-		dummy_xhat_p = [=](const std::vector<std::string> &) {
+		dummy_xhat_p = [=, this](const std::vector<std::string> &) {
 			return std::make_shared<EstimateWithCovariance>(navtk::ones(num_states),
 			                                                navtk::eye(num_states) * 0.5);
 		};
