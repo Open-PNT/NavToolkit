@@ -55,11 +55,12 @@ aspn_xtensor::MeasurementImu stationary_imu(
 }
 
 navtk::Vector3 calc_mean(const std::vector<navtk::Vector3>& v) {
-	auto mn = std::accumulate(v.cbegin(),
-	                          v.cend(),
-	                          navtk::Vector{0.0, 0.0, 0.0},
-	                          [](navtk::Vector& a, const navtk::Vector& b) { return a + b; }) /
-	          (v.size());
+	auto mn =
+	    std::accumulate(v.cbegin(),
+	                    v.cend(),
+	                    navtk::Vector{0.0, 0.0, 0.0},
+	                    [](const navtk::Vector& a, const navtk::Vector& b) { return a + b; }) /
+	    (v.size());
 	return mn;
 }
 
