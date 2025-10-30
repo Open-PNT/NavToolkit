@@ -290,7 +290,7 @@ AlignBase::AlignmentStatus ManualAlignment::process(
 AlignBase::AlignmentStatus ManualAlignment::post_meas_received(
     bool should_throw, const aspn_xtensor::TypeTimestamp& meas_time) {
 	if (should_throw) {
-		log_or_throw<std::runtime_error>("Unsupported data type received");
+		log_or_throw("Unsupported data type received");
 	} else {
 		computed_alignment.second.time = use_imu_time ? last_imu_time : meas_time;
 	}

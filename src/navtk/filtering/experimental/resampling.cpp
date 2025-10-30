@@ -79,8 +79,7 @@ ResamplingResult residual_resample_with_replacement(const Vector& weights, const
 	}
 
 	if (N == 0 || N != M) {
-		log_or_throw<std::runtime_error>(
-		    "Exception Occurred: Resampling length should be consistent and not empty.");
+		log_or_throw("Exception Occurred: Resampling length should be consistent and not empty.");
 		res.index       = new_index;
 		res.index_count = new_index_count;
 

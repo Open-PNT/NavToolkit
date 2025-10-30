@@ -40,7 +40,7 @@ DynamicsModel Pinson21NedBlock::generate_dynamics(GenXhatPFunction,
 	auto pva_aux            = p15.get_pva_aux();
 	auto force_and_rate_aux = p15.get_force_and_rate_aux();
 	if (pva_aux == nullptr || force_and_rate_aux == nullptr)
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "Pinson21 Cannot propagate unless it first receives aux_data with a Pose object");
 
 	double dt             = (time_to.get_elapsed_nsec() - time_from.get_elapsed_nsec()) * 1e-9;

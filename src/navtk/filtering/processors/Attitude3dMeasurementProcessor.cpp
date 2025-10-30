@@ -70,14 +70,13 @@ std::shared_ptr<StandardMeasurementModel> Attitude3dMeasurementProcessor::genera
 	auto xhat_p = gen_x_and_p_func(get_state_block_labels());
 	if (xhat_p == nullptr) {
 		// StandardFusionEngine will log/throw in this case as well (empty state_block_labels)
-		log_or_throw<std::runtime_error>(
-		    "gen_x_and_p_func returned null. No model can be generated.");
+		log_or_throw("gen_x_and_p_func returned null. No model can be generated.");
 		return nullptr;
 	}
 
 	auto num_states = num_rows(xhat_p->estimate);
 	if (num_states < 3) {
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "No model can be generated as there are fewer than 3 states available. Do "
 		    "state_block_labels refer to the correct StateBlocks?");
 		return nullptr;
@@ -85,7 +84,7 @@ std::shared_ptr<StandardMeasurementModel> Attitude3dMeasurementProcessor::genera
 
 	auto zr = extract_z_r(measurement, expected_frame);
 	if (num_rows(zr.estimate) != 3) {
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "No model can be generated as data payload in measurement is unsupported. Check "
 		    "documentation for supported types.");
 		return nullptr;

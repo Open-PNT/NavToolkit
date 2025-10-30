@@ -20,7 +20,7 @@ AlignBase::AlignBase(bool supports_static, bool supports_dynamic, const filterin
 
 bool AlignBase::requires_dynamic() {
 	if (!supports_static && !supports_dynamic)
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "Alignment class must be flagged as supporting static or dynamic data, or both.");
 	return !supports_static;
 }
@@ -69,7 +69,7 @@ Matrix AlignBase::bias_stats_from_model(const CovarianceFormat format) const {
 		return cov;
 	}
 	default:
-		log_or_throw<std::runtime_error>("Covariance format for imu errors unsupported");
+		log_or_throw("Covariance format for imu errors unsupported");
 		return zeros(1, 1);
 	}
 }

@@ -130,7 +130,7 @@ Matrix inverse(const Matrix& m) {
 	try {
 		return xt::linalg::inv(m);
 	} catch (const std::runtime_error& e) {
-		log_or_throw<std::runtime_error>(e.what());
+		log_or_throw(e.what());
 		return zeros(num_rows(m), num_cols(m));
 	}
 }
@@ -304,8 +304,7 @@ Matrix sqrt_of_main_diagonal(const Matrix& matrix) {
 	Matrix chol_matrix = zeros(n, n);
 	for (size_t i = 0; i < n; i++) {
 		if (matrix(i, i) < 0) {
-			log_or_throw<std::runtime_error>(
-			    "Matrix must have positive diagonal entries for Cholesky Decomposition");
+			log_or_throw("Matrix must have positive diagonal entries for Cholesky Decomposition");
 		} else {
 			// return square root of diagonal entries
 			chol_matrix(i, i) = sqrt(matrix(i, i));
@@ -402,11 +401,11 @@ Vector solve_tridiagonal_overwrite(Vector& low, Vector& mid, Vector& up, Vector&
 
 bool verify_wahba_inputs(const std::vector<Vector3>& p, const std::vector<Vector3>& r) {
 	if (p.size() != r.size()) {
-		log_or_throw<std::runtime_error>("Input vectors must be the same size");
+		log_or_throw("Input vectors must be the same size");
 		return false;
 	}
 	if (p.size() < 2 || r.size() < 2) {
-		log_or_throw<std::runtime_error>("At least 2 vector observations are required");
+		log_or_throw("At least 2 vector observations are required");
 		return false;
 	}
 	return true;

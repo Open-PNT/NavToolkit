@@ -95,8 +95,7 @@ GdalSource::GdalSource(const std::string& map_path,
 	}
 
 	if (known_tiles.empty()) {
-		log_or_throw<std::runtime_error>("GdalSource: No elevation files found in path {}",
-		                                 absolute_map_path);
+		log_or_throw("GdalSource: No elevation files found in path {}", absolute_map_path);
 	}
 }
 

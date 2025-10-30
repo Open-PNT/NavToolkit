@@ -13,7 +13,7 @@ TEST(GdalRaster, read_pixel_out_of_bounds) {
 	char raster_path[200];
 	char* data_dir = std::getenv("NAVTK_DATA_DIR");
 	if (data_dir == NULL) {
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "Environment variable 'NAVTK_DATA_DIR' not set. Must be set to directory "
 		    "containing GDAL files.");
 	} else {

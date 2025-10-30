@@ -30,12 +30,12 @@ namespace utils {
 template <typename T>
 void check_data_source_validity(const vector<T> &time_source, const vector<T> &data_source) {
 	if (time_source.size() != data_source.size()) {
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "Exception Occurred: Source time and source data are not matching lengths for "
 		    "interpolation.");
 	}
 	if (time_source.size() < 2) {
-		log_or_throw<std::runtime_error>(
+		log_or_throw(
 		    "Exception Occurred: Trying to interpolate with source data that is smaller that 2 "
 		    "data points.");
 	}
