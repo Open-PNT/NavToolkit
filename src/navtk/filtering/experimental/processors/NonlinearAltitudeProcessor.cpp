@@ -67,7 +67,7 @@ std::shared_ptr<StandardMeasurementModel> NonlinearAltitudeProcessor::generate_m
 					spdlog::warn(
 					    "lookup_datum has failed {} times, latest for {}/{}. This warning will not "
 					    "be displayed again. Is elevation data available?",
-					    failure_count,
+					    fmt::streamed(failure_count),
 					    latitude,
 					    longitude);
 					failure_count = INT32_MIN;

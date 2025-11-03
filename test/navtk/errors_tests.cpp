@@ -105,7 +105,7 @@ struct TypeWithLtLt {};
 std::ostream& operator<<(std::ostream& os, const TypeWithLtLt&) { return os << "krimber"; }
 TEST_F(ErrorsTests, log_or_throw__HandlesTypesWithOstreamLtLtOperator) {
 	TypeWithLtLt target;
-	EXPECT_ERROR(log_or_throw(ErrorMode::LOG, "{}", target), "krimber");
+	EXPECT_ERROR(log_or_throw(ErrorMode::LOG, "{}", fmt::streamed(target)), "krimber");
 }
 
 
