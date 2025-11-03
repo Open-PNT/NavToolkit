@@ -2,6 +2,8 @@
 
 #include <ostream>
 
+#include <spdlog/fmt/fmt.h>
+
 namespace navtk {
 namespace inertial {
 
@@ -30,3 +32,26 @@ std::ostream& operator<<(std::ostream& os, const MovementStatus status);
 
 }  // namespace inertial
 }  // namespace navtk
+
+#ifndef NEED_DOXYGEN_EXHALE_WORKAROUND
+// Define a custom formatter so fmt (via spdlog) can format MovementStatus.
+template <>
+struct fmt::formatter<navtk::inertial::MovementStatus> {
+	constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
+
+	template <typename FormatContext>
+	constexpr auto format(const navtk::inertial::MovementStatus& input, FormatContext& ctx) const {
+		switch (input) {
+		case navtk::inertial::MovementStatus::INVALID:
+			return fmt::format_to(ctx.out(), "INVALID");
+		case navtk::inertial::MovementStatus::NOT_MOVING:
+			return fmt::format_to(ctx.out(), "NOT_MOVING");
+		case navtk::inertial::MovementStatus::POSSIBLY_MOVING:
+			return fmt::format_to(ctx.out(), "POSSIBLY_MOVING");
+		case navtk::inertial::MovementStatus::MOVING:
+			return fmt::format_to(ctx.out(), "MOVING");
+		}
+		return fmt::format_to(ctx.out(), "Unknown enum value");
+	}
+};
+#endif
