@@ -5,7 +5,9 @@ inc = include_directories('include')
 
 thread_dep = dependency('threads')
 
-spdlog_dep = declare_dependency(include_directories : inc, dependencies : thread_dep)
+spdlog_dep = declare_dependency(include_directories : inc,
+                                dependencies : thread_dep,
+                                compile_args: ['-DFMT_HEADER_ONLY'])
 
 extra_cflags = []
 
