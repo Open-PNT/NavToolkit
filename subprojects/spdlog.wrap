@@ -2,8 +2,8 @@
 directory = spdlog
 
 url = https://github.com/gabime/spdlog.git
-# v1.13.0
-revision = 7c02e204c92545f869e2f04edaab1f19fe8b19fd
+# v1.15.1
+revision = f355b3d58f7067eee1706ff3c801c2361011f3d5
 depth = 1
 
 patch_directory = spdlog
