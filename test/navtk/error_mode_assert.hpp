@@ -25,7 +25,7 @@ DECLARE_SFINAE_BY_EXPR_VALIDITY(IsPrintable, std::declval<std::ostream&>() << st
 
 // SFINAE type provided by fmt for things that have an explicit formatter declared
 template <typename T>
-using SupportedByFmt = ::fmt::has_formatter<T, ::fmt::format_context>;
+using SupportedByFmt = fmt::is_formattable<T, ::fmt::format_context>;
 
 // SFINAE type for things fmt can print, which is anything that has a formatter plus anything
 // that has the ostream<< operator.
