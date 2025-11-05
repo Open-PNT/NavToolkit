@@ -100,6 +100,15 @@ def looks_like_math(node):
                 return True
 
 
+def is_excepted(node):
+    if node.kind == CursorKind.STRUCT_DECL:
+        for token in tokens(node):
+            # Exception: fmt::formatter
+            if token.spelling == 'fmt' and node.spelling == 'formatter':
+                return True
+    return False
+
+
 def tokens_to_search(node):
     all_toks = (token.spelling for token in tokens(node))
     # Only tokens appearing before name need considered
@@ -211,6 +220,10 @@ def pick_naming_rule(node):
     }.get(node.kind, None)
 
     if rule is None:
+        return None, None
+
+    # Check for other exceptions
+    if is_excepted(node):
         return None, None
 
     # Ignore functions with names like 'get_C_blah_blah' that work with DCMs
