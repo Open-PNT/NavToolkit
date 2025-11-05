@@ -9,7 +9,11 @@ ENV DEBIAN_FRONTEND noninteractive
 # cmake: To build LCM subproject
 # crossbuild-essential-arm64: For compiling code into ARM64 binaries
 # crossbuild-essential-armhf: For compiling code into ARMv7 binaries
+# gcc-10-aarch64-linux-gnu: For compiling code into ARM64 binaries
+# gcc-10-arm-linux-gnueabihf: For compiling code into ARMv7 binaries
 # git: For fetching subprojects from the internet
+# g++-10-aarch64-linux-gnu: For compiling code into ARM64 binaries
+# g++-10-arm-linux-gnueabihf: For compiling code into ARMv7 binaries
 # mingw-w64: For compiling code into WIN64 binaries
 # mingw-w64-tools: For compiling code into WIN64 binaries
 # nano: For modifying files when using this container for development
@@ -28,7 +32,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cmake \
     crossbuild-essential-arm64 \
     crossbuild-essential-armhf \
+    gcc-10-aarch64-linux-gnu \
+    gcc-10-arm-linux-gnueabihf \
     git \
+    g++-10-aarch64-linux-gnu \
+    g++-10-arm-linux-gnueabihf \
     mingw-w64 \
     mingw-w64-tools \
     nano \
@@ -74,6 +82,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpython3-dev:armhf \
     libpython3-dev:arm64 \
  && rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueabihf-g++-10 60
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-gcc-10 60
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++-10 60
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-10 60
 
 WORKDIR /work
 
