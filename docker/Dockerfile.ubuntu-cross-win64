@@ -1,0 +1,95 @@
+ARG BASE=ubuntu:20.04
+
+# -------------------------------------------------------------------------------
+FROM ${BASE}
+ENV DEBIAN_FRONTEND noninteractive
+
+# ccache: For CI machines to decrease compile times
+# clang: For generating Python binding documentation
+# cmake: To build LCM subproject
+# crossbuild-essential-arm64: For compiling code into ARM64 binaries
+# crossbuild-essential-armhf: For compiling code into ARMv7 binaries
+# gcc-10-aarch64-linux-gnu: For compiling code into ARM64 binaries
+# gcc-10-arm-linux-gnueabihf: For compiling code into ARMv7 binaries
+# git: For fetching subprojects from the internet
+# g++-10-aarch64-linux-gnu: For compiling code into ARM64 binaries
+# g++-10-arm-linux-gnueabihf: For compiling code into ARMv7 binaries
+# mingw-w64: For compiling code into WIN64 binaries
+# mingw-w64-tools: For compiling code into WIN64 binaries
+# nano: For modifying files when using this container for development
+# ninja-build: For compiling code
+# openssh-client: For ssh when using this container for development
+# pkg-config-aarch64-linux-gnu: For Meson to discover installed ARM64 libraries while compiling
+# pkg-config-arm-linux-gnueabihf: For Meson to discover installed ARMv7 libraries while compiling
+# python3-numpy: For running the Python examples
+# python3-pip: For installing pip packages (see requirements.txt)
+# qemu-user: For running tests under ARM64 or ARMv7 emulation
+# sudo: For privilege escalation when using this container for development
+# wine-stable: For running tests under WIN64 emulation
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ccache \
+    clang \
+    cmake \
+    crossbuild-essential-arm64 \
+    crossbuild-essential-armhf \
+    gcc-10-aarch64-linux-gnu \
+    gcc-10-arm-linux-gnueabihf \
+    git \
+    g++-10-aarch64-linux-gnu \
+    g++-10-arm-linux-gnueabihf \
+    mingw-w64 \
+    mingw-w64-tools \
+    nano \
+    ninja-build \
+    openssh-client \
+    pkg-config-aarch64-linux-gnu \
+    pkg-config-arm-linux-gnueabihf \
+    python3-numpy \
+    python3-pip \
+    qemu-user \
+    sudo \
+    wine-stable \
+&& rm -rf /var/lib/apt/lists/*
+
+# meson: Build system
+# clang: For generating Python binding documentation
+RUN pip3 install meson==1.3.2 clang==6.0.0
+
+# Use POSIX threading model for MINGW. This is necessary to include the mutex header.
+RUN update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+RUN update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
+
+# Add ARM architectures to dpkg and apt sources.list
+RUN . /etc/os-release \
+ && dpkg --add-architecture armhf \
+ && dpkg --add-architecture arm64 \
+ && sed -i 's/deb/deb [arch=amd64]/g' /etc/apt/sources.list \
+ && echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ $VERSION_CODENAME main restricted universe multiverse" >> /etc/apt/sources.list \
+ && echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ $VERSION_CODENAME-updates main restricted universe multiverse" >> /etc/apt/sources.list \
+ && echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ $VERSION_CODENAME-backports main restricted universe multiverse" >> /etc/apt/sources.list \
+ && echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ $VERSION_CODENAME-security main restricted universe multiverse" >> /etc/apt/sources.list \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install ARM packages.
+# libglib2.0-dev: To build LCM subproject
+# libopenblas-dev: For using support library OpenBLAS (BLAS/LAPACK)
+# libpython3-dev: Support library for compiling the navtk Python Extension Module
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libglib2.0-dev:armhf \
+    libglib2.0-dev:arm64 \
+    libopenblas-dev:armhf \
+    libopenblas-dev:arm64 \
+    libpython3-dev:armhf \
+    libpython3-dev:arm64 \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueabihf-g++-10 60
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-gcc-10 60
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++-10 60
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-10 60
+
+WORKDIR /work
+
+COPY util/user_bootstrap.sh /
+ENTRYPOINT ["/user_bootstrap.sh"]
+CMD ["/bin/bash"]
