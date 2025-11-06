@@ -157,8 +157,8 @@ PLATFORMS = {
         # -Dtest_timeout=1200: Increase the test timeout limit (emulator slowdown)
         Platform(
             'cross-win64',
-            'Dockerfile.ubuntu-cross',
-            'ubuntu:20.04',
+            'Dockerfile.ubuntu-cross-win64',
+            'ubuntu:24.04',
             meson_setup_args=[
                 '--buildtype=release',
                 '--cross-file=cross/x64-win.cross',
