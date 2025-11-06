@@ -149,25 +149,6 @@ PLATFORMS = {
                 '-Dbuildtype=release',
             ],
         ),
-        # ASAN is unsupported for cross-compiling Windows binaries
-        # --buildtype=release: Make a release build instead of default debug build
-        # --cross-file=cross/x64-win.cross: Tell Meson to use specific tools
-        # -Dpython_bindings=false: Python is not currently supported when
-        #   cross-compiling for Windows
-        # -Dtest_timeout=1200: Increase the test timeout limit (emulator slowdown)
-        Platform(
-            'cross-win64',
-            'Dockerfile.ubuntu-cross-win64',
-            'ubuntu:24.04',
-            meson_setup_args=[
-                '--buildtype=release',
-                '--cross-file=cross/x64-win.cross',
-                '-Dpython_bindings=false',
-                '-Dtest_timeout=1200',
-                '-Dlcm_examples=disabled',
-                '-Dfirehose-outputs:aspn-cpp-xtensor-py=disabled',
-            ],
-        ),
         # -Db_sanitize=address,undefined: Build with ASAN and UBSAN
         # --buildtype=release: Make a release build instead of default debug build
         Platform(
