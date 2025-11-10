@@ -247,7 +247,8 @@ void add_utils_functions(pybind11::module &m) {
 	FUNCTIONT(split_vector_pairs, PARAMS(double, double), "orig"_a)
 	FUNCTIONT(pair_and_time_sort_data, double, "tags"_a, "data"_a)
 
-	class PyInterpolationModel : public InterpolationModel {
+	class PyInterpolationModel : public InterpolationModel,
+	                             public py::trampoline_self_life_support {
 	public:
 		PyInterpolationModel(const vd &x, const vd &y) : InterpolationModel(x, y) {}
 
@@ -278,7 +279,7 @@ void add_utils_functions(pybind11::module &m) {
 	METHOD(GriddedInterpolant, interpolate, "x"_a, "y"_a)
 	CDOC(GriddedInterpolant);
 
-	class PyOutlierDetection : public OutlierDetection {
+	class PyOutlierDetection : public OutlierDetection, public py::trampoline_self_life_support {
 	public:
 		PyOutlierDetection(size_t buffer_size) : OutlierDetection(buffer_size) {}
 

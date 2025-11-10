@@ -116,6 +116,7 @@ navtoolkit_python_lib = static_library('navtoolkit_python',
     dependencies: [deps, aspn_xtensor_py_dep, xtensor_python_dep, pybind11_dep],
     override_options: ['b_coverage=false', 'b_sanitize=none'],
     cpp_args : python_bindings_cpp_args,
+    gnu_symbol_visibility: 'hidden',
     install: true)
 
 navtoolkit_python_dep = declare_dependency(link_with: navtoolkit_python_lib,

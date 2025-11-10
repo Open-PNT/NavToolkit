@@ -226,7 +226,7 @@ using namespace pybind11::literals;
 namespace py = pybind11;
 
 template <class FusionStrategyBase = FusionStrategy>
-class PyFusionStrategy : public FusionStrategyBase {
+class PyFusionStrategy : public FusionStrategyBase, public py::trampoline_self_life_support {
 public:
 	using FusionStrategyBase::FusionStrategyBase;
 
@@ -480,7 +480,7 @@ void add_filtering_experimental_functions(pybind11::module &m) {
 	     "warning_threshold"_a = 10000)
 	CDOC(NonlinearAltitudeProcessor);
 
-	py::class_<MeasurementBuffer, std::shared_ptr<MeasurementBuffer>>(m, "MeasurementBuffer")
+	py::class_<MeasurementBuffer, py::smart_holder>(m, "MeasurementBuffer")
 	    .def(
 	        "__iter__",
 	        [](MeasurementBuffer &buf) { return py::make_iterator(buf.begin(), buf.end()); },
@@ -527,7 +527,7 @@ void add_filtering_experimental_functions(pybind11::module &m) {
 	         "t_0"_a,
 	         "t_1"_a) CDOC(MeasurementBuffer);
 
-	py::class_<MeasurementBuffer3d, std::shared_ptr<MeasurementBuffer3d>>(m, "MeasurementBuffer3d")
+	py::class_<MeasurementBuffer3d, py::smart_holder>(m, "MeasurementBuffer3d")
 	    .def(py::init<>())
 	    .def("add_measurement",
 	         &MeasurementBuffer3d::add_measurement,
@@ -770,7 +770,7 @@ void add_filtering_functions(pybind11::module &m) {
 	FIELD(RangeInfo, range_scalar)
 	CDOC(RangeInfo);
 
-	class PyStandardStateBlock : public StateBlock<> {
+	class PyStandardStateBlock : public StateBlock<>, public py::trampoline_self_life_support {
 	public:
 		using StateBlock::StateBlock;
 		StandardDynamicsModel generate_dynamics(navtk::filtering::GenXhatPFunction gen_x_and_p_func,
@@ -794,7 +794,7 @@ void add_filtering_functions(pybind11::module &m) {
 	};
 
 	// Allow bindings to access these protected members.
-	class PyStateBlockPublic : public StateBlock<> {
+	class PyStateBlockPublic : public StateBlock<>, public py::trampoline_self_life_support {
 	public:
 		using StateBlock::discretization_strategy;
 		using StateBlock::num_states;
@@ -824,7 +824,8 @@ void add_filtering_functions(pybind11::module &m) {
 	CDOC(StateBlock);
 	// clang-format on
 
-	class PyMeasurementProcessor : public MeasurementProcessor<> {
+	class PyMeasurementProcessor : public MeasurementProcessor<>,
+	                               public py::trampoline_self_life_support {
 	public:
 		PyMeasurementProcessor(std::string label, std::string state_block_label)
 		    : MeasurementProcessor<>(label, state_block_label) {}
@@ -882,7 +883,8 @@ void add_filtering_functions(pybind11::module &m) {
 	CDOC(MeasurementProcessor);
 
 	// Allow bindings to access these protected members.
-	class PyLinearizedStrategyBasePublic : public LinearizedStrategyBase {
+	class PyLinearizedStrategyBasePublic : public LinearizedStrategyBase,
+	                                       public py::trampoline_self_life_support {
 	public:
 		using LinearizedStrategyBase::LinearizedStrategyBase;
 
@@ -1512,7 +1514,7 @@ void add_filtering_functions(pybind11::module &m) {
 	                      "time"_a)
 	CDOC(VirtualStateBlockManager);
 
-	class PyVirtualStateBlock : public VirtualStateBlock {
+	class PyVirtualStateBlock : public VirtualStateBlock, public py::trampoline_self_life_support {
 	public:
 		using VirtualStateBlock::VirtualStateBlock;
 
@@ -1542,7 +1544,8 @@ void add_filtering_functions(pybind11::module &m) {
 	METHOD(VirtualStateBlock, jacobian, "x"_a, "time"_a)
 	CDOC(VirtualStateBlock);
 
-	class PyNumericalVirtualStateBlock : public NumericalVirtualStateBlock {
+	class PyNumericalVirtualStateBlock : public NumericalVirtualStateBlock,
+	                                     public py::trampoline_self_life_support {
 	public:
 		using NumericalVirtualStateBlock::NumericalVirtualStateBlock;
 

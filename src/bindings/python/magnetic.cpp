@@ -25,7 +25,8 @@ using navtk::Matrix;
 using navtk::Vector;
 
 template <class MagnetometerCalibrationBase = MagnetometerCalibration>
-class PyMagnetometerCalibration : public MagnetometerCalibrationBase {
+class PyMagnetometerCalibration : public MagnetometerCalibrationBase,
+                                  public py::trampoline_self_life_support {
 public:
 	using MagnetometerCalibrationBase::MagnetometerCalibrationBase;
 
