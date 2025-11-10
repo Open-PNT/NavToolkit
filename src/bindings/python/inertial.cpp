@@ -115,7 +115,7 @@ void add_inertial_functions(pybind11::module &m) {
 
 	NAMESPACE_FUNCTION(quaternion_static_alignment, navtk::inertial, "dv_avg"_a, "dth_avg"_a)
 
-	class PyAlignBase : public AlignBase {
+	class PyAlignBase : public AlignBase, public py::trampoline_self_life_support {
 	public:
 		AlignmentStatus process(std::shared_ptr<aspn_xtensor::AspnBase> message) override {
 			PYBIND11_OVERRIDE(AlignmentStatus, AlignBase, process, message);
@@ -253,7 +253,7 @@ void add_inertial_functions(pybind11::module &m) {
 	FIELD(AidingAltData, integrated_alt_error)
 	FIELD(AidingAltData, time_constant) CDOC(AidingAltData);
 
-	class PyPosVelAtt : public InertialPosVelAtt {
+	class PyPosVelAtt : public InertialPosVelAtt, public py::trampoline_self_life_support {
 	public:
 		bool is_wander_capable() const override {
 			PYBIND11_OVERRIDE_PURE(bool, InertialPosVelAtt, is_wander_capable, );
@@ -351,7 +351,7 @@ void add_inertial_functions(pybind11::module &m) {
 	METHOD_OVERLOAD_CONST_VOID(StandardPosVelAtt, get_C_s_to_l, )
 	CDOC(StandardPosVelAtt);
 
-	class PyMechanization : public Mechanization {
+	class PyMechanization : public Mechanization, public py::trampoline_self_life_support {
 	public:
 		not_null<std::shared_ptr<InertialPosVelAtt>> mechanize(
 		    const Vector3 &dv_s,
@@ -690,7 +690,8 @@ void add_inertial_functions(pybind11::module &m) {
 	CHOICE(MovementStatus, POSSIBLY_MOVING)
 	CHOICE(MovementStatus, MOVING);
 
-	class PyMovementDetectorPlugin : public MovementDetectorPlugin {
+	class PyMovementDetectorPlugin : public MovementDetectorPlugin,
+	                                 public py::trampoline_self_life_support {
 	public:
 		MovementStatus process(not_null<std::shared_ptr<aspn_xtensor::AspnBase>>) override {
 			PYBIND11_OVERRIDE_PURE(MovementStatus, MovementDetectorPlugin, process, );

@@ -56,7 +56,7 @@ using geo::detail::DatasetDelete;
 using geo::detail::TransformDelete;
 
 template <class RasterBase = Raster>
-class PyRaster : public RasterBase {
+class PyRaster : public RasterBase, public py::trampoline_self_life_support {
 public:
 	using RasterBase::RasterBase;
 
@@ -86,7 +86,8 @@ public:
 #endif
 
 template <class SpatialMapDataProviderBase = SpatialMapDataProvider>
-class PySpatialMapDataProvider : public SpatialMapDataProviderBase {
+class PySpatialMapDataProvider : public SpatialMapDataProviderBase,
+                                 public py::trampoline_self_life_support {
 public:
 	using SpatialMapDataProviderBase::SpatialMapDataProviderBase;
 
@@ -100,7 +101,8 @@ public:
 };
 
 template <class SpatialMapDataSourceBase = SpatialMapDataSource>
-class PySpatialMapDataSource : public SpatialMapDataSourceBase {
+class PySpatialMapDataSource : public SpatialMapDataSourceBase,
+                               public py::trampoline_self_life_support {
 public:
 	std::pair<bool, double> lookup_datum(double latitude, double longitude) const override {
 		PYBIND11_OVERRIDE_PURE(PARAMS(std::pair<bool, double>),

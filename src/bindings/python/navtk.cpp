@@ -159,7 +159,7 @@ PYBIND11_MODULE(navtk, m) {
 	    DOCFMT(__doc_set_global_error_mode).c_str(),
 	    "mode"_a);
 
-	struct PyErrorModeLock : ErrorModeLock {
+	struct PyErrorModeLock : ErrorModeLock, public py::trampoline_self_life_support {
 		using ErrorModeLock::ErrorModeLock;
 		using ErrorModeLock::relock;
 		using ErrorModeLock::unlock;
