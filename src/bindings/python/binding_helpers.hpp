@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 
+#include <pybind11/native_enum.h>
 #include <pybind11/pybind11.h>
 
 #include <navtk/not_null.hpp>
@@ -189,10 +190,10 @@ namespace py = pybind11;
 #define NAMESPACE_FUNCTION_VOID(NAME, NS) m.def(#NAME, &NS::NAME, PROCESS_DOC(NAME));
 
 // Used to bind an enum.
-#define ENUM(NAME) py::enum_<NAME>(m, #NAME, PROCESS_DOC(NAME))
+#define ENUM(NAME) py::native_enum<NAME>(m, #NAME, "enum.Enum", PROCESS_DOC(NAME))
 // Bind an enum that is defined on a class
 #define ENUM_SCOPED(NAME, SCOPE, INSTANCE) \
-	py::enum_<SCOPE::NAME>(INSTANCE, #NAME, PROCESS_DOC(SCOPE##_##NAME))
+	py::native_enum<SCOPE::NAME>(INSTANCE, #NAME, "enum.Enum", PROCESS_DOC(SCOPE##_##NAME))
 // Used to bind an enum value.
 #define CHOICE(ENUMNAME, CHOICENAME) \
 	.value(#CHOICENAME, ENUMNAME::CHOICENAME, PROCESS_DOC(ENUMNAME##_##CHOICENAME))
@@ -218,18 +219,5 @@ namespace py = pybind11;
 		ss << obj;                  \
 		return ss.str();            \
 	})
-// Same as REPR but for an enum. Requires overriding of both __str__ and __repr__ because pybind has
-// default implementations of these functions for enums.
-#define ENUM_REPR                                                                    \
-	.def(                                                                            \
-	    "__str__",                                                                   \
-	    [](const py::object& obj) -> py::str { return py::detail::enum_name(obj); }, \
-	    py::name("__str__"),                                                         \
-	    py::is_method(m))                                                            \
-	    .def(                                                                        \
-	        "__repr__",                                                              \
-	        [](const py::object& obj) -> py::str { return obj.attr("__str__")(); },  \
-	        py::name("__repr__"),                                                    \
-	        py::is_method(m));
 
 // NOTE: No reasonable way to bind C++ assignment operator. Use constructor bindings instead

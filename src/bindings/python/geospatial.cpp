@@ -239,7 +239,7 @@ void add_geospatial_functions(pybind11::module &m) {
 
 	ENUM_SCOPED(MapType, GdalSource, gdal_source)
 	CHOICE_SCOPED(MapType, GdalSource, GEOTIFF)
-	CHOICE_SCOPED(MapType, GdalSource, DTED);
+	CHOICE_SCOPED(MapType, GdalSource, DTED).finalize();
 
 	CLASS(Raster, PyRaster<>)
 	CTOR_NODOC_DEFAULT

@@ -1077,7 +1077,7 @@ void add_filtering_functions(pybind11::module &m) {
 	CHOICE(ClockChoice, QD)
 	CHOICE(ClockChoice, QD1)
 	CHOICE(ClockChoice, QD2)
-	CHOICE(ClockChoice, QD3);
+	CHOICE(ClockChoice, QD3).finalize();
 
 	ATTR(RUBIDIUM_CLOCK);
 	ATTR(OVENIZED_CRYSTAL_CLOCK);

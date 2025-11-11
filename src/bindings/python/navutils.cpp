@@ -79,7 +79,7 @@ void add_navutils_functions(pybind11::module& m) {
 	ENUM(GravModels)
 	CHOICE(GravModels, TITTERTON)
 	CHOICE(GravModels, SCHWARTZ)
-	CHOICE(GravModels, SAVAGE);
+	CHOICE(GravModels, SAVAGE).finalize();
 	NAMESPACE_FUNCTION(calculate_gravity_titterton, nav, "alt"_a, "lat"_a, "R0"_a)
 	NAMESPACE_FUNCTION(calculate_gravity_schwartz, nav, "alt"_a, "lat"_a)
 	NAMESPACE_FUNCTION(calculate_gravity_savage_n, nav, "C_n_to_e"_a, "h"_a)

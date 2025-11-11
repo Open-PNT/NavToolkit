@@ -102,16 +102,16 @@ void add_inertial_functions(pybind11::module &m) {
 	ENUM(IntegrationMethods)
 	CHOICE(IntegrationMethods, RECTANGULAR)
 	CHOICE(IntegrationMethods, TRAPEZOIDAL)
-	CHOICE(IntegrationMethods, SIMPSONS_RULE);
+	CHOICE(IntegrationMethods, SIMPSONS_RULE).finalize();
 
 	ENUM(DcmIntegrationMethods)
 	CHOICE(DcmIntegrationMethods, FIRST_ORDER)
 	CHOICE(DcmIntegrationMethods, SIXTH_ORDER)
-	CHOICE(DcmIntegrationMethods, EXPONENTIAL);
+	CHOICE(DcmIntegrationMethods, EXPONENTIAL).finalize();
 
 	ENUM(EarthModels)
 	CHOICE(EarthModels, ELLIPTICAL)
-	CHOICE(EarthModels, SPHERICAL);
+	CHOICE(EarthModels, SPHERICAL).finalize();
 
 	NAMESPACE_FUNCTION(quaternion_static_alignment, navtk::inertial, "dv_avg"_a, "dth_avg"_a)
 
@@ -137,12 +137,14 @@ void add_inertial_functions(pybind11::module &m) {
 	auto align_base = CLASS(AlignBase, PyAlignBase);
 	ENUM_SCOPED(CovarianceFormat, AlignBase, align_base)
 	CHOICE_SCOPED(CovarianceFormat, AlignBase, PINSON15NEDBLOCK)
-	CHOICE_SCOPED(CovarianceFormat, AlignBase, PINSON21NEDBLOCK);
+	CHOICE_SCOPED(CovarianceFormat, AlignBase, PINSON21NEDBLOCK)
+	.finalize();
 
 	ENUM_SCOPED(AlignmentStatus, AlignBase, align_base)
 	CHOICE_SCOPED(AlignmentStatus, AlignBase, ALIGNING_COARSE)
 	CHOICE_SCOPED(AlignmentStatus, AlignBase, ALIGNING_FINE)
-	CHOICE_SCOPED(AlignmentStatus, AlignBase, ALIGNED_GOOD);
+	CHOICE_SCOPED(AlignmentStatus, AlignBase, ALIGNED_GOOD)
+	.finalize();
 
 	align_base
 		METHOD(AlignBase, process, "message"_a)
@@ -212,7 +214,8 @@ void add_inertial_functions(pybind11::module &m) {
 	ENUM_SCOPED(RecentPositionsEnum, DynData, dyn_data)
 	CHOICE_SCOPED(RecentPositionsEnum, DynData, MOST_RECENT)
 	CHOICE_SCOPED(RecentPositionsEnum, DynData, SECOND_MOST_RECENT)
-	CHOICE_SCOPED(RecentPositionsEnum, DynData, THIRD_MOST_RECENT);
+	CHOICE_SCOPED(RecentPositionsEnum, DynData, THIRD_MOST_RECENT)
+	.finalize();
 
 	BEGIN_SUPPRESS_WARNING("-Wdeprecated-declarations");
 	dyn_data
@@ -688,7 +691,7 @@ void add_inertial_functions(pybind11::module &m) {
 	CHOICE(MovementStatus, INVALID)
 	CHOICE(MovementStatus, NOT_MOVING)
 	CHOICE(MovementStatus, POSSIBLY_MOVING)
-	CHOICE(MovementStatus, MOVING);
+	CHOICE(MovementStatus, MOVING).finalize();
 
 	class PyMovementDetectorPlugin : public MovementDetectorPlugin,
 	                                 public py::trampoline_self_life_support {

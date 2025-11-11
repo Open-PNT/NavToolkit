@@ -143,8 +143,7 @@ PYBIND11_MODULE(navtk, m) {
 	ENUM(ErrorMode)
 	CHOICE(ErrorMode, OFF)
 	CHOICE(ErrorMode, LOG)
-	CHOICE(ErrorMode, DIE)
-	ENUM_REPR
+	CHOICE(ErrorMode, DIE).finalize();
 
 	FUNCTION_VOID(get_global_error_mode);
 	m.def(
