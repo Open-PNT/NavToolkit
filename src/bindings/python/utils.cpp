@@ -383,8 +383,7 @@ void add_utils_functions(pybind11::module &m) {
 	ENUM(ValidationResult)
 	CHOICE(ValidationResult, NOT_CHECKED)
 	CHOICE(ValidationResult, GOOD)
-	CHOICE(ValidationResult, BAD)
-	ENUM_REPR
+	CHOICE(ValidationResult, BAD).finalize();
 
 	// Because istream isn't useful from Python, rather than a straight binding for
 	// open_data_file, we provide a version that behaves like Python's `open()` builtin,
