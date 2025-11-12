@@ -31,7 +31,7 @@ using SupportedByFmt = fmt::is_formattable<T, ::fmt::format_context>;
 // that has the ostream<< operator.
 template <typename T>
 struct IsFormattable {
-	static constexpr bool value = SupportedByFmt<T>::value || IsPrintable<T>::value;
+	static constexpr bool value = SupportedByFmt<T>::value;
 };
 
 DECLARE_SFINAE_ENABLE_IF(IsFormattable);
