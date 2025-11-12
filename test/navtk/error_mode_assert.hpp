@@ -241,8 +241,11 @@ private:
 
 	// Uses fmt::format to convert the value to a string
 	template <typename T, detail::EnableIfIsFormattable<T, true> = nullptr>
-	std::string describe_return_value(const T&) {
-		return "";
+	std::string describe_return_value(const T& value) {
+		return fmt::format("instance of `{}` at memory address {:#0x} with value `{}`",
+		                   navtk::utils::identify_type<T>(),
+		                   reinterpret_cast<intptr_t>(&value),
+		                   value);
 	}
 
 	// Fallback value description for values that aren't compatible with fmt::format
