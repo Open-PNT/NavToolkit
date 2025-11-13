@@ -73,6 +73,19 @@ TEST_F(ErrorsTests, log_or_throw__CanThrowAnyType) {
 	}
 }
 
+// Passing a custom template parameter can change the log type
+TEST_F(ErrorsTests, log_or_throw__CanLogAnyLevel) {
+	EXPECT_WARN((log_or_throw<spdlog::level::level_enum::warn>(ErrorMode::LOG, "uh oh!")),
+	            "uh oh!");
+
+	// Check again using the "default mode" overload
+	{
+		auto guard = ErrorModeLock(ErrorMode::LOG);
+		EXPECT_WARN((log_or_throw<spdlog::level::level_enum::warn>(ErrorMode::LOG, "uh oh!!")),
+		            "uh oh!!");
+	}
+}
+
 // Passing both an exception class and a level also works
 TEST_F(ErrorsTests, log_or_throw__AcceptsBothTemplateParamsAtOnce) {
 	EXPECT_THROW(EXPECT_INFO((log_or_throw<std::range_error, spdlog::level::level_enum::info>(
