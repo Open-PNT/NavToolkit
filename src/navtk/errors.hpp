@@ -160,41 +160,69 @@ private:
  */
 void set_global_error_mode(ErrorMode mode);
 
+#ifndef NEED_DOXYGEN_EXHALE_WORKAROUND
+// we hide the 'full' implementation of log_or_throw in a detail namespace to prevent infinitely
+// recursive template evaluation when trying to resolve the overloads -- this allows the other
+// overloads to invoke detail::log_or_throw and we know we're always invoking the "main" one.
+// End users can also invoke the main one because of the `using detail::log_or_throw` line below.
+namespace detail {
+#endif
+
 /**
  * Write a log message or throw an error, depending on the value of the given navtk::ErrorMode.
  *
  * @tparam Exc The exception type. When the mode is ErrorMode::DIE, an instance of this exception
  * will be thrown, initialized with a string error message as its constructor parameter.
  * @tparam Level The log level to use when logging the error message.
- * @tparam FormatArgs Type parameters for the message argument. The first of these should be
+ * @tparam FormatArgs Type parameters for the args argument. The first of these should be
  * implicitly convertible to `std::string`. Others can be any type.
  * @param mode Which behavior(s) to enable. ErrorMode::LOG emits a log message only, ErrorMode::DIE
  * logs and throws an exception. This parameter can be omitted, in which case the current value of
  * get_global_error_mode() will be used.
- * @param message A `fmt`-style format string (`"foo: {}"`) and positional arguments. See
+ * @param fmt A `fmt`-style format string (`"foo: {}"`), as you'd pass to fmt::format. If you need
+ * to dynamically generate a format string, wrap it in fmt::runtime to avoid the compiler error,
+ * but as a general practice you should avoid this. If you just want to log a dynamic string, use
+ * `log_or_throw("{}", your_dynamic_string);` instead.
+ * @param args Arguments needed by the format string, as you'd pass to fmt::format.
  * https://github.com/fmtlib/fmt for details.
  * @throw An instance of `Exc` if mode is ErrorMode::DIE.
  */
 template <typename Exc                    = DefaultLogOrThrowException,
           spdlog::level::level_enum Level = DEFAULT_LOG_OR_THROW_LEVEL,
           typename... FormatArgs>
-void log_or_throw(ErrorMode mode, FormatArgs&&... message) {
-	if (mode != ErrorMode::OFF) spdlog::log(Level, message...);
-	if (mode == ErrorMode::DIE) throw Exc(fmt::format(std::forward<FormatArgs>(message)...));
+void log_or_throw(ErrorMode mode,
+                  spdlog::format_string_t<FormatArgs...> fmt,
+                  FormatArgs&&... args) {
+	auto message = fmt::format(fmt, std::forward<FormatArgs>(args)...);
+	if (mode != ErrorMode::OFF) spdlog::log(Level, "{}", message);
+	if (mode == ErrorMode::DIE) throw Exc(std::move(message));
 }
 
 #ifndef NEED_DOXYGEN_EXHALE_WORKAROUND
+}
+
+using detail::log_or_throw;
 
 template <typename Exc                    = DefaultLogOrThrowException,
           spdlog::level::level_enum Level = DEFAULT_LOG_OR_THROW_LEVEL,
           typename... FormatArgs>
-void log_or_throw(FormatArgs&&... message) {
-	log_or_throw<Exc, Level>(get_global_error_mode(), std::forward<FormatArgs>(message)...);
+void log_or_throw(spdlog::format_string_t<FormatArgs...> fmt, FormatArgs&&... args) {
+	detail::log_or_throw<Exc, Level>(
+	    get_global_error_mode(), fmt, std::forward<FormatArgs>(args)...);
 }
 
-template <spdlog::level::level_enum Level, typename... LogOrThrowArgs>
-void log_or_throw(LogOrThrowArgs&&... args) {
-	log_or_throw<DefaultLogOrThrowException, Level>(std::forward<LogOrThrowArgs>(args)...);
+template <spdlog::level::level_enum Level, typename... FormatArgs>
+void log_or_throw(spdlog::format_string_t<FormatArgs...> fmt, FormatArgs&&... args) {
+	detail::log_or_throw<DefaultLogOrThrowException, Level>(
+	    get_global_error_mode(), fmt, std::forward<FormatArgs>(args)...);
+}
+
+template <spdlog::level::level_enum Level, typename... FormatArgs>
+void log_or_throw(ErrorMode mode,
+                  spdlog::format_string_t<FormatArgs...> fmt,
+                  FormatArgs&&... args) {
+	detail::log_or_throw<DefaultLogOrThrowException, Level>(
+	    mode, fmt, std::forward<FormatArgs>(args)...);
 }
 
 // SEE ALSO: py_log_or_throw_ in bindings/python/navtk.cpp, a re-implementation that uses runtime

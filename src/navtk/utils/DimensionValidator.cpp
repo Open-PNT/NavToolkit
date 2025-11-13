@@ -405,7 +405,8 @@ void DimensionValidator::perform_validation(ErrorMode mode, ValidationResult& re
 
 	if (failed.size() > 0) {
 		result_out = ValidationResult::BAD;
-		log_or_throw<std::range_error>(mode, implementation->concoct_exception_message(failed));
+		log_or_throw<std::range_error>(
+		    mode, "{}", implementation->concoct_exception_message(failed));
 	} else
 		result_out = ValidationResult::GOOD;
 }

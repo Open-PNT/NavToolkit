@@ -71,7 +71,7 @@ GdalSource::GdalSource(const std::string& map_path,
 	try {
 		file_search_iterator = fs::recursive_directory_iterator(absolute_map_path);
 	} catch (fs::filesystem_error& e) {
-		log_or_throw<std::invalid_argument>(e.what());
+		log_or_throw<std::invalid_argument>("{}", e.what());
 	}
 
 	for (const auto& entry : file_search_iterator) {

@@ -140,7 +140,7 @@ void GdalRaster::transform_tile(AspnMeasurementAltitudeReference prev_ref,
 		std::ostringstream error;
 		error << "Invalid transformation. Cannot transform vertical reference from " << prev_ref
 		      << " to " << new_ref << ".";
-		log_or_throw<std::invalid_argument>(error.str());
+		log_or_throw<std::invalid_argument>("{}", error.str());
 		return;
 	}
 
