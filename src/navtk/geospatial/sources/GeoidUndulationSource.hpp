@@ -83,12 +83,10 @@ public:
 private:
 	// private constructor because global instance is implemented via `get_shared()`.
 	GeoidUndulationSource(const std::string& path);
-#ifndef NAVTK_PYTHON_TENSOR
 	GeoidUndulationSource(const GeoidUndulationSource&)             = delete;
 	GeoidUndulationSource& operator=(const GeoidUndulationSource&)  = delete;
 	GeoidUndulationSource(const GeoidUndulationSource&&)            = delete;
 	GeoidUndulationSource& operator=(const GeoidUndulationSource&&) = delete;
-#endif
 
 	// Check if either latitude/longitude pair are outside of the current chunk of undulation
 	// values read into memory.
@@ -154,7 +152,11 @@ private:
 	mutable double lon_coverage_max = -1;
 
 	// The chunk of read data stored in memory
-	mutable Matrix available_undulations = zeros(chunk_size + 1, chunk_size + 1);
+	// NOTE: using xt::xtensor instead of navtk::Matrix as the latter will heap-allocate a
+	// xt::pytensor object when using the python module. This is undesirable as the
+	// GeoidUndulationSource singleton won't be cleaned up until after the python interpreter has
+	// completely shut down, which will trigger a segfault.
+	mutable xt::xtensor<navtk::Scalar, 2> available_undulations;
 };
 }  // namespace geospatial
 }  // namespace navtk
