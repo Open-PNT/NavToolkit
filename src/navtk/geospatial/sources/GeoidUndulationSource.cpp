@@ -26,12 +26,8 @@ namespace geospatial {
 using navtk::navutils::RAD2DEG;
 
 std::shared_ptr<GeoidUndulationSource> GeoidUndulationSource::get_shared(const std::string& path) {
-#ifdef NAVTK_PYTHON_TENSOR
-	return std::make_shared<GeoidUndulationSource>(GeoidUndulationSource(path));
-#else
 	static std::shared_ptr<GeoidUndulationSource> instance(new GeoidUndulationSource(path));
 	return instance;
-#endif
 }
 
 GeoidUndulationSource::GeoidUndulationSource(const std::string& path)
@@ -41,7 +37,8 @@ GeoidUndulationSource::GeoidUndulationSource(const std::string& path)
       min_lon(read_value()),
       max_lon(read_value()),
       lat_step(read_value()),
-      lon_step(read_value()) {
+      lon_step(read_value()),
+      available_undulations(xt::zeros<Scalar>({chunk_size + 1, chunk_size + 1})) {
 	// ww15mgh.grd file should always start with these values, specifying the range the file covers.
 	// If these values aren't found, then the file could have been corrupted, so yield a runtime
 	// error.
