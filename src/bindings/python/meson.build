@@ -143,7 +143,7 @@ python_path =  python_bindings_lib_location + ':' + aspn_xtensor_python_lib_loca
 
 python_with_mypy = import('python').find_installation('python3', modules: ['mypy'], required: false)
 
-if (python_with_mypy.found())
+if (python_with_mypy.found() and not is_disabler(aspn_xtensor_py_dep))
 
     generate_stubs = meson.project_source_root() / 'util' / 'generate_stubs.py'
 
