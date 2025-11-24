@@ -88,6 +88,8 @@ namespace py = pybind11;
 	.def(py::init<TYPES>(), PROCESS_DOC(CLASSNAME##_##CLASSNAME), __VA_ARGS__)
 // Binds a default constructor (some compilers give warnings when not all macro arguments are used).
 #define CTOR_DEFAULT(CLASSNAME) .def(py::init<>(), PROCESS_DOC(CLASSNAME##_##CLASSNAME))
+// Same as CTOR_DEFAULT, but with no docstring.
+#define CTOR_DEFAULT_NODOC(CLASSNAME) .def(py::init<>())
 // Same as CTOR, but uses top-level docstring rather than constructor docstring
 #define CTOR_CLSDOC(CLASSNAME, TYPES, ...) \
 	.def(py::init<TYPES>(), PROCESS_DOC(CLASSNAME), __VA_ARGS__)

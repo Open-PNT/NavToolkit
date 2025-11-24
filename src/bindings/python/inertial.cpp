@@ -378,7 +378,7 @@ void add_inertial_functions(pybind11::module &m) {
 	};
 
 	CLASS(Mechanization, PyMechanization)
-	CTOR_DEFAULT(Mechanization)
+	CTOR_DEFAULT_NODOC(Mechanization)
 	METHOD(Mechanization,
 	       mechanize,
 	       "dv_s"_a,
