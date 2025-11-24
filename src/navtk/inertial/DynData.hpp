@@ -18,14 +18,19 @@ public:
 	/**
 	 * DynData contains the three most recently received positions.  This enum allows selection
 	 * of these positions.
-	 *
-	 * MOST_RECENT: The position corresponding to the current position in time
-	 * SECOND_MOST_RECENT: The position one time step in the past
-	 * THIRD_MOST_RECENT: The position two time steps in the past
 	 */
 	enum class RecentPositionsEnum {
+		/**
+		The position corresponding to the current position in time
+		*/
 		MOST_RECENT,
+		/**
+		The position one time step in the past
+		*/
 		SECOND_MOST_RECENT,
+		/**
+		The position two time steps in the past
+		*/
 		THIRD_MOST_RECENT,
 	};
 
