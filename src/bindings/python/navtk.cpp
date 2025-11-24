@@ -213,7 +213,7 @@ PYBIND11_MODULE(navtk, m) {
 	// Bindings not needed for not_null, as this is a C++ pointer feature.  The NOT_NONE macro is
 	// sufficient to implement not_null functionality in python.
 
-	// Bindings not neaded for functions in linear_algebra.hpp, factory.hpp, inspect.hpp,
+	// Bindings not needed for functions in linear_algebra.hpp, factory.hpp, inspect.hpp,
 	// random.hpp, tensors.hpp, transform.hpp, as these functions all have numpy alternatives.
 	// Furthermore, RandomNumberGenerator classes are expected to be replaced with librandom, so not
 	// worth binding these at this time.
