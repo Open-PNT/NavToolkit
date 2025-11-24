@@ -2,7 +2,7 @@
 srcs_pybindings = run_command([python, find_sources_py, meson.current_source_dir(), 'cpp'], check: true).stdout().split()
 
 python_bindings_errors = []
-cindex_errors = []
+docstring_extraction_errors = []
 
 meson_flag_prefix = '-D'
 if meson.is_subproject()
@@ -40,71 +40,26 @@ endif
 
 subprojects_dir = join_paths(meson.global_source_root(), 'subprojects')
 
-
-extract_docs_prog = [join_paths(meson.project_source_root(), 'util', 'extract_docs.py')]
-extract_docs_test_flags = [
-    '-C' + meson.project_source_root(),
-    '-std=c++20',
-    '-I' + subprojects_dir + '/*/include',
-    '-I' + join_paths(get_option('prefix'), get_option('subproj_includedir')),
-    '-I' + subprojects_dir + '/firehose-outputs/aspn-c/src/',
-    '-I' + subprojects_dir + '/firehose-outputs/aspn-cpp/src/',
-    '-I' + meson.project_source_root() + '/src',
-    '-I' + meson.project_source_root()]
-extract_docs_test = extract_docs_prog + extract_docs_test_flags
-
-extract_docs_real = extract_docs_prog + [
-    '-Q@OUTPUT@'
-] + extract_docs_test_flags + [
-    meson.project_source_root() + '/src/navtk/**/*.hpp',
-    meson.project_source_root() + '/examples/utils/*.hpp',
-    meson.project_build_root() + '/src/navtk/utils/version.hpp',
-    '-o' + meson.current_build_dir() + '/navtk_generated.hpp']
-
-extract_docs_test_without_filename = extract_docs_test
-# note: hard-coded path here is a file with a lot of dependency references,
-# to make sure subprojects are wired up correctly.
-# TODO: PNTOS-453 we need a better solution.
-extract_docs_test += [
-    meson.project_source_root() +
-    '/src/navtk/filtering/fusion/StandardFusionEngine.cpp']
-
-extract_docs_test_result = run_command([python] + extract_docs_test + ['-hardexit'], check: false)
-working_cindex = extract_docs_test_result.returncode() == 0
+python_with_parser = import('python').find_installation('python3',
+                                                        modules: ['cxxheaderparser'],
+                                                        required: false)
 
 navtk_generated_hpp = []
 python_bindings_cpp_args = ['-DNAVTK_PYTHON_TENSOR']
 
 if not get_option('python_docstrings')
-    cindex_errors += ['Meson configured with ' +
+    docstring_extraction_errors += ['Meson configured with ' +
                       meson_flag_prefix + 'python_docstrings=false']
-    working_cindex = false
-elif (working_cindex)
+elif python_with_parser.found()
     navtk_generated_hpp = custom_target(
         'navtk_generated.hpp',
         output : 'navtk_generated.hpp',
         input : headers,
-        command : [python] + extract_docs_real)
+        command : [python_with_parser] + [meson.project_source_root() / 'util' / 'extract_docs.py', meson.current_build_dir(), meson.project_source_root()])
 
     python_bindings_cpp_args += ['-DNAVTK_PYTHON_DOCSTRINGS']
 else
-    cindex_errors += [extract_docs_test_result.stderr()]
-
-    # Re-run the test with a filename that _doesn't_ reference any problem
-    # files to see whether cindex is installed/working.
-    cindex_test = [python] + extract_docs_test_without_filename + [
-        meson.project_source_root() + '/src/navtk/not_null.hpp',
-        '-hardexit'
-    ]
-    if run_command(cindex_test, check: false).returncode() == 0
-        cindex_errors += ['Generating docstrings for the python bindings requires all subprojects to be downloaded',
-                          '(even those you already have installed on your system).',
-                          'Please run `meson subprojects download`, or disable docstrings with ' +
-                          meson_flag_prefix + 'python_docstrings=false']
-    else
-        cindex_errors += ['Using clang.cindex failed using ' + python.full_path() + '. Install the clang python bindings and ensure the following command runs:']
-        cindex_errors += [python.full_path() + ' \'' + '\' \''.join(extract_docs_test) + '\'']
-    endif
+    docstring_extraction_errors += ['Could not find cxxheaderparser']
 endif
 
 # This is the library that contains all of the navtk source code, but compiled
@@ -174,13 +129,13 @@ if not is_disabler(python_bindings_lib)
         section: 'navtk Python bindings',
         bool_yn: true)
 
-    if working_cindex
+    if docstring_extraction_errors.length() == 0
         summary({'Python docstrings included': true},
             section: 'navtk Python bindings',
             bool_yn: true)
     else
         summary({'Python docstrings included': false,
-                 'Python docstrings problem(s)': cindex_errors},
+                 'Python docstrings problem(s)': docstring_extraction_errors},
             section: 'navtk Python bindings',
             bool_yn: true)
     endif

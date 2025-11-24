@@ -128,7 +128,6 @@ module, and documentation as well as run the examples:
 sudo dnf install -y \
     ccache \
     clang \
-    clang-devel \
     cmake3 \
     @development-tools \
     doxygen \
@@ -139,7 +138,6 @@ sudo dnf install -y \
     libasan    \
     libubsan \
     ninja-build \
-    python3-clang \
     python3-devel \
     python3-matplotlib \
     python3-numpy \

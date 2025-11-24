@@ -6,12 +6,11 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # build-essential: For compiling code
 # ccache: For CI machines to decrease compile times
-# clang: For running the naming rules check and generating Python binding documentation
+# clang: For running the naming rules check
 # clang-format: For formatting source code
 # doxygen: For building project documentation
 # doxygen-latex: For building project documentation
 # git: For fetching subprojects from the internet
-# libclang-dev: For generating Python binding documentation
 # libgdal-dev: Support library needed for `optional/gdal`
 # liblcm-dev: To build certain examples
 # libopenblas-dev: For using support library OpenBLAS (BLAS/LAPACK)
@@ -19,7 +18,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # ninja-build: For compiling code
 # openssh-client: For ssh when using this container for development
 # pkg-config: For Meson to discover installed libraries while compiling
-# python3-clang: For running the naming rules check and generating Python binding documentation
+# python3-clang: For running the naming rules check
 # python3-inflection: For util/process_file_naming.py
 # python3-matplotlib: For displaying graphs when running Python examples
 # python3-numpy: For running the Python examples
@@ -38,7 +37,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     doxygen \
     doxygen-latex \
     git \
-    libclang-dev \
     libgdal-dev \
     liblcm-dev \
     libopenblas-dev \

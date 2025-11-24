@@ -5,7 +5,6 @@ FROM ${BASE}
 # ccache: For CI machines to decrease compile times
 # cmake3: To build the lcm subproject for certain examples
 # clang: For compiling code with Clang
-# clang-devel: For generating Python binding documentation
 # @development-tools: For compiling code with GCC
 # doxygen: For generating documentation
 # flexiblas-devel: For using support library OpenBLAS (BLAS/LAPACK)
@@ -16,7 +15,6 @@ FROM ${BASE}
 # libubsan: For compiling with Undefined Behavior Sanitizer to detect errors
 # micro: For modifying files when using this container for development
 # ninja-build: For compiling code
-# python3-clang: For generating Python binding documentation
 # python3-devel: Support library to compile the navtk Python Extension Module
 # python3-numpy: Support library to compile the navtk Python Extension Module
 # python3-pip: For installing pip packages (see requirements.txt)
@@ -26,7 +24,6 @@ RUN dnf install -y \
     ccache \
     cmake3 \
     clang \
-    clang-devel \
     @development-tools \
     doxygen \
     flexiblas-devel \
@@ -37,7 +34,6 @@ RUN dnf install -y \
     libubsan \
     micro \
     ninja-build \
-    python3-clang \
     python3-devel \
     python3-numpy \
     python3-pip \
