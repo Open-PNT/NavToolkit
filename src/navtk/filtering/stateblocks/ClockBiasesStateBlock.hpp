@@ -192,7 +192,6 @@ enum class ClockChoice {
 	 * \end{bmatrix} \f$
 	 *
 	 */
-
 	QD,
 
 	/**
@@ -236,7 +235,6 @@ enum class ClockChoice {
 /**
  * Clock Error State Block with a variety of Q implementations in 2 or 3 states
  */
-
 class ClockBiasesStateBlock : public StateBlock<> {
 public:
 	/**

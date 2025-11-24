@@ -177,7 +177,6 @@ Vector4 dcm_to_quat(const Matrix3 &dcm);
  * @return Equivalent Euler angles [roll pitch yaw] (radians) that describe a frame rotation from
  * frame A to frame B.
  */
-
 Vector3 dcm_to_rpy(const Matrix3 &dcm);
 
 /**

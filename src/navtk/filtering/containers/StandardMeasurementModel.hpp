@@ -24,7 +24,6 @@ public:
 	 * The measurement prediction function (i.e. \f$h(x)\f$ in \f$z=h(x)+v\f$). Accepts the state
 	 * vector (xhat) (of size M) and returns the expected measurement vector, of size N.
 	 */
-
 	MeasurementFunction h;
 
 	/// The Jacobian of h, a matrix of size NxM, where M is the number of states.
