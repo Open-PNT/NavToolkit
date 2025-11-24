@@ -5,7 +5,6 @@ FROM ${BASE}
 ENV DEBIAN_FRONTEND noninteractive
 
 # ccache: For CI machines to decrease compile times
-# clang: For generating Python binding documentation
 # cmake: To build LCM subproject
 # crossbuild-essential-arm64: For compiling code into ARM64 binaries
 # crossbuild-essential-armhf: For compiling code into ARMv7 binaries
@@ -25,7 +24,6 @@ ENV DEBIAN_FRONTEND noninteractive
 # sudo: For privilege escalation when using this container for development
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ccache \
-    clang \
     cmake \
     crossbuild-essential-arm64 \
     crossbuild-essential-armhf \
@@ -46,8 +44,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
 
 # meson: Build system
-# clang: For generating Python binding documentation
-RUN pip3 install meson==1.8.4 clang==6.0.0
+# cxxheaderparser: Supports extracting docstrings from headers for reuse in Python docstrings.
+RUN pip3 install meson==1.8.4 cxxheaderparser==1.6.0
 
 # Add ARM architectures to dpkg and apt sources.list
 RUN . /etc/os-release \
