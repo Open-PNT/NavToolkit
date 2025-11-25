@@ -1,6 +1,6 @@
 [build-system]
 # Build dependencies
-requires = ['meson-python', 'meson==1.4.2', 'numpy', 'mypy>=1.10.0']
+requires = ['meson-python', 'meson==1.8.4', 'numpy', 'mypy>=1.10.0']
 build-backend = 'mesonpy'
 
 [tool.meson-python.args]

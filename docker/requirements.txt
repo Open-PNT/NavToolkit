@@ -12,7 +12,7 @@ exhale==0.3.5
 # matplotlib is a Python plotting package used by the examples
 matplotlib==3.10.5
 # Meson is a high performance build system
-meson==1.4.2
+meson==1.8.4
 # MyPy provides stubgen
 mypy==1.9.0
 # LinkChecker is used by CI to make sure links in documentation are valid
