@@ -1,7 +1,7 @@
 project('navtoolkit', 'cpp',
     default_options: ['cpp_std=c++20', 'backend_max_links=4', 'cpp_args=-DGLIBCXX_ASSERTIONS=1'],
     meson_version: '>=1.8.4',
-    version: '2.1.0-3.dev')
+    version: '2.1.0-4.dev')
 
 python = import('python').find_installation('python3')
 python_version = python.language_version()
