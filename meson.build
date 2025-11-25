@@ -1,13 +1,7 @@
 project('navtoolkit', 'cpp',
     default_options: ['cpp_std=c++20', 'backend_max_links=4', 'cpp_args=-DGLIBCXX_ASSERTIONS=1'],
-    meson_version: '>=0.59.1',
+    meson_version: '>=1.8.4',
     version: '2.1.0-3.dev')
-
-# Warn if using an untested version of meson.
-if meson.version().version_compare('>=1.5')
-  warning('This project is untested for Meson versions greater than 1.4 and is not guaranteed to '
-  + 'work with this version')
-endif
 
 python = import('python').find_installation('python3')
 python_version = python.language_version()
