@@ -155,7 +155,7 @@ PYBIND11_MODULE(navtk, m) {
 		    py::gil_scoped_release unlock_gil;
 		    set_global_error_mode(mode);
 	    },
-	    DOCFMT(__doc_set_global_error_mode).c_str(),
+	    __doc_set_global_error_mode,
 	    "mode"_a);
 
 	struct PyErrorModeLock : ErrorModeLock, public py::trampoline_self_life_support {
@@ -184,7 +184,7 @@ PYBIND11_MODULE(navtk, m) {
 	BIND_LOG_OR_THROW_OVERLOAD(1, 0, 0, );
 	BIND_LOG_OR_THROW_OVERLOAD(1, 0, 1, );
 	BIND_LOG_OR_THROW_OVERLOAD(1, 1, 0, );
-	BIND_LOG_OR_THROW_OVERLOAD(1, 1, 1, DOCFMT(__doc_log_or_throw).c_str() COMMA);
+	BIND_LOG_OR_THROW_OVERLOAD(1, 1, 1, __doc_log_or_throw COMMA);
 
 	m.def("version", []() -> py::tuple {
 		return py::make_tuple(

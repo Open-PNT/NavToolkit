@@ -297,6 +297,7 @@ def main() -> None:
     header_paths = [
         f'{project_directory}/src/navtk/**/*.hpp',
         f'{project_directory}/examples/utils/*.hpp',
+        f'{project_directory}/optional/gdal/src/navtk/**/*.hpp',
     ]
     for path in header_paths:
         files.extend(glob(os.path.normpath(path), recursive=True))
