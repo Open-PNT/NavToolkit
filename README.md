@@ -109,12 +109,6 @@ The following dependency is not required but some targets will be disabled if it
 brew install gdal
 ```
 
-Docstrings for the Python bindings do not build properly, so disable them to avoid an error:
-
-```shell
-meson setup build -Dpython_docstrings=false
-```
-
 **Note:** The PATH variable should be adjusted such that the Python installed by Homebrew is found
 before the standard `/usr/bin/python`.  If it is not done automatically, it will need to be done
 manually.
