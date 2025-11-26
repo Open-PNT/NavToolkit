@@ -190,11 +190,6 @@ void add_geospatial_functions(pybind11::module &m) {
 	CDOC(GeoidUndulationSource);
 
 #ifdef NAVTK_GDAL_ENABLED
-// Redefine DOCFMT because docs extraction doesn't work on gdal.
-// This prevents the helper macros from binding_helpers.hpp (included above)
-// from trying to access docstrings for bindings declared in this file.
-#	undef DOCFMT
-#	define DOCFMT(NAME) docfmt("")
 
 	NAMESPACE_FUNCTION(import_frame_from_dataset, geo::detail, "dataset"_a)
 	NAMESPACE_FUNCTION_VOID(import_frame_from_wgs84, geo::detail)

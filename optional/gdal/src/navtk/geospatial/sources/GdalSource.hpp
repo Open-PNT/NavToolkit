@@ -21,7 +21,16 @@ public:
 	/**
 	 * Current GDAL implementations
 	 */
-	enum class MapType { GEOTIFF, DTED };
+	enum class MapType {
+		/**
+		 * A TIFF file with georeferencing information embedded in it.
+		 */
+		GEOTIFF,
+		/**
+		 * An NGA standard of terrain elevation data.
+		 */
+		DTED
+	};
 
 	/**
 	 * Constructor

@@ -15,13 +15,7 @@
 // files so they can be reused as the bindings docs.
 #ifdef NAVTK_PYTHON_DOCSTRINGS
 #	include "navtk_generated.hpp"
-#	define DOCFMT(NAME) docfmt(NAME)
-#else
-#	define DOCFMT(NAME) docfmt("")
 #endif
-
-// TODO PNTOS-262 Better version of this (still has issues recovering whitespace sometimes).
-std::string docfmt(const std::string& docstring);
 
 namespace pybind11 {
 namespace detail {
@@ -82,7 +76,7 @@ namespace py = pybind11;
 #define CDOC(NAME) .doc() = PROCESS_DOC(NAME)
 // Accepts a string argument, which it matches against the docstrings in navtk_generated.hpp,
 // returning the matched string.
-#define PROCESS_DOC(DOCNAME) DOCFMT(__doc_##DOCNAME).c_str()
+#define PROCESS_DOC(DOCNAME) __doc_##DOCNAME
 // Binds a constructor
 #define CTOR(CLASSNAME, TYPES, ...) \
 	.def(py::init<TYPES>(), PROCESS_DOC(CLASSNAME##_##CLASSNAME), __VA_ARGS__)

@@ -418,7 +418,7 @@ void add_utils_functions(pybind11::module &m) {
 	       const py::str &mode) -> py::object {
 		    return py_open_data_file(error_mode, label, basename, mode);
 	    },
-	    DOCFMT(__doc_open_data_file).c_str(),
+	    __doc_open_data_file,
 	    "error_mode"_a,
 	    "label"_a,
 	    "basename"_a,
