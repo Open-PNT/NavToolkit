@@ -73,7 +73,7 @@ module, and documentation as well as run the examples on Ubuntu:
 
 ```shell
 sudo apt-get update
-sudo apt-get install ninja-build libopenblas-dev python3-numpy python3-matplotlib python3-clang clang doxygen texlive-base texlive-font-utils python3-pip git pkg-config
+sudo apt-get install ninja-build libopenblas-dev python3-numpy python3-matplotlib doxygen texlive-base texlive-font-utils python3-pip git pkg-config
 pip3 install -r <(grep -vf <(pip3 freeze | cut -d= -f1) docker/requirements.txt)
 ```
 
@@ -100,7 +100,6 @@ Python extension module, documentation and examples:
 ```shell
 brew install python ninja llvm pkg-config doxygen gcovr glib mactex numpy cmake python-matplotlib
 pip3 install -r <(grep -vf <(pip3 freeze | cut -d= -f1) docker/requirements.txt)
-pip3 install clang
 ```
 
 The following dependency is not required but some targets will be disabled if it is not installed.
