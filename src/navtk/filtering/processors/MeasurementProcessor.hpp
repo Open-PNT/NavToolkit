@@ -98,12 +98,12 @@ public:
 	/**
 	 * Generates a shared pointer of `ModelType`. `ModelType` contains the parameters
 	 * required for a filter update:
-	 * 	- the measurement vector (`z`)
-	 * 	- the function mapping states to measurements (`h`) that accepts `xhat` as an argument and
-	 * 	returns `zhat`
-	 * 	- the matrix providing approximate mapping of states to measurements (`H`); the Jacobian
-	 * 	matrix of `h`
-	 * 	- the corresponding measurement covariance matrix (`R`)
+	 *  - the measurement vector (`z`)
+	 *  - the function mapping states to measurements (`h`) that accepts `xhat` as an argument and
+	 *    returns `zhat`
+	 *  - the matrix providing approximate mapping of states to measurements (`H`); the Jacobian
+	 *    matrix of `h`
+	 *  - the corresponding measurement covariance matrix (`R`)
 	 *
 	 * @param measurement The raw measurement received from the sensor.
 	 * @param gen_x_and_p_func A function that will generate `xhat` (a vector of estimates for the
@@ -113,11 +113,11 @@ public:
 	 * situations where application of usability metrics results in insufficient data, or when an
 	 * error occurs during generation, `nullptr` will be returned instead. In general, the
 	 * `ModelType` contains:
-	 * 	- z: An Mx1 vector of measurement values
-	 * 	- h: A function which maps states to measurements (as zhat=h(xhat))
-	 * 	accepting `xhat` as an argument and producing an Mx1 vector
-	 * 	- H: an MxN matrix relating `xhat` to z (as zhat = H*xhat, approximately); the Jacobian of h
-	 * 	- R: MxM covariance matrix for measurement vector z
+	 *  - z: An Mx1 vector of measurement values
+	 *  - h: A function which maps states to measurements (as zhat=h(xhat)) accepting `xhat` as
+	 *       an argument and producing an Mx1 vector
+	 *  - H: an MxN matrix relating `xhat` to z (as zhat = H*xhat, approximately); the Jacobian of h
+	 *  - R: MxM covariance matrix for measurement vector z
 	 */
 	virtual std::shared_ptr<ModelType> generate_model(
 	    std::shared_ptr<aspn_xtensor::AspnBase> measurement, GenXhatPFunction gen_x_and_p_func) = 0;

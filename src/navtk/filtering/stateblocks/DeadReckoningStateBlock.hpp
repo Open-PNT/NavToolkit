@@ -19,13 +19,13 @@ namespace filtering {
  * A state block that may be used for a horizontal dead reckoning system.
  * The following states are represented in the state block:
  *
- * 		1 - Latitude, random walk model [rad]
+ *    1 - Latitude, random walk model [rad]
  *
- * 		2 - Longitude, random walk model [rad]
+ *    2 - Longitude, random walk model [rad]
  *
- * 		3 - Velocity North, first-order gaussian-markov model [m/s]
+ *    3 - Velocity North, first-order gaussian-markov model [m/s]
  *
- * 		4 - Velocity East, first-order gaussian-markov model [m/s]
+ *    4 - Velocity East, first-order gaussian-markov model [m/s]
  */
 class DeadReckoningStateBlock : public FogmBlock {
 public:
