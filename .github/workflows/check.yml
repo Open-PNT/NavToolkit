@@ -1,0 +1,46 @@
+name: Check
+
+on: [push, pull_request]
+
+jobs:
+    Format:
+        runs-on: ubuntu-24.04
+        steps:
+        - uses: actions/checkout@v4
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v3
+
+        - name: Build Docker image
+          id: docker_build
+          uses: docker/build-push-action@v5
+          with:
+              context: docker/
+              file: docker/Dockerfile.ubuntu
+              push: false
+              tags: ubuntu
+              cache-from: type=gha
+              cache-to: type=gha,mode=max
+              load: true
+
+        - name: Create iidfile
+          run: |
+              set -xe
+              mkdir docker/build/
+              mkdir docker/build/iidfiles/
+              echo ${{ steps.docker_build.outputs.imageid }} > docker/build/iidfiles/ubuntu_noble
+
+        # TODO remove this once repo is public.
+        - name: Set up SSH
+          run: |
+              set -xe
+              eval `ssh-agent -s`
+              mkdir ~/.ssh
+              echo '${{ secrets.FIREHOSE_OUTPUTS_SSH_KEY }}' > ~/.ssh/id_ed25519
+              chmod 600 ~/.ssh/id_ed25519
+
+        - name: Run formatters
+          run: |
+              set -xe
+              docker/docker_interface.py format
+              git diff --exit-code
