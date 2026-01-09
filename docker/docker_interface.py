@@ -37,7 +37,7 @@ from subprocess import check_call, CalledProcessError
 import argparse
 
 # This script has different behavior for CI and normal users
-CI_USER = environ.get('CI_SERVER') == 'yes'
+CI_USER = environ.get('CI') == 'true'
 # Folder that contains the per-platform build folders.
 # Relative to project root.
 BUILD_PATH = 'docker/build'
@@ -254,14 +254,14 @@ def docker_run(args, task=None):
     container that will be generated for the given `platform`, or a None
     object which will cause the script to open a shell for interactive use.
     '''
-    verify_docker_build(args)
+    # CI pre-builds the docker image so it can be cached with a GitHub action.
+    if not CI_USER:
+        verify_docker_build(args)
 
     platform = PLATFORMS[args.platform_name]
     cwd = getcwd()
     home_dir = environ.get('HOME')
 
-    # --interactive --tty so that it is possible to use CTRL+C to kill the
-    #   container
     # --cap-add SYS_PTRACE to give LeakSanitizer enough permissions to run
     #   without error
     # --security-opt label=disable allows volume mounts to have write access
@@ -270,8 +270,6 @@ def docker_run(args, task=None):
     command = [
         'docker',
         'run',
-        '--interactive',
-        '--tty',
         '--cap-add',
         'SYS_PTRACE',
         *safe_add_volume(cwd, '/work'),
@@ -301,9 +299,14 @@ def docker_run(args, task=None):
                     '-e',
                     'SSH_AUTH_SOCK=/.ssh-auth-sock',
                 ]
-        ssh_dir = home_dir + '/.ssh'
-        command += safe_add_volume(ssh_dir, '/home/docker/.ssh', 'ro')
-        command += safe_add_volume(ssh_dir, '/root/.ssh', 'ro')
+        # --interactive --tty so that it is possible to use CTRL+C to kill the
+        #   container
+        command += ['--interactive', '--tty']
+    ssh_dir = home_dir + '/.ssh'
+
+    # TODO: don't need to volume mount in SSH for CI once dependencies are public.
+    command += safe_add_volume(ssh_dir, '/home/docker/.ssh', 'ro')
+    command += safe_add_volume(ssh_dir, '/root/.ssh', 'ro')
 
     command += [open(platform.iid_file).read()]
 
