@@ -31,12 +31,9 @@
 #include <navtk/filtering/containers/TrackedGnssObservations.hpp>
 #include <navtk/filtering/experimental/containers/RbpfModel.hpp>
 #include <navtk/filtering/experimental/fusion/strategies/RbpfStrategy.hpp>
-#include <navtk/filtering/experimental/processors/BaronavMeasurementProcessor.hpp>
 #include <navtk/filtering/experimental/processors/NonlinearAltitudeProcessor.hpp>
 #include <navtk/filtering/experimental/resampling.hpp>
-#include <navtk/filtering/experimental/stateblocks/BaronavMotionBlock.hpp>
 #include <navtk/filtering/experimental/stateblocks/SampledFogmBlock.hpp>
-#include <navtk/filtering/experimental/virtualstateblocks/BaronavMotionToLatitudeLongitude.hpp>
 #include <navtk/filtering/fusion/StandardFusionEngine.hpp>
 #include <navtk/filtering/fusion/strategies/EkfStrategy.hpp>
 #include <navtk/filtering/fusion/strategies/FusionStrategy.hpp>
@@ -219,10 +216,6 @@ using navtk::filtering::VelocityMeasurementProcessor;
 using navtk::filtering::VirtualStateBlock;
 using navtk::filtering::VirtualStateBlockManager;
 using navtk::filtering::ZuptMeasurementProcessor;
-using navtk::filtering::experimental::BaronavMeasurementProcessor;
-using navtk::filtering::experimental::BaronavMeasurementProcessorStatus;
-using navtk::filtering::experimental::BaronavMotionBlock;
-using navtk::filtering::experimental::BaronavMotionToLatitudeLongitude;
 using navtk::filtering::experimental::NonlinearAltitudeProcessor;
 using navtk::filtering::experimental::RbpfModel;
 using navtk::filtering::experimental::RbpfStrategy;
@@ -453,94 +446,6 @@ void add_filtering_experimental_functions(pybind11::module &m) {
 	FUNCTION(systematic_resampling, "weights"_a, "M"_a)
 	FUNCTION(residual_resample_with_replacement, "weights"_a, "m_arg"_a)
 
-	CLASS(BaronavMotionBlock, StateBlock<>)
-	CTOR(BaronavMotionBlock,
-	     PARAMS(const std::string &,
-	            double,
-	            double,
-	            double,
-	            not_null<std::shared_ptr<RandomNumberGenerator>>,
-	            double,
-	            bool),
-	     "label"_a,
-	     "heading_measurement_sigma"_a,
-	     "heading_tau"_a,
-	     "heading_bias_sigma"_a,
-	     "rng"_a,
-	     "delta_position_sigma_per_sec"_a,
-	     "propagate_heading_when_stationary"_a)
-	CDOC(BaronavMotionBlock);
-
-	ENUM(BaronavMeasurementProcessorStatus)
-	CHOICE(BaronavMeasurementProcessorStatus, WAITING_FOR_INIT)
-	CHOICE(BaronavMeasurementProcessorStatus, RUNNING)
-	CHOICE(BaronavMeasurementProcessorStatus, STATIONARY);
-
-	CLASS(BaronavMeasurementProcessor, MeasurementProcessor<>)
-	CTOR(BaronavMeasurementProcessor,
-	     PARAMS(std::string,
-	            std::vector<std::string>,
-	            std::shared_ptr<SimpleElevationProvider>,
-	            std::shared_ptr<RandomNumberGenerator>,
-	            double,
-	            double,
-	            double,
-	            double,
-	            double,
-	            double,
-	            double,
-	            bool,
-	            int,
-	            double,
-	            Vector,
-	            double,
-	            double,
-	            double,
-	            double,
-	            bool,
-	            double,
-	            bool,
-	            std::string),
-	     "label"_a,
-	     "state_block_labels"_a,
-	     "elevation_provider"_a,
-	     "rng"_a,
-	     "barometer_tau"_a                         = 300.0,
-	     "barometer_bias_process_sigma"_a          = 8.0,
-	     "baro_elevation_measurement_sigma"_a      = 1.0,
-	     "heading_tau"_a                           = 80.0,
-	     "heading_bias_process_sigma"_a            = 0.1,
-	     "heading_meas_sigma"_a                    = 0.05,
-	     "delta_position_sigma_per_sec"_a          = 4.0,
-	     "propagate_heading_when_stationary"_a     = false,
-	     "num_particles"_a                         = 1000,
-	     "initial_barometer_bias_variance"_a       = 64.0 / 3.0,
-	     "initialization_variance_scale_factors"_a = Vector{1.0, 1.0, 1.0, 1.0},
-	     "min_initial_position_variance"_a         = 9.0,
-	     "resampling_threshold"_a                  = 0.5,
-	     "min_update_time"_a                       = 30.0,
-	     "max_propagate_time"_a                    = 5.0,
-	     "calc_single_jacobian"_a                  = true,
-	     "delta_t_to_estimate_current_state"_a     = 0.5,
-	     "enable_debug_printouts"_a                = false,
-	     "debug_filename"_a                        = "baronav_debug")
-	METHOD_VOID(BaronavMeasurementProcessor, get_filter_time)
-	METHOD_VOID(BaronavMeasurementProcessor, get_ecef_reference)
-	METHOD_VOID(BaronavMeasurementProcessor, get_altitude_reference)
-	METHOD_VOID(BaronavMeasurementProcessor, get_particles)
-	METHOD_VOID(BaronavMeasurementProcessor, get_weights)
-	METHOD(BaronavMeasurementProcessor, get_initialization_buffer_llh, "time"_a)
-	METHOD_VOID(BaronavMeasurementProcessor, get_motion_block_estimate)
-	METHOD_VOID(BaronavMeasurementProcessor, get_motion_block_cov)
-	METHOD_VOID(BaronavMeasurementProcessor, get_baro_bias_block_estimate)
-	METHOD_VOID(BaronavMeasurementProcessor, get_baro_bias_block_cov)
-	METHOD_VOID(BaronavMeasurementProcessor, get_status)
-	METHOD(BaronavMeasurementProcessor, generate_internal_filter_model, "pressure_meas")
-	METHOD(BaronavMeasurementProcessor, convert_pressure_to_altitude, "pressure")
-	METHOD_VOID(BaronavMeasurementProcessor, get_baro_elevation_measurement_sigma)
-	METHOD(BaronavMeasurementProcessor, set_baro_elevation_measurement_sigma, "new_sigma")
-	CDOC(BaronavMeasurementProcessor);
-
 	CLASS(SampledFogmBlock, StateBlock<>)
 	CTOR(SampledFogmBlock,
 	     PARAMS(const std::string &,
@@ -664,15 +569,6 @@ void add_filtering_experimental_functions(pybind11::module &m) {
 	        "is_empty", &MeasurementBuffer3d::is_empty, PROCESS_DOC(MeasurementBufferBase_is_empty))
 	    .def("clear", &MeasurementBuffer3d::clear, PROCESS_DOC(MeasurementBufferBase_clear))
 	        CDOC(MeasurementBuffer3d);
-
-	CLASS(BaronavMotionToLatitudeLongitude, VirtualStateBlock)
-	CTOR(BaronavMotionToLatitudeLongitude,
-	     PARAMS(const std::string &, const std::string &, const Vector3 &),
-	     "current"_a,
-	     "target"_a,
-	     "ecef_reference"_a)
-	METHOD(BaronavMotionToLatitudeLongitude, set_ecef_reference, "new_ecef_reference")
-	CDOC(BaronavMotionToLatitudeLongitude);
 }
 
 void add_filtering_functions(pybind11::module &m) {
