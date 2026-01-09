@@ -62,19 +62,6 @@ else
         include_directories: [incdir],
         dependencies: [aspn_cpp_lcm_dep])
 
-    gps_ins_tightly_coupled_ground_example = executable('gps_ins_tightly_coupled_ground_example',
-        sources: ['gps_ins/gps_ins_tightly_coupled_ground.cpp', src_ex],
-        dependencies: [xtensor_python_dep, pybind11_dep, libpython3_dep, aspn_cpp_lcm_dep, gps_ins_dep, navtoolkit_dep],
-        cpp_args : ['-D_NAVTK_UNIT_TESTS'])
-
-    test('GPS/INS Tightly Coupled Ground Example',
-        gps_ins_tightly_coupled_ground_example,
-        env: embedded_interpreter_env,
-        args: [join_paths(DATA_DIRECTORY, log_files[1]), '0', '120'],
-        timeout: test_timeout)
-
-    run_target('run_gps_ins_tightly_coupled_ground_example', command: [gps_ins_tightly_coupled_ground_example , join_paths(DATA_DIRECTORY, log_files[1])])
-
     gps_ins_loosely_coupled_flight_example = executable('gps_ins_loosely_coupled_flight_example',
         sources: ['gps_ins/gps_ins_loosely_coupled_flight.cpp', src_ex],
         dependencies: [xtensor_python_dep, pybind11_dep, libpython3_dep, aspn_cpp_lcm_dep, gps_ins_dep, navtoolkit_dep],

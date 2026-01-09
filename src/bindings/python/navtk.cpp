@@ -131,7 +131,6 @@ PYBIND11_MODULE(navtk, m) {
 	ADD_NAMESPACE(m, navutils);
 	ADD_NAMESPACE(m, geospatial);
 	ADD_NAMESPACE(m, exampleutils);
-	ADD_NAMESPACE(m, gnssutils);
 	ADD_NAMESPACE(m, inertial);
 	ADD_NAMESPACE(m, magnetic);
 	ADD_NAMESPACE(m, utils);

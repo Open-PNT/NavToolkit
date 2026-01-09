@@ -54,9 +54,6 @@
 #include <navtk/filtering/processors/MeasurementProcessor.hpp>
 #include <navtk/filtering/processors/PinsonPositionMeasurementProcessor.hpp>
 #include <navtk/filtering/processors/PositionVelocityAttitudeMeasurementProcessor.hpp>
-#include <navtk/filtering/processors/PseudorangeDopplerProcessorEcef.hpp>
-#include <navtk/filtering/processors/SinglePointPseudorangeProcessor.hpp>
-#include <navtk/filtering/processors/SinglePointPseudorangeProcessorEcef.hpp>
 #include <navtk/filtering/processors/VelocityMeasurementProcessor.hpp>
 #include <navtk/filtering/processors/ZuptMeasurementProcessor.hpp>
 #include <navtk/filtering/stateblocks/ClockBiasesStateBlock.hpp>
@@ -180,7 +177,6 @@ using navtk::filtering::PlatformToSensorEcefQuat;
 using navtk::filtering::Pose;
 using navtk::filtering::PositionVelocityAttitudeMeasurementProcessor;
 using navtk::filtering::PseudorangeDopplerMeasurements;
-using navtk::filtering::PseudorangeDopplerProcessorEcef;
 using navtk::filtering::QuatToRpyPva;
 using navtk::filtering::RangeInfo;
 using navtk::filtering::RelativeHumidityAux;
@@ -195,8 +191,6 @@ using navtk::filtering::SensorToPlatformCartesianVirtualStateBlock;
 using navtk::filtering::SensorToPlatformEcef;
 using navtk::filtering::SensorToPlatformEcefQuat;
 using navtk::filtering::ShiftVirtualStateBlock;
-using navtk::filtering::SinglePointPseudorangeProcessor;
-using navtk::filtering::SinglePointPseudorangeProcessorEcef;
 using navtk::filtering::StandardDynamicsModel;
 using navtk::filtering::StandardFusionEngine;
 using navtk::filtering::StandardMeasurementModel;
@@ -225,8 +219,6 @@ using navtk::filtering::experimental::residual_resample_with_replacement;
 using navtk::filtering::experimental::SampledFogmBlock;
 using navtk::filtering::experimental::systematic_resampling;
 using navtk::geospatial::SimpleElevationProvider;
-using navtk::gnssutils::CarrierPhaseType;
-using navtk::gnssutils::PseudorangeType;
 using std::vector;
 
 using namespace pybind11::literals;
@@ -1176,92 +1168,6 @@ void add_filtering_functions(pybind11::module &m) {
 	CTOR(RelativeHumidityAux, double, "t"_a)
 	FIELD(RelativeHumidityAux, tropo_rel_humidity)
 	CDOC(RelativeHumidityAux);
-
-	CLASS(SinglePointPseudorangeProcessor, MeasurementProcessor<>)
-	CTOR(SinglePointPseudorangeProcessor,
-	     PARAMS(std::string,
-	            std::string,
-	            std::string,
-	            PseudorangeType,
-	            double,
-	            double,
-	            double,
-	            not_null<std::shared_ptr<StandardFusionEngine>>,
-	            bool,
-	            double,
-	            double,
-	            bool),
-	     "label"_a,
-	     "pinson15_label"_a,
-	     "clock_biases_label"_a,
-	     "pr_to_use"_a,
-	     "pr_noise_covariance"_a,
-	     "pr_bias_covariance"_a,
-	     "pr_time_constant"_a,
-	     NOT_NONE("engine_in"),
-	     "apply_tropo_model"_a          = true,
-	     "tropo_rel_humidity"_a         = 0.5,
-	     "elevation_mask"_a             = -1,
-	     "force_clock_initialization"_a = true)
-	CDOC(SinglePointPseudorangeProcessor);
-
-	CLASS(SinglePointPseudorangeProcessorEcef, MeasurementProcessor<>)
-	CTOR(SinglePointPseudorangeProcessorEcef,
-	     PARAMS(std::string,
-	            std::string,
-	            std::string,
-	            PseudorangeType,
-	            double,
-	            double,
-	            double,
-	            not_null<std::shared_ptr<StandardFusionEngine>>,
-	            bool,
-	            double,
-	            double,
-	            bool),
-	     "label"_a,
-	     "pos_ecef_label"_a,
-	     "clock_biases_label"_a,
-	     "pr_to_use"_a,
-	     "pr_noise_covariance"_a,
-	     "pr_bias_covariance"_a,
-	     "pr_time_constant"_a,
-	     NOT_NONE("engine_in"),
-	     "apply_tropo_model"_a          = true,
-	     "tropo_rel_humidity"_a         = 0.5,
-	     "elevation_mask"_a             = -1,
-	     "force_clock_initialization"_a = true)
-	CDOC(SinglePointPseudorangeProcessorEcef);
-
-	CLASS(PseudorangeDopplerProcessorEcef, MeasurementProcessor<>)
-	CTOR(PseudorangeDopplerProcessorEcef,
-	     PARAMS(std::string,
-	            std::string,
-	            std::string,
-	            CarrierPhaseType,
-	            double,
-	            double,
-	            double,
-	            double,
-	            not_null<std::shared_ptr<StandardFusionEngine>>,
-	            bool,
-	            double,
-	            double,
-	            bool),
-	     "label"_a,
-	     "pv_ecef_label"_a,
-	     "clock_biases_label"_a,
-	     "cp_to_use"_a,
-	     "pr_noise_covariance"_a,
-	     "pr_bias_covariance"_a,
-	     "pr_time_constant"_a,
-	     "prr_noise_covariance"_a,
-	     NOT_NONE("engine_in"),
-	     "apply_tropo_model"_a          = true,
-	     "tropo_rel_humidity"_a         = 0.5,
-	     "elevation_mask"_a             = -1,
-	     "force_clock_initialization"_a = true)
-	CDOC(PseudorangeDopplerProcessorEcef);
 
 	CLASS(AltitudeMeasurementProcessor, MeasurementProcessor<>)
 	CTOR(AltitudeMeasurementProcessor,
