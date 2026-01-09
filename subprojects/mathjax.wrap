@@ -1,0 +1,9 @@
+[wrap-git]
+directory = MathJax
+
+url = https://github.com/mathjax/MathJax.git
+# v3.2.2
+revision = 600692ad9d3552cc25f85510d5797bc942ecc9f7
+depth = 1
+
+patch_directory = MathJax

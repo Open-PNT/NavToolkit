@@ -1,0 +1,6 @@
+[wrap-git]
+directory = navtk-data
+
+url = git@git.aspn.us:pntos/navigation-data.git
+revision = 5238be80cdaa59d26903a0021e814e628634bb09
+depth = 1

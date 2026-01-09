@@ -1,0 +1,13 @@
+prefix=/usr/local
+includedir=${prefix}/include
+
+Name: xtensor-blas
+Description: an extension to the xtensor library, offering bindings to BLAS and LAPACK libraries through cxxblas and cxxlapack from the FLENS project
+Version: 0.21.0
+Requires: blas, lapack, xtensor >= 0.25.0, xtensor < 1.0.0
+# Fedora required cblas to be specified
+#Requires: cblas, blas, lapack, xtensor >= 0.25.0, xtensor < 1.0.0
+# If Mac wants to use Accelerate framework, use the following two lines instead:
+# Requires: xtensor >= 0.25.0, xtensor < 1.0.0
+# Libs: -framework Accelerate
+Cflags: -I${includedir}

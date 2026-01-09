@@ -1,0 +1,12 @@
+[wrap-git]
+directory = json
+
+url = https://github.com/nlohmann/json.git
+# v3.11.3
+revision = 9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03
+depth = 1
+
+patch_directory = nlohmann_json
+
+[provide]
+dependency_names = nlohmann_json

@@ -1,0 +1,79 @@
+ARG BASE=ubuntu:24.04
+
+# -------------------------------------------------------------------------------
+FROM ${BASE}
+ENV DEBIAN_FRONTEND noninteractive
+
+# build-essential: For compiling code
+# ccache: For CI machines to decrease compile times
+# clang: For running the naming rules check and generating Python binding documentation
+# clang-format: For formatting source code
+# doxygen: For building project documentation
+# doxygen-latex: For building project documentation
+# git: For fetching subprojects from the internet
+# libclang-dev: For generating Python binding documentation
+# libgdal-dev: Support library needed for `optional/gdal`
+# liblcm-dev: To build certain examples
+# libopenblas-dev: For using support library OpenBLAS (BLAS/LAPACK)
+# libpython3-dev: Support library for compiling the navtk Python Extension Module
+# ninja-build: For compiling code
+# openssh-client: For ssh when using this container for development
+# pkg-config: For Meson to discover installed libraries while compiling
+# python3-clang: For running the naming rules check and generating Python binding documentation
+# python3-inflection: For util/process_file_naming.py
+# python3-matplotlib: For displaying graphs when running Python examples
+# python3-numpy: For running the Python examples
+# python3-pip: For installing pip packages (see requirements.txt)
+# python3-tk: For plot rendering in examples
+# python3-venv: For creating a venv
+# sudo: For privilege escalation when using this container for development
+# texlive-base: For building project documentation
+# texlive-font-utils: For building project documentation
+# vim: For modifying files when using this container for development
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    ccache \
+    clang \
+    clang-format* \
+    doxygen \
+    doxygen-latex \
+    git \
+    libclang-dev \
+    libgdal-dev \
+    liblcm-dev \
+    libopenblas-dev \
+    libpython3-dev \
+    ninja-build \
+    openssh-client \
+    pkg-config \
+    python3-clang \
+    python3-inflection \
+    python3-matplotlib \
+    python3-numpy \
+    python3-pip \
+    python3-tk \
+    python3-venv \
+    sudo \
+    texlive-base \
+    texlive-font-utils \
+    vim \
+&& rm -rf /var/lib/apt/lists/*
+
+# Create a venv
+RUN mkdir /venv && python3 -m venv /venv --system-site-packages
+
+# flake8: For Python style checking
+# linkchecker: For CI verifying hyperlinks are valid in project documentation
+RUN /venv/bin/pip install \
+    flake8 \
+    linkchecker
+
+# Install pip packages, excluding any that were already installed by apt
+COPY requirements.txt /
+RUN bash -c '/venv/bin/pip install -r <(grep -vf <(pip3 freeze | cut -d= -f1) /requirements.txt)'
+
+WORKDIR /work
+
+COPY util/user_bootstrap.sh /
+ENTRYPOINT ["/user_bootstrap.sh"]
+CMD ["/bin/bash"]

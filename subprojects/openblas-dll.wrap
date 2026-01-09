@@ -1,0 +1,9 @@
+[wrap-file]
+directory = openblas-dll
+
+source_url = https://github.com/xianyi/OpenBLAS/releases/download/v0.3.26/OpenBLAS-0.3.26-x64.zip
+source_filename = openblas-dll-0.3.26.zip
+source_hash = 859c510a962a30ef1b01aa93cde26fdb5fb1050f94ad5ab2802eba3731935e06
+lead_directory_missing = true
+
+patch_directory = openblas-dll

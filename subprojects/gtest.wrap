@@ -1,0 +1,15 @@
+[wrap-git]
+directory = googletest
+
+url = https://github.com/google/googletest.git
+# revision = v1.14.0 is the following hash:
+revision = f8d7d77c06936315286eb55f8de22cd23c188571
+depth = 1
+
+patch_directory = googletest
+
+[provide]
+gtest=gtest_dep
+gtest_main=gtest_main_dep
+gmock=gmock_dep
+gmock_main=gmock_main_dep

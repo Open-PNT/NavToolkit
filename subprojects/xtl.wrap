@@ -1,0 +1,12 @@
+[wrap-git]
+directory = xtl
+
+url = https://github.com/xtensor-stack/xtl.git
+# v0.7.7
+revision = a7c1c5444dfc57f76620391af4c94785ff82c8d6
+depth = 1
+
+patch_directory = xtl
+
+[provide]
+dependency_names = xtl

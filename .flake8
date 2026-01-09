@@ -1,0 +1,8 @@
+[flake8]
+ignore =
+    # Ignores line breaks around operators. This helps with formatting long lines.
+    W503, W504
+    # Ignores space before ":", which conflicts with black.
+    E203
+    # Ignores error from math-variables, like "I".
+    E741

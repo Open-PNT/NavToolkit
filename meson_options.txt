@@ -1,0 +1,43 @@
+option('python_bindings', type : 'boolean',
+    description: 'Build the Python Extension Module for navtk')
+
+option('python_docstrings', type : 'boolean',
+    description: 'Generate docstrings for Python bindings')
+
+option('subproj_includedir',
+    type: 'string',
+    value: 'include/navtk/embed',
+    description: 'Header file directory when built as subproject')
+
+option('test_timeout', type: 'integer', value: 180,
+       description: 'Maximum number of seconds to run tests')
+
+option('test_color', type: 'boolean', value: true,
+       description: 'Whether to enable ANSI colors in meson test output.')
+
+option('show_sphinx_warnings', type: 'boolean', value: false,
+       description: 'Show sphinx warnings in terminal or not')
+
+option('lcm_examples', type: 'feature', value: 'auto',
+       description: 'Build examples that require the LCM library')
+
+option('get_navtk_data', type: 'boolean', value: true,
+       description: 'Fetch navtk binary data used for certain features and example data')
+
+option('build_docs_tests_examples', type: 'boolean', value: true,
+       description: 'Build the docs, tests, and examples')
+
+# NavToolkit is build twice by default: once using xtensor as the underlying tensor representation
+# and once with pytensor. Setting this option to false disables the former library from being built
+# or installed.
+option('main_library', type: 'boolean', value: true, yield: true)
+
+option('gdal_extensions', type: 'feature', value: 'auto', yield: true)
+
+# Set the Global Error Mode to validate inputs and other key items, especially matrices.
+# Enabling this feature causes a significant performance decrease but helps to prevent/debug crashes and other strange
+# errors.  See src/navtk/errors.hpp for more information.
+# 'auto': Enabled for debug builds, disabled for release builds
+# 'enabled' : Always validate matrices
+# 'disabled' : Never validate matrices
+option('matrix_validation', type: 'feature', value: 'auto')

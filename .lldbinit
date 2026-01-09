@@ -1,0 +1,2 @@
+command script import extra/lldbinit.py
+settings set target.load-cwd-lldbinit true

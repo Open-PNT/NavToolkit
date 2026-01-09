@@ -1,0 +1,36 @@
+# NOTE: Avoid using the ** syntax in this file where at all possible. Some
+# tools which parse your .gitignore file (such as `ag`) don't support it.
+
+# OSX-specific things
+.DS_Store
+
+# Windows-specific things
+Thumbs.db
+
+# Ignore temporary files
+*~
+*.autosave
+*.swp
+
+# Ignore meson artifacts
+/build*/
+/subprojects/*/
+!subprojects/packagefiles
+docker/build/
+
+# Symbolic link to build directory
+build
+
+# Ignore documentation generation files
+docs/api-exhale
+docs/doxygen_output
+
+# Local Python virtual environment
+.venv/
+
+# Miscellaneous
+.vscode
+__pycache__
+.idea
+util/asan_tests/bin
+.cache

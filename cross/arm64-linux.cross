@@ -1,0 +1,14 @@
+[binaries]
+c = '/usr/bin/aarch64-linux-gnu-gcc'
+cpp = ['ccache', '/usr/bin/aarch64-linux-gnu-g++']
+ar = '/usr/bin/aarch64-linux-gnu-ar'
+strip = '/usr/bin/aarch64-linux-gnu-strip'
+pkgconfig = '/usr/bin/aarch64-linux-gnu-pkg-config'
+exe_wrapper = ['qemu-aarch64', '-L', '/usr/aarch64-linux-gnu']
+
+[host_machine]
+system = 'linux'
+cpu_family = 'aarch64'
+# readelf -A a.out
+cpu = 'arm64'
+endian = 'little'

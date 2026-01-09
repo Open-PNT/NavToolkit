@@ -1,0 +1,12 @@
+[wrap-git]
+directory = xtensor-blas
+
+url = https://github.com/xtensor-stack/xtensor-blas.git
+# v0.21.0
+revision = 5dcbab5f41636a678a9ec715a058fbe6501aba77
+depth = 1
+
+patch_directory = xtensor-blas
+
+[provide]
+dependency_names = xtensor-blas

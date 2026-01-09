@@ -1,0 +1,49 @@
+# Black is the uncompromising Python code formatter
+black==22.8.0
+# Breathe is an extension to reStructuredText and Sphinx to be able to read and render Doxygen xml output.
+breathe==4.34.0
+# Build is necessary to create Python source distributions.
+build==1.2.2.post1
+# docutils is a dependency of Sphinx.
+# Pinned to 0.17.1 because Sphinx 4.5.0 requires <0.18
+docutils==0.17.1
+# Exhale is an automatic C++ library API documentation generator using Doxygen, Sphinx, and Breathe
+exhale==0.3.5
+# matplotlib is a Python plotting package used by the examples
+# Pinned to version 3.5.3 by navtk#781
+matplotlib==3.5.3
+# Meson is a high performance build system
+meson==1.4.2
+# MyPy provides stubgen
+mypy==1.9.0
+# LinkChecker is used by CI to make sure links in documentation are valid
+LinkChecker==10.1.0
+# Sphinx is a Python documentation generator (and also supports C/C++)
+# Pinned to 4.5.0 because exhale does not currently support later versions
+Sphinx==4.5.0
+# A sphinx extension which outputs Apple help books.
+# Pinned to 1.0.4 because after this version it requires Sphinx>5.0.0
+sphinxcontrib-applehelp==1.0.4
+# A sphinx extension which outputs Devhelp document.
+# Pinned to 1.0.2 because after this version it requires Sphinx>5.0.0
+sphinxcontrib-devhelp==1.0.2
+# A sphinx extension which renders HTML help files.
+# Pinned to 2.0.1 because after this version it requires Sphinx>5.0.0
+sphinxcontrib-htmlhelp==2.0.1
+# A sphinx extension which renders display math in HTML via JavaScript.
+# Pinned to 1.0.1 because if it ever updates it will probably need Sphinx>5.0.0
+sphinxcontrib-jsmath==1.0.1
+# A sphinx extension which outputs QtHelp document.
+# Pinned to 1.0.3 because after this version it requires Sphinx>5.0.0
+sphinxcontrib-qthelp==1.0.3
+# A sphinx extension which outputs “serialized” HTML files (json and pickle).
+# Pinned to 1.1.5 because after this version it requires Sphinx>5.0.0
+sphinxcontrib-serializinghtml==1.1.5
+# Read the Docs theme for Sphinx
+sphinx-rtd-theme==1.3.0
+# Twine is necessary for uploading wheels and source distributions to a registry.
+twine==6.1.0
+# urllib3 is an HTTP library with thread-safe connection pooling, file post, and more.
+# Pinned to 1.26.15 because versions after 2.0 require newer Python ssl module than
+# all of our platforms have available.
+urllib3==1.26.15

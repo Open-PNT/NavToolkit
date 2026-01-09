@@ -1,0 +1,26 @@
+NavToolkit
+Copyright (c) 2019-2025 Integrated Solutions for Systems, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License"),
+with an additional restriction given in the following Distribution Statement D.
+You may not use these files except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+STATEMENT D: To DoD and U.S. DoD Contractors Only. Distribution authorized to
+Department of Defense and U.S. DoD Contractors only. Other requests for this
+document must be referred to PM PNT. Distribution statement D may be used on
+unclassified and classified technical documents.
+
+--
+
+The file util/mkdoc.py is a modified version of a file distributed by the
+pybind11 project. The original code is licensed under the terms given by the
+pybind11 project at https://github.com/pybind/pybind11_mkdoc.
+
+--
+
+The file util/ghwt.py is distributed by the meson project.  The original code is
+licensed under the terms given by the project at
+https://github.com/mesonbuild/meson

@@ -1,0 +1,12 @@
+[wrap-git]
+directory = xtensor
+
+url = https://github.com/xtensor-stack/xtensor.git
+# v0.25.0
+revision = 3634f2ded19e0cf38208c8b86cea9e1d7c8e397d
+depth = 1
+
+patch_directory = xtensor
+
+[provide]
+dependency_names = xtensor

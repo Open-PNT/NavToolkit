@@ -1,0 +1,21 @@
+[build-system]
+# Build dependencies
+requires = ['meson-python', 'meson==1.4.2', 'numpy', 'mypy>=1.10.0']
+build-backend = 'mesonpy'
+
+[tool.meson-python.args]
+setup = ['-Dbuild_docs_tests_examples=false',
+         '-Dmain_library=false',
+         '-Dgdal_extensions=disabled',
+         '-Dget_navtk_data=false',
+         '-Dfirehose-outputs:aspn-cpp-xtensor=disabled',
+         '-Dfirehose-outputs:aspn-cpp-xtensor-py=enabled',
+         '-Dfirehose-outputs:aspn-c-main-library=false']
+install = ['--tags=runtime,python-runtime']
+
+[project]
+# Runtime dependencies
+dependencies = ['numpy']
+name = 'navtk'
+dynamic = ['version']
+description = 'NavToolkit Python Bindings'
