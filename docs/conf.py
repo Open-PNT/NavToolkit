@@ -21,7 +21,7 @@ import json
 # -- Project information -----------------------------------------------------
 
 project = 'NavToolkit'
-copyright = '2019-2025, IS4S'
+copyright = '2019-2026, IS4S'
 author = 'IS4S'
 
 # The full version, including alpha/beta/rc tags
