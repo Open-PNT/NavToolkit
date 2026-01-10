@@ -308,7 +308,7 @@ def docker_run(args, task=None):
     command += safe_add_volume(ssh_dir, '/home/docker/.ssh', 'ro')
     command += safe_add_volume(ssh_dir, '/root/.ssh', 'ro')
 
-    command += [open(platform.iid_file).read()]
+    command += [open(platform.iid_file).read().strip()]
 
     if task:
         command += [task]
@@ -395,7 +395,7 @@ def verify_docker_build(args):
     # `--format=image_check` is added so that the Docker client doesn't print
     # all of the image information.
     command = ['docker', 'image', 'inspect', '--format=image_check']
-    command += [open(platform.iid_file).read()]
+    command += [open(platform.iid_file).read().strip()]
 
     # The `call` function throws an exception if `command` returns non-zero
     try:
