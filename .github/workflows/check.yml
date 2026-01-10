@@ -36,8 +36,15 @@ jobs:
               set -xe
               eval `ssh-agent -s`
               mkdir ~/.ssh
-              echo '${{ secrets.FIREHOSE_OUTPUTS_SSH_KEY }}' > ~/.ssh/id_ed25519
+              echo '${{ secrets.FIREHOSE_OUTPUTS_SSH_KEY }}' > ~/.ssh/id_ed25519_2
+              echo '${{ secrets.NAVIGATION_DATA_SSH_KEY }}' > ~/.ssh/id_ed25519
+              chmod 600 ~/.ssh/id_ed25519_2
               chmod 600 ~/.ssh/id_ed25519
+              echo 'Host *' > ~/.ssh/config
+              echo 'IdentityFile /home/runner/.ssh/id_ed25519_2' >> ~/.ssh/config
+              # Hack: just use the latest version
+              git clone git@github.com:Open-PNT/firehose-outputs.git subprojects/firehose-outputs
+              rm ~/.ssh/config
 
         - name: Run formatters
           run: |
