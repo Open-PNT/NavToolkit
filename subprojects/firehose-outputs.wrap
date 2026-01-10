@@ -1,7 +1,7 @@
 [wrap-git]
 directory = firehose-outputs
 
-url = git@git.aspn.us:pntos/firehose-outputs.git
-# main branch - committed 13 November 2025
-revision = f642101b18acd93a561f52865055ec83b342ddb3
+url = git@github.com:Open-PNT/firehose-outputs.git
+# main branch - committed 8 January 2026
+revision = 211af969253a08e6fcb47f2b9f903cd1c67cd7d9
 depth = 1
