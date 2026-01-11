@@ -41,3 +41,31 @@ jobs:
 
         - name: Check copyright year
           run: (! grep --color -i "copyright.*$(( $(date +%Y) - 1 ))" $(git ls-files))
+
+    documentation:
+        runs-on: ubuntu-24.04
+        env:
+          BUILD_DIR: docker/build/ubuntu_noble
+        steps:
+        - uses: actions/checkout@v4
+
+        - name: Build documentation
+          run: |
+            set -xe;
+            docker/docker_interface.py check_documentation
+            docker/docker_interface.py setup
+            docker/docker_interface.py debug ubuntu-noble "ninja -C $BUILD_DIR docs"
+            status=0
+            docker/docker_interface.py debug ubuntu-noble "linkchecker -r 3 $BUILD_DIR/docs/index.html" || status=1
+            # Fail the build when any "doxygenfunction" raw commands leak into the output, which indicates the exhale
+            # overloads bug (PNTOS-273) has been triggered. The offending code must use
+            # #ifndef NEED_DOXYGEN_EXHALE_WORKAROUND to hide one or more overloads from the documentation pipeline.
+            grep -Fr doxygenfunction: "$BUILD_DIR"/docs/api-exhale && status=1
+            grep -Fr '.. doxygenfunction::' "$BUILD_DIR"/docs/_sources | cut -d: -f2- | perl -ne 'print if $$x{$$_}++' | grep . && status=1
+            exit $$status
+
+        - name: Archive Docs
+          uses: actions/upload-artifact@v4
+          with:
+            name: archived-docs
+            path: $BUILD_DIR/docs
