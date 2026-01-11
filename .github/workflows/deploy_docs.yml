@@ -1,0 +1,41 @@
+name: deploy_docs
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  docs:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-24.04
+    env:
+      BUILD_DIR: docker/build/ubuntu_noble
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up
+      uses: ./.github/actions/setup
+      with:
+        firehose-outputs-ssh-key: ${{ secrets.FIREHOSE_OUTPUTS_SSH_KEY }}
+        navigation-data-ssh-key: ${{ secrets.NAVIGATION_DATA_SSH_KEY }}
+
+    - name: Build documentation
+      run: |
+        set -xe;
+        docker/docker_interface.py setup
+        docker/docker_interface.py debug ubuntu-noble "ninja -C $BUILD_DIR docs"
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '$BUILD_DIR/docs'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
