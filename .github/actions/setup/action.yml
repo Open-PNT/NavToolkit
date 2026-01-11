@@ -1,0 +1,55 @@
+name: 'Set up Docker'
+description: 'Builds docker image and completes any additional setup needed'
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      id: docker_build
+      uses: docker/build-push-action@v5
+      with:
+          context: docker/
+          file: docker/Dockerfile.ubuntu
+          push: false
+          tags: ubuntu
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+
+    - name: Create iidfile
+      shell: bash
+      run: |
+          set -xe
+          mkdir docker/build/
+          mkdir docker/build/iidfiles/
+          echo ${{ steps.docker_build.outputs.imageid }} > docker/build/iidfiles/ubuntu_noble
+
+      # TODO remove this once repo is public.
+    - name: Set up SSH
+      shell: bash
+      env:
+        FIREHOSE_OUTPUTS_SSH_KEY: ${{ inputs.firehose-outputs-ssh-key }}
+        NAVIGATION_DATA_SSH_KEY: ${{ inputs.navigation-data-ssh-key }}
+      run: |
+          set -xe
+          eval `ssh-agent -s`
+          mkdir ~/.ssh
+          echo '${{ env.FIREHOSE_OUTPUTS_SSH_KEY }}' > ~/.ssh/id_ed25519_2
+          echo '${{ env.NAVIGATION_DATA_SSH_KEY }}' > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519_2
+          chmod 600 ~/.ssh/id_ed25519
+          echo 'Host *' > ~/.ssh/config
+          echo 'IdentityFile /home/runner/.ssh/id_ed25519_2' >> ~/.ssh/config
+          # Hack: just use the latest version
+          git clone git@github.com:Open-PNT/firehose-outputs.git subprojects/firehose-outputs
+          rm ~/.ssh/config
+
+inputs:
+  firehose-outputs-ssh-key:
+    description: 'SSH key for firehose-outputs'
+    required: true
+  navigation-data-ssh-key:
+    description: 'SSH key for navigation-data'
+    required: true
