@@ -33,3 +33,11 @@ jobs:
 
         - name: Run flake8
           run: docker/docker_interface.py flake8
+
+    copyright-year:
+        runs-on: ubuntu-24.04
+        steps:
+        - uses: actions/checkout@v4
+
+        - name: Check copyright year
+          run: (! grep --color -i "copyright.*$(( $(date +%Y) - 1 ))" $(git ls-files))
