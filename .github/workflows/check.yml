@@ -67,4 +67,4 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: archived-docs
-            path: $BUILD_DIR/docs
+            path: ${{ env.BUILD_DIR }}/docs
