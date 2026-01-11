@@ -49,6 +49,12 @@ jobs:
         steps:
         - uses: actions/checkout@v4
 
+        - name: Set up
+          uses: ./.github/actions/setup
+          with:
+            firehose-outputs-ssh-key: ${{ secrets.FIREHOSE_OUTPUTS_SSH_KEY }}
+            navigation-data-ssh-key: ${{ secrets.NAVIGATION_DATA_SSH_KEY }}
+
         - name: Build documentation
           run: |
             set -xe;
