@@ -1,7 +1,0 @@
-[wrap-git]
-directory = lcm
-
-url = https://github.com/lcm-proj/lcm.git
-# v1.5.0
-revision = 53e68e66ff478049c10d92b8e457af522cfefa25
-depth = 1

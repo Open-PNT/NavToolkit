@@ -188,8 +188,6 @@ Compile and run examples using ninja:
 ninja -C build run_straight_flight_example
 ninja -C build run_aliased_example
 ninja -C build run_bias_example_with_update
-ninja -C build run_gps_ins_tightly_coupled_ground_example
-ninja -C build run_gps_ins_loosely_coupled_flight_example
 ```
 
 If the python bindings were built, then you can also run the Python examples using ninja:
@@ -200,7 +198,6 @@ ninja -C build run_virtual_state_block_example_py
 ninja -C build run_scalar_fogm_example_py
 ninja -C build run_particle_filter_example_py
 ninja -C build run_bias_example_with_update_py
-ninja -C build run_gps_ins_loosely_coupled_flight_example_py # Only if LCM was installed
 ```
 
 Depending on your environment, these examples may not run with the default Matplotlib backend.

@@ -44,7 +44,6 @@ def build_extract_args():
     args.extend(
         repo_glob('subprojects', '*', 'googletest', 'include', flag="-I")
     )
-    args.extend(repo_glob('subprojects', 'lcm-generated', 'cpp', flag="-I"))
     args.extend(repo_glob('src', flag="-I"))
     filenames = []
     for srcdir in ('test', 'src/navtk', 'examples'):

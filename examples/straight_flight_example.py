@@ -105,9 +105,7 @@ def straight_flight_example():
     Inertial mechanization is simulated by adding modeled inertial errors
     to a perfect trajectory.  Feedback to this 'inertial' is optionally
     employed to keep the reference trajectory from becoming so incorrect
-    during longer examples that the model breaks down.  For a more
-    complicated example that performs feedback into a live running INS
-    mechanization,please see gps_ins_example.
+    during longer examples that the model breaks down.
 
     A walk through of this example is available in the official
     documentation.  Please look there for a step-by-step tutorial.
