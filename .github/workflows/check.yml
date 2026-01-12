@@ -68,3 +68,35 @@ jobs:
           with:
             name: archived-docs
             path: ${{ env.BUILD_DIR }}/docs
+
+    external-link:
+        runs-on: ubuntu-24.04
+        needs: documentation
+        env:
+          BUILD_DIR: docker/build/ubuntu_noble
+        steps:
+        - uses: actions/checkout@v4
+
+        - name: Set up
+          uses: ./.github/actions/setup
+          with:
+            firehose-outputs-ssh-key: ${{ secrets.FIREHOSE_OUTPUTS_SSH_KEY }}
+            navigation-data-ssh-key: ${{ secrets.NAVIGATION_DATA_SSH_KEY }}
+
+        - name: Download documentation artifacts
+          uses: actions/download-artifact@v4
+          with:
+            name: archived-docs
+            path: ${{ env.BUILD_DIR }}/docs
+
+        - name: Check external links
+          run: |
+            set -xe;
+            docker/docker_interface.py debug ubuntu-noble "\
+            linkchecker $BUILD_DIR/docs/index.html --check-extern -r 3 \
+                --ignore-url=RobotoSlab \
+                --ignore-url=py-modindex \
+                --ignore-url=sphinx-doc \
+                --ignore-url=http://schema.org/Article \
+                --ignore-url=https://about.readthedocs.com?ref=readthedocs.org \
+                --ignore-url=https://readthedocs.org"
