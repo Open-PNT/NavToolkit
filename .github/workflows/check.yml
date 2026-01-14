@@ -3,6 +3,17 @@ name: Check
 on: [push, pull_request]
 
 jobs:
+    debug:
+        runs-on: ubuntu-24.04
+        steps:
+        - uses: actions/checkout@v4
+
+        - name: Git status
+          run: |
+            set -xe
+            git status
+            git log
+
     Format:
         runs-on: ubuntu-24.04
         steps:
