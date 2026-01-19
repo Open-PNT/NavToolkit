@@ -79,7 +79,7 @@ public:
 // same elevation for a given set of latitudes and longitudes as the GDAL command line utility,
 // gdallocationinfo. Since gdallocationinfo doesn't do interpolation, query coordinates have been
 // selected such that the resulting pixel offset will be as close to integer values as
-// possible. The primary error source is a small amount of interpolation that is still occuring in
+// possible. The primary error source is a small amount of interpolation that is still occurring in
 // the results but not in the expected results.
 TEST_F(GdalSourceTest, geotiff_compare_against_command_line_gdal) {
 	// clang-format off
