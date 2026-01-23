@@ -1,6 +1,6 @@
 # NavToolkit
 
-This document contains guidance on how to install the NavToolkit Python module. 
+This document contains guidance on how to install the NavToolkit Python module.
 
 **Note:** Some operating systems require or encourage the use of a Python virtual environment. For
 more information, please see `README.md`.
@@ -9,33 +9,16 @@ more information, please see `README.md`.
 
 ### Option 1: installing a prebuilt wheel
 
-The [wheelhouse package registry](https://git.aspn.us/pntos/wheelhouse/-/packages) contains python
-packages in the form of wheels for various projects, including NavToolkit. This can be the most
-convenient way to install NavToolkit's Python module because it skips having to install build
-dependencies or build source code. On the other hand, the wheels only cover the most common
-platforms and versions of Python. So if your environment is not supported then you will need to
-build from source.
+Installing from [PyPi](https://pypi.org/project/navtk/) can be the most convenient way to install
+NavToolkit's Python module because it skips having to install build dependencies or build source
+code. On the other hand, the wheels only cover the most common platforms and versions of Python. So
+if your environment is not supported then you will need to build from source.
 
-In order to enable pip to install packages from this package registry, you will need a Personal
-Access Token (PAT) with `read_api` privileges. You can create one from [your account page on
-git.aspn.us](https://git.aspn.us/-/user_settings/personal_access_tokens).
-
-Once you have created a token, use it to set an environment variable, replacing  `<TOKEN_VALUE>`
-with the value of your token:
+Installing the NavToolkit Python module can be as simple as:
 
 ```shell
-export WHEELHOUSE_URL=https://:<TOKEN_VALUE>@git.aspn.us/api/v4/projects/94/packages/pypi/simple
+pip3 install  navtk
 ```
-
-Now installing the NavToolkit Python module can be as simple as:
-
-```shell
-pip3 install --index-url $WHEELHOUSE_URL navtk
-```
-
-For alternatives to including a PAT in a `--index-url` argument, consider using
-[keyring](https://pip.pypa.io/en/stable/topics/authentication/#using-keyring-s-python-module) or
-[git credential helper](https://git-scm.com/doc/credential-helpers).
 
 If this approach does not work for you, then you may want to consider building from source by
 following the instructions in the next section.

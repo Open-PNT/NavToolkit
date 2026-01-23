@@ -144,15 +144,6 @@ pip3 install -r <(grep -vf <(pip3 freeze | cut -d= -f1) docker/requirements.txt)
 
 ## Building
 
-Some of the subprojects are authenticated git repositories which meson attempts to clone via SSH. If
-you have an SSH key set up on [your ASPN GitLab account](https://git.aspn.us/-/profile/keys) and
-access to the PNTOS project, then it is possible for the meson instructions to succeed as-is. If you
-do not have access to the PNTOS project on ASPN Gitlab but you do have SSH access to one of the
-mirrors then you can modify all of the `.wrap` files in the `subprojects/` directory that have
-`[wrap-git]` at the top, modifying the `url =` line to point to the repository that you do have
-access to. If you do not have access to any of the mirrors, then you can build by copying the
-subprojects from another source into the `subprojects/` directory.
-
 To build, you'll first need to configure the build system:
 
 ```shell
