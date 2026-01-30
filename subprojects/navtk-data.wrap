@@ -1,7 +1,7 @@
 [wrap-git]
 directory = navtk-data
 
-url = git@github.com:Open-PNT/navigation-data.git
-# navtoolkit/v0 branch, committed 20 January 2026
-revision = bcae9db178795303632f942ca3d1113f2ffda306
+url = https://github.com/Open-PNT/navigation-data.git
+# navtoolkit/v0 branch, committed 22 January 2026
+revision = bf5963028d4e5f9b03288f678db49e131fc4dd9b
 depth = 1

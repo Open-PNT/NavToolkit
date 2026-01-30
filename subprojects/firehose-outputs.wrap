@@ -1,7 +1,7 @@
 [wrap-git]
 directory = firehose-outputs
 
-url = git@github.com:Open-PNT/firehose-outputs.git
-# main branch - committed 8 January 2026
-revision = 211af969253a08e6fcb47f2b9f903cd1c67cd7d9
+url = https://github.com/Open-PNT/firehose-outputs.git
+# main branch - committed 30 January 2026
+revision = 56f06136cdc82002f444a6b895488dce50cb167a
 depth = 1
