@@ -302,11 +302,10 @@ def docker_run(args, task=None):
         # --interactive --tty so that it is possible to use CTRL+C to kill the
         #   container
         command += ['--interactive', '--tty']
-    ssh_dir = home_dir + '/.ssh'
+        ssh_dir = home_dir + '/.ssh'
 
-    # TODO: don't need to volume mount in SSH for CI once dependencies are public.
-    command += safe_add_volume(ssh_dir, '/home/docker/.ssh', 'ro')
-    command += safe_add_volume(ssh_dir, '/root/.ssh', 'ro')
+        command += safe_add_volume(ssh_dir, '/home/docker/.ssh', 'ro')
+        command += safe_add_volume(ssh_dir, '/root/.ssh', 'ro')
 
     command += [open(platform.iid_file).read().strip()]
 

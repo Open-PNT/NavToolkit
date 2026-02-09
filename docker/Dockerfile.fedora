@@ -53,6 +53,3 @@ WORKDIR /work
 COPY util/user_bootstrap.sh /
 ENTRYPOINT ["/user_bootstrap.sh"]
 CMD ["/bin/bash"]
-
-# TODO: this is to support CI, remove once dependencies are public.
-ENV GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
