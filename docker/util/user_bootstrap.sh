@@ -13,6 +13,7 @@ groupadd "$group" --non-unique -g "$gid"
 useradd "$user" --non-unique -m -u "$uid" -g "$gid"
 chown $user:$group /home/$user
 echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+install -dm755 -o "$uid" -g "$gid" /run/user/"$uid"
 
 if [ -d /venv ]; then
     source /venv/bin/activate
