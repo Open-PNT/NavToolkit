@@ -131,10 +131,11 @@ void VelocityMeasurementProcessor::setup() {
 		num_expected += 1;
 	}
 
-	ValidationContext{}
-	    .add_matrix(measurement_matrix, "measurement_matrix")
-	    .dim(num_expected, 'N')
-	    .validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(measurement_matrix, "measurement_matrix")
+		    .dim(num_expected, 'N')
+		    .validate();
+	}
 
 	meas_vector = zeros(num_expected);
 }

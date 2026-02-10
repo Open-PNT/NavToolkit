@@ -23,12 +23,13 @@ SampledFogmBlock::SampledFogmBlock(
       state_sigmas(std::move(state_sigmas)),
       rng(rng) {
 
-	ValidationContext{}
-	    .add_matrix(this->time_constants, "time_constants")
-	    .dim(num_states, 1)
-	    .add_matrix(this->state_sigmas, "state_sigmas")
-	    .dim(num_states, 1)
-	    .validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(this->time_constants, "time_constants")
+		    .dim(num_states, 1)
+		    .add_matrix(this->state_sigmas, "state_sigmas")
+		    .dim(num_states, 1)
+		    .validate();
+	}
 }
 
 SampledFogmBlock::SampledFogmBlock(

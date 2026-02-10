@@ -209,10 +209,11 @@ void PositionVelocityAttitudeMeasurementProcessor::setup() {
 		num_expected += 3;
 	}
 
-	utils::ValidationContext{}
-	    .add_matrix(measurement_matrix, "measurement_matrix")
-	    .dim(num_expected, 'N')
-	    .validate();
+	if (utils::ValidationContext validation{}) {
+		validation.add_matrix(measurement_matrix, "measurement_matrix")
+		    .dim(num_expected, 'N')
+		    .validate();
+	}
 
 	z = zeros(num_expected);
 }

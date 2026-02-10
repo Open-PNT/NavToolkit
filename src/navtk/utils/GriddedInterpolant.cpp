@@ -21,11 +21,13 @@ GriddedInterpolant::GriddedInterpolant(Vector x_vector, Vector y_vector, Matrix 
       x_min(xt::amin(x_vec)[0]),
       y_max(xt::amax(y_vec)[0]),
       y_min(xt::amin(y_vec)[0]) {
-	if (num_x_elem <= 2)
-		log_or_throw<std::invalid_argument>("x_vector must have at least three elements");
-	if (num_y_elem <= 2)
-		log_or_throw<std::invalid_argument>("y_vector must have at least three elements");
-	ValidationContext{}.add_matrix(q, "q").dim(num_x_elem, num_y_elem).validate();
+	if (ValidationContext validation{}) {
+		if (num_x_elem <= 2)
+			log_or_throw<std::invalid_argument>("x_vector must have at least three elements");
+		if (num_y_elem <= 2)
+			log_or_throw<std::invalid_argument>("y_vector must have at least three elements");
+		validation.add_matrix(q, "q").dim(num_x_elem, num_y_elem).validate();
+	}
 
 	// check spacing of X and Y
 	auto x_vec_diff = xt::view(x_vec, xt::range(1, num_x_elem - 1)) -
@@ -35,15 +37,17 @@ GriddedInterpolant::GriddedInterpolant(Vector x_vector, Vector y_vector, Matrix 
 	x_spacing = xt::mean(x_vec_diff)[0];
 	y_spacing = xt::mean(y_vec_diff)[0];
 
-	// check if monotonic and for equal spacing
-	if (xt::amin(x_vec_diff)[0] <= 0 || xt::amin(y_vec_diff)[0] <= 0) {
-		log_or_throw<std::invalid_argument>("Vectors are not monotonically increasing");
-	}
-	if (xt::amax(x_vec_diff)[0] - xt::amin(x_vec_diff)[0] > 1e-7) {
-		log_or_throw<std::invalid_argument>("x_vector spacing not uniform");
-	}
-	if (xt::amax(y_vec_diff)[0] - xt::amin(y_vec_diff)[0] > 1e-7) {
-		log_or_throw<std::invalid_argument>("y_vector spacing not uniform");
+	if (ValidationContext{}) {
+		// check if monotonic and for equal spacing
+		if (xt::amin(x_vec_diff)[0] <= 0 || xt::amin(y_vec_diff)[0] <= 0) {
+			log_or_throw<std::invalid_argument>("Vectors are not monotonically increasing");
+		}
+		if (xt::amax(x_vec_diff)[0] - xt::amin(x_vec_diff)[0] > 1e-7) {
+			log_or_throw<std::invalid_argument>("x_vector spacing not uniform");
+		}
+		if (xt::amax(y_vec_diff)[0] - xt::amin(y_vec_diff)[0] > 1e-7) {
+			log_or_throw<std::invalid_argument>("y_vector spacing not uniform");
+		}
 	}
 }
 

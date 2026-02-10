@@ -67,12 +67,9 @@ Matrix calc_numerical_jacobian(const std::function<Vector(const Vector&)>& f,
                                const Vector& x,
                                const Vector& eps) {
 
-	ValidationContext{}
-	    .add_matrix(x, "x")
-	    .dim('N', 1)
-	    .add_matrix(eps, "eps")
-	    .dim('N', 1)
-	    .validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(x, "x").dim('N', 1).add_matrix(eps, "eps").dim('N', 1).validate();
+	}
 	auto cols    = num_rows(x);
 	auto partial = partial_derivative(f, x, eps[0], 0);
 	auto rows    = num_rows(partial);
@@ -102,12 +99,9 @@ Vector partial_derivative_rpy(const std::function<Vector(const Vector&)>& f,
 Matrix calc_numerical_jacobian_rpy(const std::function<Vector(const Vector&)>& f,
                                    const Vector& x,
                                    const Vector& eps) {
-	ValidationContext{}
-	    .add_matrix(x, "x")
-	    .dim('N', 1)
-	    .add_matrix(eps, "eps")
-	    .dim('N', 1)
-	    .validate();
+	if (ValidationContext validation{}) {
+		validation.add_matrix(x, "x").dim('N', 1).add_matrix(eps, "eps").dim('N', 1).validate();
+	}
 	auto cols  = num_rows(x);
 	Matrix out = zeros(3, cols);
 	for (Size ind = 0; ind < cols; ++ind)

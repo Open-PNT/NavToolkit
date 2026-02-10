@@ -90,10 +90,9 @@ public:
 		if (num_states > 1 && this->Q.shape(0) == 1 && this->Q.shape(1) == 1 && this->Q(0) == 0.0) {
 			this->Q = zeros(num_states, num_states);
 		}
-		navtk::utils::ValidationContext{}
-		    .add_matrix(this->Q, "Q")
-		    .dim(num_states, num_states)
-		    .validate();
+		if (navtk::utils::ValidationContext validation{}) {
+			validation.add_matrix(this->Q, "Q").dim(num_states, num_states).validate();
+		}
 	}
 
 	/**
