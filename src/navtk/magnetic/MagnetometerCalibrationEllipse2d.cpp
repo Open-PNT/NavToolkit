@@ -26,7 +26,8 @@ void MagnetometerCalibrationEllipse2d::generate_calibration(const Matrix& mag) {
 	if (dims != 2) {
 		log_or_throw<std::invalid_argument>(
 		    "Magnetic field matrix must have 2 rows, but {} were given. Cannot generate "
-		    "magnetometer calibration");
+		    "magnetometer calibration",
+		    dims);
 	}
 	size_t num_meas = num_cols(mag);
 	Matrix mag_cpy  = mag;

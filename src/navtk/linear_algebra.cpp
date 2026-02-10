@@ -130,7 +130,7 @@ Matrix inverse(const Matrix& m) {
 	try {
 		return xt::linalg::inv(m);
 	} catch (const std::runtime_error& e) {
-		log_or_throw(e.what());
+		log_or_throw("{}", e.what());
 		return zeros(num_rows(m), num_cols(m));
 	}
 }
