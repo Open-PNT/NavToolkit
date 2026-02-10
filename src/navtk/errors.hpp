@@ -198,26 +198,6 @@ inline void log_or_throw(const std::string& message, LogOrThrowArgs&&... args) {
 	log_or_throw<DefaultLogOrThrowException, Level>(message, std::forward<LogOrThrowArgs>(args)...);
 }
 
-template <>
-inline void log_or_throw(const std::string& message) {
-	ErrorMode mode = get_global_error_mode();
-	if (mode != ErrorMode::OFF) spdlog::log(DEFAULT_LOG_OR_THROW_LEVEL, message);
-	if (mode == ErrorMode::DIE) throw DefaultLogOrThrowException(message);
-}
-
-template <>
-inline void log_or_throw(ErrorMode mode, const std::string& message) {
-	if (mode != ErrorMode::OFF) spdlog::log(DEFAULT_LOG_OR_THROW_LEVEL, message);
-	if (mode == ErrorMode::DIE) throw DefaultLogOrThrowException(message);
-}
-
-template <typename Exc>
-inline void log_or_throw(const std::string& message) {
-	ErrorMode mode = get_global_error_mode();
-	if (mode != ErrorMode::OFF) spdlog::log(DEFAULT_LOG_OR_THROW_LEVEL, message);
-	if (mode == ErrorMode::DIE) throw Exc(message);
-}
-
 // SEE ALSO: py_log_or_throw_ in bindings/python/navtk.cpp, a re-implementation that uses runtime
 // values instead of template parameters.
 
