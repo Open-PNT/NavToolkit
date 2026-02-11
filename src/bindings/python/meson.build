@@ -14,8 +14,8 @@ if not get_option ('python_bindings')
     pybind11_dep = disabler()
     aspn_xtensor_py_dep = disabler()
     aspn_xtensor_python_lib_location = ''
-    python_bindings_errors += ['Meson configured with ' +
-                               meson_flag_prefix + 'python_bindings=false']
+    python_bindings_errors += ['Meson not configured with ' +
+                               meson_flag_prefix + 'python_bindings=true']
 else
     xtensor_python_dep = dependency('xtensor-python',
         version: ['>=0.24.1', '<1.0.0'],

@@ -10,6 +10,7 @@ build-backend = 'mesonpy'
 [tool.meson-python.args]
 setup = ['-Dbuild_docs_tests_examples=false',
          '-Dmain_library=false',
+         '-Dpython_bindings=true',
          '-Dgdal_extensions=disabled',
          '-Dget_navtk_data=true',
          '-Dfirehose-outputs:aspn-cpp-xtensor=disabled',

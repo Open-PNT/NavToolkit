@@ -1,4 +1,4 @@
-option('python_bindings', type : 'boolean',
+option('python_bindings', type : 'boolean', value: false,
     description: 'Build the Python Extension Module for navtk')
 
 option('python_docstrings', type : 'boolean',
