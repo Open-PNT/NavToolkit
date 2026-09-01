@@ -1,5 +1,5 @@
 # ASPN-C++ is a build-time and runtime dependency of the NavToolkit Python module.
-aspn23_xtensor==0.1.0
+aspn23_xtensor==1.0.1
 # Ruff is a python linter and formatter.
 ruff==0.15.16
 # Breathe is an extension to reStructuredText and Sphinx to be able to read and render Doxygen xml output.

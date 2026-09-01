@@ -1,7 +1,7 @@
 [build-system]
 # Build dependencies
 requires = [
-    'aspn23_xtensor==0.1.0',
+    'aspn23_xtensor==1.0.1',
     'meson-python',
     'meson==1.8.4',
     'numpy',
@@ -40,7 +40,7 @@ install = ['--tags=runtime,python-runtime']
 
 [project]
 # Runtime dependencies
-dependencies = ['aspn23_xtensor==0.1.0', 'numpy']
+dependencies = ['aspn23_xtensor==1.0.1', 'numpy']
 name = 'navtk'
 dynamic = ['version']
 description = 'NavToolkit Python Bindings'
