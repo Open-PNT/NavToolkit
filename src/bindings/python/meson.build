@@ -150,7 +150,13 @@ endif
 
 pybind11_stubgen = find_program('pybind11-stubgen', required : false)
 
-if (pybind11_stubgen.found() and not is_disabler(aspn_xtensor_py_dep))
+# Ensure both pybind11-stubgen and ASPN-C++ can be found
+stubgen_ready = pybind11_stubgen.found() and not is_disabler(aspn_xtensor_py_dep)
+
+# TODO Add support to generate stubs on Windows ARM platforms
+acceptable_platform = build_machine.system() != 'windows' or host_machine.cpu_family() != 'aarch64'
+
+if (stubgen_ready and acceptable_platform)
 
     env = environment()
     env.append('PYTHONPATH', python_path)

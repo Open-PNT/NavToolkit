@@ -52,7 +52,6 @@ readme = 'README_PYTHON_PACKAGE.md'
 before-all = "yum install openblas-devel -y"
 
 [tool.cibuildwheel.windows]
-archs = ["AMD64"]
 before-build = "pip install delvewheel pkgconf && bash {project}/util/cibw_prepare_windows.sh {project}"
 repair-wheel-command = "delvewheel repair --add-path .openblas/bin --include msvcp140.dll -w {dest_dir} {wheel}"
 config-settings = { setup-args = ["--vsenv"] }

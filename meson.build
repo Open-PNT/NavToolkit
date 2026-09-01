@@ -16,10 +16,6 @@ find_program('pkg-config', required: true)
 cpp_compiler = meson.get_compiler('cpp')
 cpp_is_msvc = cpp_compiler.get_argument_syntax() == 'msvc'
 
-if host_machine.cpu_family() == 'aarch64' or host_machine.cpu_family() == 'arm'
-    add_project_arguments('-Wno-psabi', language: 'cpp')
-endif
-
 if (host_machine.system() == 'windows')
     if cpp_is_msvc
         add_project_arguments(['/bigobj', '/Zc:preprocessor', '-D_USE_MATH_DEFINES', '-DNOMINMAX'], language : 'cpp')
@@ -28,6 +24,10 @@ if (host_machine.system() == 'windows')
     endif
     if not meson.is_subproject()
         add_global_arguments(cpp_is_msvc ? '/bigobj' : '-Wa,-mbig-obj', language : 'cpp')
+    endif
+else
+    if host_machine.cpu_family() == 'aarch64' or host_machine.cpu_family() == 'arm'
+        add_project_arguments('-Wno-psabi', language: 'cpp')
     endif
 endif
 

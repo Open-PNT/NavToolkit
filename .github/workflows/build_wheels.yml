@@ -65,12 +65,16 @@ jobs:
           path: ./wheelhouse/*.whl
 
   windows:
-    name: windows | AMD64 | ${{ matrix.python }}
-    runs-on: windows-latest
+    name: ${{ matrix.os }} | ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         python: [cp310-*, cp311-*, cp312-*, cp313-*, cp314-*]
+        os: [windows-latest, windows-11-arm]
+        exclude:
+          - os: windows-11-arm
+            python: cp310-*
 
     steps:
       - uses: actions/checkout@v4
@@ -78,6 +82,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.2.1
         env:
+          CIBW_ARCHS: ${{ matrix.os == 'windows-latest' && 'AMD64' || 'ARM64' }}
           CIBW_BUILD: ${{ matrix.python }}
           CIBW_TEST_REQUIRES: pytest
           CIBW_TEST_COMMAND: "pytest {project}/test/python --ignore={project}/test/python/error_mode_test.py"
