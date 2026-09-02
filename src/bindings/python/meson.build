@@ -76,9 +76,21 @@ else
             error('Found ASPN-C++ installation, but could not locate the ASPN-C++ headers')
         endif
 
+        # Find the library with platform-appropriate naming
+        aspn_xtensor_py_lib = meson.get_compiler('cpp').find_library(
+            'aspn_xtensor_py',
+            dirs: [aspn_install_dir_abs],
+            static: true,
+            required: false
+        )
+
+        if not aspn_xtensor_py_lib.found()
+            error('Could not find ASPN-C++ static library')
+        endif
+
         aspn_xtensor_py_dep = declare_dependency(
             include_directories: include_directories(aspn_install_dir, aspn_include_dir),
-            link_args: ['-L' + aspn_install_dir_abs, '-laspn_xtensor_py'])
+            dependencies: [aspn_xtensor_py_lib])
     endif
 endif
 
